@@ -32,7 +32,7 @@ import saloon from "../assets/CarTypes/saloon-hand.png";
 import mini_truck from "../assets/CarTypes/mini-truck.png";
 import big_truck from "../assets/CarTypes/big-truck.png";
 
-import Toyota from "../assets/CarLogo/toyota.png";
+import Toyota from "../assets/CarLogo/Toyota.png";
 import Kia from "../assets/CarLogo/KIA.png";
 import Nissan from "../assets/CarLogo/Nissan.png";
 import Daewoo from "../assets/CarLogo/Daewoo.png";
