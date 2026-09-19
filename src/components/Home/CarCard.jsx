@@ -15,7 +15,7 @@ const CarCard = ({ car }) => {
             className="w-full h-full object-cover rounded-lg transition-transform duration-500"
           />
           <div className="absolute top-6 right-6 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">
-            NEW
+            {car.type === "new" ? "NEW" : "USED"}
           </div>
         </div>
 

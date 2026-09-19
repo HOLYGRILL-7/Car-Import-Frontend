@@ -19,6 +19,7 @@ const EMPTY_FORM = {
   engineSize: "",
   horsepower: "",
   status: "available",
+  isDealerChoice: false,
 };
 
 // Optional details; written to the document only when filled in.
@@ -83,6 +84,9 @@ const AddCarForm = ({ onAdded }) => {
     setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
   };
 
+  const setChecked = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.checked }));
+
   const handleFiles = (e) => {
     const picked = Array.from(e.target.files);
     e.target.value = ""; // allow re-picking the same file after removing it
@@ -129,6 +133,7 @@ const AddCarForm = ({ onAdded }) => {
       mileage: form.mileage.trim(),
       description: form.description.trim(),
       status: form.status,
+      isDealerChoice: form.isDealerChoice,
     };
     for (const { name } of OPTIONAL_FIELDS) {
       if (form[name].trim()) fields[name] = form[name].trim();
@@ -204,6 +209,22 @@ const AddCarForm = ({ onAdded }) => {
           </select>
         </Field>
       </div>
+
+      <label className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          name="isDealerChoice"
+          checked={form.isDealerChoice}
+          onChange={setChecked}
+          className="mt-1 h-4 w-4"
+        />
+        <span className="text-sm font-medium text-primary">
+          Dealer's Choice
+          <span className="block font-normal text-neutral">
+            Feature this car in the homepage's Dealer's Choice section.
+          </span>
+        </span>
+      </label>
 
       <Field label="Description *" error={errors.description}>
         <textarea name="description" rows={4} value={form.description} onChange={setField} className={inputClass} placeholder="Condition, features, history..." />

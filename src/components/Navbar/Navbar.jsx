@@ -1,45 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import AuthSection from "./AuthSection";
 import { useAuth } from "../../context/useAuth";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 
+// Positioned by Layout (fixed at the top, below the promo banner).
 const Navbar = () => {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const isHomePage = location.pathname === "/";
 
   const handleLogout = async () => {
     await logout();
     navigate("/");
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isHomePage && !isScrolled
-          ? "bg-transparent"
-          : "bg-primary-dark shadow-lg"
-      }`}
-    >
-      {/* Backdrop blur for transparency */}
-      {isHomePage && !isScrolled && (
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      )}
-
+    <nav className="bg-primary-dark shadow-lg">
       <div className="relative w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <Logo />
@@ -49,7 +26,6 @@ const Navbar = () => {
             user={user}
             isAdmin={isAdmin}
           />
-
         </div>
       </div>
     </nav>

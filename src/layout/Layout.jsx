@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import PromoBanner from "../components/Navbar/PromoBanner";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 
@@ -11,9 +12,15 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+      {/* Promo banner + navbar, fixed together at the top */}
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <PromoBanner />
+        <Navbar />
+      </header>
 
-      <main className="flex-1">
+      {/* pt-8 clears the promo banner (h-8); each page adds its own offset
+          for the navbar beneath it */}
+      <main className="flex-1 pt-8">
         <Outlet />
       </main>
 

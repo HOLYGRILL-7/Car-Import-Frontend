@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCars } from "../../hooks/useCars";
 import CarListingCard from "../../components/Cars/CarListingCard";
-import redCar_front from "../../assets/Images/redCar-frontside.png";
+import CarTypeFilter from "../../components/Cars/CarTypeFilter";
+import { BODY_TYPES, matchesBodyType } from "../../utils/bodyTypes";
 
 const NewCars = () => {
   const { cars, loading, error, hasMore, loadingMore, loadMoreError, loadMore } =
     useCars("new");
+  const [bodyType, setBodyType] = useState("all");
+
+  const visibleCars = cars.filter((car) => matchesBodyType(car, bodyType));
+  const bodyTypeLabel = BODY_TYPES.find((t) => t.id === bodyType)?.label;
 
   return (
     <div>
-      <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="hero-section w-full p-20 bg-linear-to-b from bg-neutral-dark via-neutral to-bg-neutral-light h-[390px] shadow-2xl rounded-2xl px-14 grid grid-cols-2 ">
-          <h1 className="font-bold text-8xl col-span-2 text-neutral-cream">
-            ONLY THE BEST <br /> NEW CAR DEALS
-          </h1>
-        </div>
-        <div className=" front redCar absolute right-8 top-0 z-10">
-          <img src={redCar_front} alt="" width={450} />
+      <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold text-primary">New Cars</h1>
+        <div className="mt-4">
+          <CarTypeFilter value={bodyType} onChange={setBodyType} />
         </div>
 
         {loading && (
@@ -32,10 +33,16 @@ const NewCars = () => {
             No new cars available at the moment.
           </p>
         )}
+        {cars.length > 0 && visibleCars.length === 0 && (
+          <p className="my-10 text-center text-neutral">
+            No {bodyTypeLabel} found
+            {hasMore ? " so far — try Load More or another type." : "."}
+          </p>
+        )}
 
-        {cars.length > 0 && (
+        {visibleCars.length > 0 && (
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10">
-            {cars.map((car) => (
+            {visibleCars.map((car) => (
               <li key={car.id}>
                 <CarListingCard car={car} />
               </li>

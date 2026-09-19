@@ -3,21 +3,23 @@ import React from "react";
 import Hero from "../../../components/Hero/Hero";
 import SectionHeader from "../../../components/Home/SectionHeader";
 import CarSlider from "../../../components/Home/CarSlider";
-import CarTypeCard from "../../../components/Home/CarTypeCard";
 import BrandList from "../../../components/Home/BrandList";
 import PopularUsedCarList from "../../../components/Home/PopularUsedCarList";
 import { useCars } from "../../../hooks/useCars";
+import { useDealerChoiceCars } from "../../../hooks/useDealerChoiceCars";
 import { formatPrice } from "../../../utils/formatPrice";
+import { pickNewArrivals } from "../../../utils/newArrivals";
 
 // Import data
-import { carTypes, carBrands, icons } from "../../../data/carsData";
+import { carBrands, icons } from "../../../data/carsData";
 
 const NEW_ARRIVALS_COUNT = 8;
 
-// CarCard expects { id, name, image, price, year } with a display-ready price.
+// CarCard expects { id, name, type, image, price, year } with a display-ready price.
 const toCardCar = (car) => ({
   id: car.id,
   name: car.name,
+  type: car.type,
   image: car.imageUrls?.[0],
   price: formatPrice(car.price),
   year: car.year,
@@ -34,9 +36,21 @@ const getStatusMessage = ({ loading, error, cars }, emptyText) => {
 const Home = () => {
   const newCarsResult = useCars("new");
   const usedCarsResult = useCars("used");
+  const dealerChoiceResult = useDealerChoiceCars();
+
+  // New Arrivals draws on both lists (newest 20 of each type, which always
+  // contain the newest 8 overall): cars added in the last 14 days, else the
+  // most recent overall.
+  const newArrivalsResult = {
+    loading: newCarsResult.loading || usedCarsResult.loading,
+    error: newCarsResult.error && usedCarsResult.error,
+    cars: pickNewArrivals([...newCarsResult.cars, ...usedCarsResult.cars], {
+      max: NEW_ARRIVALS_COUNT,
+    }),
+  };
 
   const newArrivalsMessage = getStatusMessage(
-    newCarsResult,
+    newArrivalsResult,
     "No new arrivals at the moment.",
   );
   const usedCarsMessage = getStatusMessage(
@@ -48,8 +62,25 @@ const Home = () => {
     <div>
       <Hero />
 
+      {/* Dealer's Choice: only cars the admin has flagged; hidden when none */}
+      {dealerChoiceResult.cars.length > 0 && (
+        <div className="py-14 mt-15 bg-neutral-light">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeader
+              title="Dealer's Choice"
+              description="Hand-picked by our dealers"
+            />
+            <CarSlider cars={dealerChoiceResult.cars.map(toCardCar)} />
+          </div>
+        </div>
+      )}
+
       {/* New Arrivals Section */}
-      <div className="py-14 mt-15 bg-neutral-light">
+      <div
+        className={`py-14 ${
+          dealerChoiceResult.cars.length > 0 ? "bg-white" : "mt-15 bg-neutral-light"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             icon={icons.fireFlame}
@@ -63,32 +94,8 @@ const Home = () => {
               {newArrivalsMessage}
             </p>
           ) : (
-            <CarSlider
-              cars={newCarsResult.cars
-                .slice(0, NEW_ARRIVALS_COUNT)
-                .map(toCardCar)}
-            />
+            <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} />
           )}
-        </div>
-      </div>
-
-      {/* Explore Cars */}
-      <div className="py-14 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            title="Explore Cars"
-            description="Browse by Car type"
-          />
-          <div className="flex gap-6">
-            {carTypes.map((type) => (
-              <CarTypeCard
-                key={type.id}
-                image={type.image}
-                name={type.name}
-                link={type.link}
-              />
-            ))}
-          </div>
         </div>
       </div>
 

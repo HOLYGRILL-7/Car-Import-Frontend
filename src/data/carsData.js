@@ -26,12 +26,6 @@ import romeo_black from "../assets/New Arrivals/romeo-black.jpg";
 import rover_black from "../assets/New Arrivals/rover-black.jpg";
 import range_silver from "../assets/New Arrivals/range-silver.jpg";
 
-import suv from "../assets/CarTypes/suv1.png";
-import hatch from "../assets/CarTypes/hatch.png";
-import saloon from "../assets/CarTypes/saloon-hand.png";
-import mini_truck from "../assets/CarTypes/mini-truck.png";
-import big_truck from "../assets/CarTypes/big-truck.png";
-
 import Toyota from "../assets/CarLogo/Toyota.png";
 import Kia from "../assets/CarLogo/KIA.png";
 import Nissan from "../assets/CarLogo/Nissan.png";
@@ -91,15 +85,6 @@ export const newArrivals = [
     price: "$82,000",
     year: "2024",
   },
-];
-
-// Car Types
-export const carTypes = [
-  { id: 1, image: suv, name: "SUVs", link: "/cars/suv" },
-  { id: 2, image: hatch, name: "Hatchback", link: "/cars/hatchback" },
-  { id: 3, image: saloon, name: "Saloon", link: "/cars/saloon" },
-  { id: 4, image: mini_truck, name: "Mini Truck", link: "/cars/mini-truck" },
-  { id: 5, image: big_truck, name: "Big Truck", link: "/cars/big-truck" },
 ];
 
 // Car Brands

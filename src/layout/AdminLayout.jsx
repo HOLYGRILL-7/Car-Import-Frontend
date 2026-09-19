@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import logoWhite from ".././assets/Logo/logoWhite.png";
-import { CarFront, Gauge, Boxes, Users, ExternalLink } from "lucide-react";
+import { CarFront, Gauge, Boxes, Users } from "lucide-react";
 
 const AdminLayout = () => {
   const { user, logout } = useAuth();
@@ -10,12 +10,6 @@ const AdminLayout = () => {
   const handleLogout = async () => {
     await logout();
     navigate("/");
-  };
-
-  // Open public site in new tab to preserve admin session
-  const handleViewSite = (e) => {
-    e.preventDefault();
-    window.open("/", "_blank");
   };
 
   return (
@@ -65,19 +59,6 @@ const AdminLayout = () => {
             <Users width={24} height={24} />
             <p className="text-lg">Manage Users</p>
           </Link>
-
-          {/* Divider */}
-          <div className="border-t border-neutral-cream/10 my-4"></div>
-
-          {/* View Public Site - Opens in new tab */}
-          <a
-            href="/"
-            onClick={handleViewSite}
-            className="flex gap-2 items-center py-3 px-4 rounded hover:bg-neutral-cream/10 mb-2 text-neutral-cream transition-colors cursor-pointer"
-          >
-            <ExternalLink width={24} height={24} />
-            <p className="text-lg">View Site</p>
-          </a>
         </nav>
 
         {/* User Info at Bottom */}

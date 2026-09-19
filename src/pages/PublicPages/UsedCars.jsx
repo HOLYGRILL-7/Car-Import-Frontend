@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCars } from "../../hooks/useCars";
 import CarListingCard from "../../components/Cars/CarListingCard";
+import CarTypeFilter from "../../components/Cars/CarTypeFilter";
+import { BODY_TYPES, matchesBodyType } from "../../utils/bodyTypes";
 
 const UsedCars = () => {
   const { cars, loading, error, hasMore, loadingMore, loadMoreError, loadMore } =
     useCars("used");
+  const [bodyType, setBodyType] = useState("all");
+
+  const visibleCars = cars.filter((car) => matchesBodyType(car, bodyType));
+  const bodyTypeLabel = BODY_TYPES.find((t) => t.id === bodyType)?.label;
 
   return (
-    <div className="main-container bg-neutral-light pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Hero Section */}
-      <div className="hero-section w-full space-y-7 p-20 bg-linear-to-b from bg-neutral-dark via-neutral to-bg-neutral-light h-[390px] shadow-2xl rounded-2xl flex flex-col justify-center items-center">
-        <h1 className="font-bold text-8xl text-neutral-cream">
-          USED CAR DEALS
-        </h1>
-        <p className="text-2xl font-bold">
-          Approved by our experts, zero-faults.
-        </p>
+    <div className="main-container bg-neutral-light pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 className="text-4xl font-bold text-primary">Used Cars</h1>
+      <div className="mt-4">
+        <CarTypeFilter value={bodyType} onChange={setBodyType} />
       </div>
 
       {/* Cars Grid */}
@@ -32,9 +33,15 @@ const UsedCars = () => {
           No used cars available at the moment.
         </p>
       )}
-      {cars.length > 0 && (
+      {cars.length > 0 && visibleCars.length === 0 && (
+        <p className="my-10 text-center text-neutral">
+          No {bodyTypeLabel} found
+          {hasMore ? " so far — try Load More or another type." : "."}
+        </p>
+      )}
+      {visibleCars.length > 0 && (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10">
-          {cars.map((car) => (
+          {visibleCars.map((car) => (
             <li key={car.id}>
               <CarListingCard car={car} />
             </li>
