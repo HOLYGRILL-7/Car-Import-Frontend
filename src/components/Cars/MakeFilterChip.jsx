@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 // Shows the manufacturer filter that's currently applied, and clears it.
 const MakeFilterChip = ({ label, onClear }) => {
   return (
-    <div className="mt-3 flex items-center gap-2 text-sm text-neutral">
+    <div className="flex items-center gap-2 text-sm text-neutral">
       <span>Make:</span>
       <button
         type="button"

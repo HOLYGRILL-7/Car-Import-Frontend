@@ -2,16 +2,16 @@
 // `bodyType` is free text in the admin form, so each type lists the spellings
 // that count as a match (compared case-insensitively).
 export const BODY_TYPES = [
-  { id: "suv", label: "SUVs", aliases: ["suv", "suvs", "crossover"] },
+  { id: "suv", label: "SUV", aliases: ["suv", "suvs", "crossover"] },
+  {
+    id: "saloon",
+    label: "Sedan",
+    aliases: ["saloon", "saloons", "sedan", "sedans"],
+  },
   {
     id: "hatchback",
     label: "Hatchback",
     aliases: ["hatchback", "hatchbacks", "hatch"],
-  },
-  {
-    id: "saloon",
-    label: "Saloon",
-    aliases: ["saloon", "saloons", "sedan", "sedans"],
   },
   {
     id: "mini-truck",
