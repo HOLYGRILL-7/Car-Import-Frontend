@@ -1,6 +1,5 @@
 export const footerData = {
   company: {
-    logo: "/assets/Logo/logoWhite.png",
     description:
       "Your trusted partner for new and used cars. Quality vehicles at competitive prices.",
   },
@@ -21,5 +20,5 @@ export const footerData = {
     phone: "+233 123 456 789",
     address: "Accra, Ghana",
   },
-  copyright: "2025 CarWise. All rights reserved.",
+  copyright: "2025 Xtra Motors. All rights reserved.",
 };

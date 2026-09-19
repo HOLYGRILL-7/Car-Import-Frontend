@@ -3,16 +3,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
+// No hover/transition effects on purpose (the slider keeps only its simple
+// slide and the dot indicator's animation).
 const CarCard = ({ car }) => {
   return (
     <Link to={`/carDetails/${car.id}`} className="block group">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Image */}
         <div className="relative overflow-hidden h-64 p-4">
           <img
             src={car.image}
             alt={car.name}
-            className="w-full h-full object-cover rounded-lg transition-transform duration-500"
+            className="w-full h-full object-cover rounded-lg"
           />
           <div className="absolute top-6 right-6 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">
             {car.type === "new" ? "NEW" : "USED"}
@@ -21,7 +23,7 @@ const CarCard = ({ car }) => {
 
         {/* Card Content */}
         <div className="p-6">
-          <h3 className="text-xl font-bold text-primary mb-2 group-hover:text-accent transition-colors">
+          <h3 className="text-xl font-bold text-primary mb-2 group-hover:text-accent">
             {car.name}
           </h3>
 
@@ -31,9 +33,9 @@ const CarCard = ({ car }) => {
           </div>
 
           <div className="flex items-center justify-between text-sm text-neutral pt-4 border-t border-neutral-light">
-            <span className="text-accent font-semibold group-hover:gap-2 flex items-center transition-all">
+            <span className="text-accent font-semibold flex items-center">
               View Details
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-4 h-4" />
             </span>
           </div>
         </div>

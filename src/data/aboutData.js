@@ -35,10 +35,10 @@ export const ABOUT_CONTENT = {
     },
     {
       id: "group",
-      title: "CARWISE GROUP",
+      title: "XTRA MOTORS GROUP",
       borderColor: "border-secondary",
       content:
-        "Our group has expanded beyond just vehicle imports. We now offer comprehensive automotive solutions including general cargo shipping, maintenance services, and logistics consulting. With operations spanning three continents and partnerships with over 500 dealers worldwide, CarWise Group has become a trusted name in international automotive trade. Our commitment to transparency, efficiency, and customer satisfaction drives everything we do.",
+        "Our group has expanded beyond just vehicle imports. We now offer comprehensive automotive solutions including general cargo shipping, maintenance services, and logistics consulting. With operations spanning three continents and partnerships with over 500 dealers worldwide, Xtra Motors Group has become a trusted name in international automotive trade. Our commitment to transparency, efficiency, and customer satisfaction drives everything we do.",
     },
     {
       id: "join",

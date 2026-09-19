@@ -36,8 +36,6 @@ import Lexus from "../assets/CarOfTheYear/Lexus.jpg";
 import Mazda from "../assets/CarOfTheYear/Mazda.jpg";
 import Tahoe from "../assets/CarOfTheYear/ChevTahoe.jpg";
 
-import fire_flame from "../assets/Icons/fire-flame.png";
-
 // New Arrivals
 export const newArrivals = [
   {
@@ -119,11 +117,6 @@ export const popularUsedBrands = [
   { id: 19, name: "Used Tesla Model 3" },
   { id: 20, name: "Used Chevrolet Silverado" },
 ];
-
-// Icons/Assets
-export const icons = {
-  fireFlame: fire_flame,
-};
 
 // New Cars
 export const usedCars = [

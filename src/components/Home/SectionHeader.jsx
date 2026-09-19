@@ -20,7 +20,7 @@ const SectionHeader = ({ icon, title, description, linkTo, linkText }) => {
       {linkTo && linkText && (
         <Link
           to={linkTo}
-          className="text-accent hover:text-accent-light font-semibold flex items-center gap-2 transition-colors"
+          className="text-accent hover:text-accent-light font-semibold flex items-center gap-2"
         >
           {linkText}
           <ChevronRight className="w-5 h-5" />

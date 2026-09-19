@@ -2,15 +2,24 @@ import React, { useState } from "react";
 import { useCars } from "../../hooks/useCars";
 import CarListingCard from "../../components/Cars/CarListingCard";
 import CarTypeFilter from "../../components/Cars/CarTypeFilter";
+import MakeFilterChip from "../../components/Cars/MakeFilterChip";
+import { useMakeFilter } from "../../hooks/useMakeFilter";
 import { BODY_TYPES, matchesBodyType } from "../../utils/bodyTypes";
+import { matchesMake } from "../../utils/makes";
 
 const NewCars = () => {
   const { cars, loading, error, hasMore, loadingMore, loadMoreError, loadMore } =
     useCars("new");
   const [bodyType, setBodyType] = useState("all");
+  const { make, makeLabel, clearMake } = useMakeFilter();
 
-  const visibleCars = cars.filter((car) => matchesBodyType(car, bodyType));
+  const visibleCars = cars.filter(
+    (car) => matchesMake(car, make) && matchesBodyType(car, bodyType),
+  );
   const bodyTypeLabel = BODY_TYPES.find((t) => t.id === bodyType)?.label;
+  const filterLabel = makeLabel
+    ? `${makeLabel} ${bodyTypeLabel ?? "cars"}`
+    : bodyTypeLabel;
 
   return (
     <div>
@@ -19,6 +28,7 @@ const NewCars = () => {
         <div className="mt-4">
           <CarTypeFilter value={bodyType} onChange={setBodyType} />
         </div>
+        {make && <MakeFilterChip label={makeLabel} onClear={clearMake} />}
 
         {loading && (
           <p className="my-10 text-center text-neutral">Loading cars...</p>
@@ -35,7 +45,7 @@ const NewCars = () => {
         )}
         {cars.length > 0 && visibleCars.length === 0 && (
           <p className="my-10 text-center text-neutral">
-            No {bodyTypeLabel} found
+            No {filterLabel} found
             {hasMore ? " so far — try Load More or another type." : "."}
           </p>
         )}

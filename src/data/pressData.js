@@ -9,14 +9,14 @@ import HAP from "../../assets/News/happy.jpg";
 export const PRESS_CONTENT = {
   header: {
     title: "PRESS & MEDIA",
-    subtitle: "Latest news, press releases, and media coverage about CarWise",
+    subtitle: "Latest news, press releases, and media coverage about Xtra Motors",
   },
   newsItems: [
     {
       id: "expansion-2025",
       image: news1,
       imageAlt: "Global trade and international expansion",
-      title: "CarWise Expands Operations to Three New Countries",
+      title: "Xtra Motors Expands Operations to Three New Countries",
       date: "2025-11-20",
       displayDate: "November 20, 2025",
       excerpt:
@@ -39,7 +39,7 @@ export const PRESS_CONTENT = {
       id: "ai-launch-2025",
       image: AI,
       imageAlt: "AI technology interface",
-      title: "CarWise Launches AI-Powered Vehicle Sourcing",
+      title: "Xtra Motors Launches AI-Powered Vehicle Sourcing",
       date: "2025-11-10",
       displayDate: "November 10, 2025",
       excerpt:
@@ -77,7 +77,7 @@ export const PRESS_CONTENT = {
       title: "Customer Satisfaction Rate Hits 98%",
       date: "2025-10-05",
       displayDate: "October 5, 2025",
-      excerpt: "Independent survey ranks CarWise as top automotive importer...",
+      excerpt: "Independent survey ranks Xtra Motors as top automotive importer...",
       source: "Consumer Reports",
       link: "/press/satisfaction-rating-2025",
     },

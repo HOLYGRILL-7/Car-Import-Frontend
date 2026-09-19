@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import logoWhite from ".././assets/Logo/logoWhite.png";
+import BrandWordmark from "../components/Brand/BrandWordmark";
 import { CarFront, Gauge, Boxes, Users } from "lucide-react";
 
 const AdminLayout = () => {
@@ -20,7 +20,7 @@ const AdminLayout = () => {
           to="/admin"
           className="transition-transform border-b p-9 border-neutral-cream/10 px-8 pt-6"
         >
-          <img src={logoWhite} alt="CarWise" width={130} />
+          <BrandWordmark />
         </Link>
 
         {/* Logo/Brand */}

@@ -9,9 +9,10 @@ import { useCars } from "../../../hooks/useCars";
 import { useDealerChoiceCars } from "../../../hooks/useDealerChoiceCars";
 import { formatPrice } from "../../../utils/formatPrice";
 import { pickNewArrivals } from "../../../utils/newArrivals";
+import { matchesMake } from "../../../utils/makes";
 
 // Import data
-import { carBrands, icons } from "../../../data/carsData";
+import { carBrands } from "../../../data/carsData";
 
 const NEW_ARRIVALS_COUNT = 8;
 
@@ -49,6 +50,24 @@ const Home = () => {
     }),
   };
 
+  // "View All" opens whichever listing page holds most of the arrivals shown
+  // (New Arrivals mixes both types), so it never lands on an empty page.
+  const newArrivalCount = newArrivalsResult.cars.filter(
+    (car) => car.type === "new",
+  ).length;
+  const usedArrivalCount = newArrivalsResult.cars.length - newArrivalCount;
+  const viewAllPath = usedArrivalCount > newArrivalCount ? "/usedCars" : "/newCars";
+
+  // A manufacturer opens the listing page that has cars of that make: the
+  // used page, unless it only has new ones.
+  const brands = carBrands.map((brand) => {
+    const make = brand.name.toLowerCase();
+    const inNew = newCarsResult.cars.some((car) => matchesMake(car, make));
+    const inUsed = usedCarsResult.cars.some((car) => matchesMake(car, make));
+    const page = inNew && !inUsed ? "/newCars" : "/usedCars";
+    return { ...brand, to: `${page}?make=${make}` };
+  });
+
   const newArrivalsMessage = getStatusMessage(
     newArrivalsResult,
     "No new arrivals at the moment.",
@@ -83,10 +102,9 @@ const Home = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            icon={icons.fireFlame}
             title="New Arrivals"
-            description="Say hello to the hottest deals on the market"
-            linkTo="/newCars"
+            description="Freshly listed vehicles, updated as new stock arrives."
+            linkTo={viewAllPath}
             linkText="View All"
           />
           {newArrivalsMessage ? (
@@ -108,7 +126,7 @@ const Home = () => {
           />
         </div>
         <div className="py-10">
-          <BrandList brands={carBrands} />
+          <BrandList brands={brands} />
         </div>
       </div>
 
