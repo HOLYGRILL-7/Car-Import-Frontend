@@ -1,9 +1,12 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { user, isLoggedIn, loading } = useAuth();
+// Requires a signed-in user (any account). Signed-out visitors are sent to
+// /login and brought back here afterwards.
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn, loading } = useAuth();
+  const location = useLocation();
 
   // Show loading while checking auth status
   if (loading) {
@@ -17,24 +20,17 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     );
   }
 
-  // If not logged in, redirect to login page
-  if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />;
+  if (!isLoggedIn) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+      />
+    );
   }
 
-  // If roles are specified, check if user has required role
-  if (allowedRoles.length > 0 && user?.role) {
-    if (!allowedRoles.includes(user.role)) {
-      // User doesn't have permission - redirect based on their role
-      if (user.role === "admin") {
-        return <Navigate to="/admin" replace />;
-      }
-      return <Navigate to="/users/dashboard" replace />;
-    }
-  }
-
-  // If children are provided (old pattern), render them
-  // Otherwise use Outlet for nested routes (new pattern)
+  // Wraps children directly, or renders nested routes via <Outlet />
   return children || <Outlet />;
 };
 

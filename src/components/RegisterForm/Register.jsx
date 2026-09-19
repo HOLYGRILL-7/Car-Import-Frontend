@@ -1,32 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Fixed import
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
+import { getAuthErrorMessage } from "../../utils/authErrors";
 import user_icon from "../../assets/Icons/user.png";
 import mail_icon from "../../assets/Icons/mail.png";
 import pass_icon from "../../assets/Icons/pass.png";
 
+// Sign-up for regular users (e.g. to save cars). The admin account is created
+// manually in the Firebase console, not here.
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const { login } = useAuth();
-  const navigate = useNavigate(); // ✅ Moved up
+  const { user, loading, register } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e) => {
+  // Already signed in (including right after a successful registration).
+  if (!loading && user) {
+    return <Navigate to={location.state?.from ?? "/"} replace />;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSubmitting(true);
 
-    // TODO: Replace with actual registration API call
-    // For now, just creating a new user and logging them in
-    const newUser = {
-      id: Date.now(), // Temporary ID
-      name: name,
-      email: email,
-      role: "user", // New registrations are regular users
-    };
-
-    login(newUser);
-    navigate("/users/dashboard");
+    try {
+      await register(name, email, password);
+      // The redirect above takes over once auth state updates.
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
+      setSubmitting(false);
+    }
   };
 
   const handleKeepBrowsing = () => {
@@ -55,6 +64,7 @@ const Register = () => {
               value={name}
               placeholder="Name"
               required
+              autoComplete="name"
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               onChange={(e) => setName(e.target.value)}
             />
@@ -66,10 +76,11 @@ const Register = () => {
               className="w-6 h-6 m-5 mt-5 opacity-80"
             />
             <input
-              type="email" // ✅ Fixed
+              type="email"
               value={email}
               placeholder="Email"
               required
+              autoComplete="email"
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -81,21 +92,31 @@ const Register = () => {
               className="w-6 h-6 m-5 mt-5 opacity-80"
             />
             <input
-              type="password" // ✅ Fixed
+              type="password"
               value={password}
-              placeholder="Password"
+              placeholder="Password (at least 6 characters)"
               required
+              minLength={6}
+              autoComplete="new-password"
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </div>
+
+        {error && (
+          <p role="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
+
         <div className="buttons space-y-3">
           <button
             type="submit"
-            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full"
+            disabled={submitting}
+            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {submitting ? "Creating account..." : "Sign Up"}
           </button>
           <button
             type="button"
@@ -104,6 +125,16 @@ const Register = () => {
           >
             Keep Browsing
           </button>
+          <p className="text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              state={location.state}
+              className="text-blue-600 hover:underline"
+            >
+              Log in
+            </Link>
+          </p>
         </div>
       </form>
     </div>

@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Car photos are public to view; only the admin account can upload or
+    // delete them (uploads limited to images under 5 MB).
+    // Replace the email below with your VITE_ADMIN_EMAIL value (lowercase).
+    // The account must be email-verified (run verify-admin.js once).
+    match /cars/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+                            && request.auth.token.email == "REPLACE_WITH_ADMIN_EMAIL"
+                            && request.auth.token.email_verified == true
+                            && request.resource.size < 5 * 1024 * 1024
+                            && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null
+                    && request.auth.token.email == "REPLACE_WITH_ADMIN_EMAIL"
+                    && request.auth.token.email_verified == true;
+    }
+  }
+}

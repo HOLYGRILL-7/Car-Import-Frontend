@@ -6,18 +6,15 @@ import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const isHomePage = location.pathname === "/";
 
-  const parts = location.pathname.split("/");
-  const isUsersPage = parts[1] === "users";
-
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/");
   };
 
@@ -48,11 +45,11 @@ const Navbar = () => {
           <Logo />
           <NavLinks />
           <AuthSection
-            isUserPath={isUsersPage}
             onLogout={handleLogout}
             user={user}
+            isAdmin={isAdmin}
           />
-         
+
         </div>
       </div>
     </nav>

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Lexus RX 350",
+    "type": "used",
+    "year": 2016,
+    "price": 185000,
+    "mileage": "62,000 km",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "bodyType": "SUV",
+    "color": "Beige",
+    "engineSize": "3.5L V6",
+    "horsepower": "295 hp",
+    "description": "Clean used import, well-maintained, leather interior, sunroof, all-wheel drive.",
+    "imageUrls": [
+      "https://firebasestorage.googleapis.com/v0/b/dad-car-listings.firebasestorage.app/o/cars%2FLexus.jpg?alt=media&token=12d45e86-b23f-4d8a-85fc-ce2f8095f1f2"
+    ],
+    "status": "available"
+  },
+  {
+    "name": "Toyota Land Cruiser Prado",
+    "type": "used",
+    "year": 2018,
+    "price": 250000,
+    "mileage": "45,000 km",
+    "fuelType": "Diesel",
+    "transmission": "Automatic",
+    "bodyType": "SUV",
+    "color": "Black",
+    "engineSize": "2.8L",
+    "horsepower": "177 hp",
+    "description": "Reliable used import, spacious interior, off-road capabilities, excellent condition.",
+    "imageUrls": [
+      "https://firebasestorage.googleapis.com/v0/b/dad-car-listings.firebasestorage.app/o/cars%2F2016%20Toyota%20Land%20Cruiser%20Prado%202_8L%20GXL.jpg?alt=media&token=97b40865-98b6-480f-85b4-40c61b226463"
+    ],
+    "status": "available"
+  },
+  {
+    "name": "Honda CR-V",
+    "type": "used",
+    "year": 2017,
+    "price": 150000,
+    "mileage": "55,000 km",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "bodyType": "SUV",
+    "color": "White",
+    "engineSize": "1.5L Turbo",
+    "horsepower": "190 hp",
+    "description": "Well-maintained used import, fuel-efficient, spacious interior, great for families.",
+    "imageUrls": [
+      "https://firebasestorage.googleapis.com/v0/b/dad-car-listings.firebasestorage.app/o/cars%2FHonda%20crv.jpg?alt=media&token=571218eb-05de-4d10-aa9d-885c98668e53"
+    ],
+    "status": "available"
+  },
+  {
+    "name": "Nissan X-Trail",
+    "type": "used",
+    "year": 2019,
+    "price": 200000,
+    "mileage": "30,000 km",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "bodyType": "SUV",
+    "color": "Red",
+    "engineSize": "2.5L",
+    "horsepower": "169 hp",
+    "description": "Modern used import, advanced safety features, comfortable ride, low mileage.",
+    "imageUrls": [
+      "https://firebasestorage.googleapis.com/v0/b/dad-car-listings.firebasestorage.app/o/cars%2FNissan%20X-Trail%20Ti%202019%20long-term%20review.jpg?alt=media&token=5bad8e5d-5d0c-47c6-bd8a-3c1f719b9a76"
+    ],
+    "status": "available"
+  }
+]

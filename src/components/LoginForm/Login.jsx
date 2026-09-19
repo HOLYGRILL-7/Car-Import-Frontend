@@ -1,59 +1,68 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/useAuth"; // Import useAuth
-import user_icon from "../../assets/Icons/user.png";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/useAuth";
+import { getAuthErrorMessage } from "../../utils/authErrors";
 import mail_icon from "../../assets/Icons/mail.png";
 import pass_icon from "../../assets/Icons/pass.png";
 
+// The one login page for everyone. Whether the account is the admin is
+// decided by its email (see AuthContext), not by anything chosen here.
 const Login = () => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth(); // Get login function from AuthContext
+  const location = useLocation();
+  const { user, isAdmin, loading, login, resetPassword } = useAuth();
+
+  // Where to go once signed in: back to what they were doing, else the admin
+  // panel for the admin account, else home.
+  const destination = location.state?.from ?? (isAdmin ? "/admin" : "/");
+  const promptMessage = location.state?.message;
+
+  // Already signed in (including right after a successful login).
+  if (!loading && user) {
+    return <Navigate to={destination} replace />;
+  }
 
   const handleKeepBrowsing = () => {
     navigate("/");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setNotice("");
+    setSubmitting(true);
 
-    // Will replace with backend call later
-    if (
-      name === "admin" &&
-      email === "admin@test.com" &&
-      password === "admin123"
-    ) {
-      // Admin login
-      login({
-        id: 1,
-        name: "admin",
-        email: "admin@test.com",
-        role: "admin", // IMPORTANT: Add role
-      });
-      navigate("/admin");
-    } else if (
-      name === "user" &&
-      email === "user@test.com" &&
-      password === "user123"
-    ) {
-      // User login
-      login({
-        id: 2,
-        name: "user",
-        email: "user@test.com",
-        role: "user", // IMPORTANT: Add role
-      });
-      navigate("/users/dashboard");
-    } else {
-      alert("Invalid credentials");
+    try {
+      await login(email, password);
+      // The redirect above takes over once auth state updates.
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
+      setSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setError("");
+    setNotice("");
+    if (!email.trim()) {
+      setError("Enter your email above, then click Forgot Password again.");
+      return;
+    }
+    try {
+      await resetPassword(email);
+      setNotice("If that email has an account, a reset link is on its way.");
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
     }
   };
 
   return (
-    // <div className='p-10 max-w-[400px] m-auto bg-gray-300 '>
     <div className="bg-gray-300 h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
@@ -63,22 +72,13 @@ const Login = () => {
           <h1 className="text-2xl font-bold">Login</h1>
         </div>
 
+        {promptMessage && (
+          <p className="text-center text-sm text-blue-700 bg-blue-50 rounded p-3">
+            {promptMessage}
+          </p>
+        )}
+
         <div className="inputs">
-          <div className="name flex mt-5 bg-gray-200 h-15 opacity-80">
-            <img
-              src={user_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80 "
-            />
-            <input
-              type="text"
-              value={name}
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              placeholder="Name"
-              required
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
           <div className="email flex mt-5 bg-gray-200 h-15 opacity-80">
             <img
               src={mail_icon}
@@ -91,6 +91,7 @@ const Login = () => {
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               placeholder="Email"
               required
+              autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -106,19 +107,33 @@ const Login = () => {
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               placeholder="Password"
               required
+              autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </div>
+
+        {error && (
+          <p role="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
+        {notice && <p className="text-sm text-green-700">{notice}</p>}
+
         <div className="buttons space-y-3">
-          <button className="forgot-password text-blue-400 cursor-pointer">
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="forgot-password text-blue-400 cursor-pointer"
+          >
             Forgot Password?
           </button>
           <button
             type="submit"
-            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full"
+            disabled={submitting}
+            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Login
+            {submitting ? "Logging in..." : "Login"}
           </button>
           <button
             type="button"
@@ -127,27 +142,20 @@ const Login = () => {
           >
             Keep Browsing
           </button>
+          <p className="text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              state={location.state}
+              className="text-blue-600 hover:underline"
+            >
+              Register
+            </Link>
+          </p>
         </div>
       </form>
-
-      {/* Test Credentials
-      <div className='mt-6 p-4 bg-gray-100 rounded'>
-        <p className='font-bold mb-2'>Test Accounts:</p>
-        <p className='text-sm'>Admin: admin / admin@test.com / admin123</p>
-        <p className='text-sm'>User: user / user@test.com / user123</p>
-      </div> */}
     </div>
   );
 };
 
 export default Login;
-
-{
-  /* <div>
-  <form>
-    <div className="header"></div>
-    <div className="inputs"></div>
-    <div className="buttons"></div>
-  </form>
-</div> */
-}

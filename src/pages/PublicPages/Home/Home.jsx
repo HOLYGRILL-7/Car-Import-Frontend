@@ -6,17 +6,44 @@ import CarSlider from "../../../components/Home/CarSlider";
 import CarTypeCard from "../../../components/Home/CarTypeCard";
 import BrandList from "../../../components/Home/BrandList";
 import PopularUsedCarList from "../../../components/Home/PopularUsedCarList";
+import { useCars } from "../../../hooks/useCars";
+import { formatPrice } from "../../../utils/formatPrice";
 
 // Import data
-import {
-  newArrivals,
-  carTypes,
-  carBrands,
-  popularUsedBrands,
-  icons,
-} from "../../../data/carsData";
+import { carTypes, carBrands, icons } from "../../../data/carsData";
+
+const NEW_ARRIVALS_COUNT = 8;
+
+// CarCard expects { id, name, image, price, year } with a display-ready price.
+const toCardCar = (car) => ({
+  id: car.id,
+  name: car.name,
+  image: car.imageUrls?.[0],
+  price: formatPrice(car.price),
+  year: car.year,
+});
+
+// Message to show in place of a section's content, or null when it has cars.
+const getStatusMessage = ({ loading, error, cars }, emptyText) => {
+  if (loading) return "Loading cars...";
+  if (error) return "Couldn't load cars right now. Please try again later.";
+  if (cars.length === 0) return emptyText;
+  return null;
+};
 
 const Home = () => {
+  const newCarsResult = useCars("new");
+  const usedCarsResult = useCars("used");
+
+  const newArrivalsMessage = getStatusMessage(
+    newCarsResult,
+    "No new arrivals at the moment.",
+  );
+  const usedCarsMessage = getStatusMessage(
+    usedCarsResult,
+    "No used cars available at the moment.",
+  );
+
   return (
     <div>
       <Hero />
@@ -31,7 +58,17 @@ const Home = () => {
             linkTo="/newCars"
             linkText="View All"
           />
-          <CarSlider cars={newArrivals} />
+          {newArrivalsMessage ? (
+            <p className="my-10 text-center text-neutral">
+              {newArrivalsMessage}
+            </p>
+          ) : (
+            <CarSlider
+              cars={newCarsResult.cars
+                .slice(0, NEW_ARRIVALS_COUNT)
+                .map(toCardCar)}
+            />
+          )}
         </div>
       </div>
 
@@ -77,7 +114,11 @@ const Home = () => {
           />
         </div>
         <div className="py-10">
-          <PopularUsedCarList cars={popularUsedBrands} />
+          {usedCarsMessage ? (
+            <p className="text-center text-neutral">{usedCarsMessage}</p>
+          ) : (
+            <PopularUsedCarList cars={usedCarsResult.cars} />
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 .history
 /dist
+.env
 
 # Logs
 logs
@@ -14,6 +15,14 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Environment variables (keep .env.example committed)
+.env
+.env.*
+!.env.example
+
+# Firebase Admin credentials — never commit
+serviceAccountKey.json
 
 # Editor directories and files
 .vscode/*

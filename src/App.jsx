@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import AdminRoute from "./components/Admin/AdminRoute";
 import Home from "./pages/PublicPages/Home/Home";
 import Login from "./components/LoginForm/Login";
 import Register from "./components/RegisterForm/Register";
@@ -17,6 +18,7 @@ import Dashboard from "./pages/UserPages/Dashboard";
 import TrackMyOrder from "./pages/UserPages/TrackMyOrder";
 import MyProfile from "./pages/UserPages/MyProfile";
 import MyOrder from "./pages/UserPages/MyOrder";
+import Wishlist from "./pages/UserPages/Wishlist";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import ManageCars from "./pages/AdminPages/ManageCars";
@@ -44,7 +46,8 @@ const App = () => {
         </Route>
 
         {/* Protected USER routes */}
-        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/users/dashboard" element={<Dashboard />} />
           <Route path="/trackOrder" element={<TrackMyOrder />} />
           <Route path="/myProfile" element={<MyProfile />} />
@@ -53,7 +56,7 @@ const App = () => {
       </Route>
 
       {/* Protected ADMIN routes (separate layout, no public navbar) */}
-      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+      <Route element={<AdminRoute />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="cars" element={<ManageCars />} />
