@@ -6,7 +6,7 @@ const FooterLogo = ({ description }) => {
   return (
     <div>
       <div className="logo">
-        <Link to="/" className="transition-transform hover:scale-105 inline-block">
+        <Link to="/" className="inline-block">
           <BrandWordmark />
         </Link>
       </div>

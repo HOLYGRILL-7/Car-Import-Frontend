@@ -3,7 +3,20 @@ import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const SectionHeader = ({ icon, title, description, linkTo, linkText }) => {
+// "View All" link colours. "orange" is the default; New Arrivals uses "blue".
+const LINK_TONES = {
+  orange: "text-accent hover:text-accent-light",
+  blue: "text-blue-600 hover:text-blue-500",
+};
+
+const SectionHeader = ({
+  icon,
+  title,
+  description,
+  linkTo,
+  linkText,
+  tone = "orange",
+}) => {
   return (
     <div className="flex items-center justify-between mb-10">
       <div className="flex items-center gap-3">
@@ -20,7 +33,7 @@ const SectionHeader = ({ icon, title, description, linkTo, linkText }) => {
       {linkTo && linkText && (
         <Link
           to={linkTo}
-          className="text-accent hover:text-accent-light font-semibold flex items-center gap-2"
+          className={`${LINK_TONES[tone]} font-semibold flex items-center gap-2`}
         >
           {linkText}
           <ChevronRight className="w-5 h-5" />

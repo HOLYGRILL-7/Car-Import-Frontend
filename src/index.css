@@ -61,3 +61,45 @@
     animation: none;
   }
 }
+
+/* Hero plane: a slow, ambient loop. It flies in from beyond the right edge and
+   leaves past the left edge (nose first, banner last), then starts over from
+   the right. Only `transform` is animated, so it runs on the compositor.
+   The moving box is as wide as the hero with the plane at its right end:
+     start  translateX(plane width)  -> plane just off the right edge
+     end    translateX(-100%)        -> plane just off the left edge
+   so the wrap-around jump always happens while it's off-screen. */
+.hero-plane {
+  --plane-w: clamp(150px, 24vw, 340px);
+  position: absolute;
+  top: 92px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  will-change: transform;
+  animation: plane-fly 26s linear infinite;
+}
+
+.hero-plane img {
+  display: block;
+  width: var(--plane-w);
+  height: auto;
+}
+
+@keyframes plane-fly {
+  from {
+    transform: translateX(var(--plane-w));
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-plane {
+    animation: none;
+    will-change: auto;
+  }
+}

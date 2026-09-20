@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Logo = () => {
   return (
     <div>
-      <Link to="/" className="transition-transform hover:scale-105 block">
+      <Link to="/" className="block">
         <BrandWordmark />
       </Link>
     </div>

@@ -108,6 +108,7 @@ const Home = () => {
             description="Freshly listed vehicles, updated as new stock arrives."
             linkTo={viewAllPath}
             linkText="View All"
+            tone="blue"
           />
           {newArrivalsResult.loading ? (
             <CarSliderSkeleton />
@@ -117,7 +118,7 @@ const Home = () => {
             </p>
           ) : (
             <div className="fade-in">
-              <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} />
+              <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} tone="blue" />
             </div>
           )}
         </div>

@@ -20,5 +20,5 @@ export const footerData = {
     phone: "+233 123 456 789",
     address: "Accra, Ghana",
   },
-  copyright: "2025 Xtra Motors. All rights reserved.",
+  copyright: "2026 Xtra Motors. All rights reserved.",
 };

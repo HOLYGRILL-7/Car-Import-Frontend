@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 // Signed out: Login / Register. Signed in: Saved Cars, the user's name and
 // Logout — plus an Admin link for the admin account only.
@@ -16,12 +16,16 @@ const AuthSection = ({ user, isAdmin, onLogout }) => {
               Admin
             </Link>
           )}
-          <Link
+          <NavLink
             to="/wishlist"
-            className="text-white hover:text-secondary-light transition-colors font-medium"
+            className={({ isActive }) =>
+              `${
+                isActive ? "text-secondary-light" : "text-white"
+              } hover:text-secondary-light transition-colors font-medium`
+            }
           >
             Saved Cars
-          </Link>
+          </NavLink>
           <span className="text-white">Welcome, {user.name}</span>
           <button
             onClick={onLogout}
