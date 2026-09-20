@@ -27,14 +27,14 @@ const CarCard = ({ car, tone = "orange" }) => {
     <Link to={`/carDetails/${car.id}`} className="block cursor-pointer">
       <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Image */}
-        <div className="relative overflow-hidden h-64 p-4">
+        <div className="relative overflow-hidden h-52 p-3">
           <img
             src={car.image}
             alt={car.name}
             className="w-full h-full object-cover rounded-lg"
           />
           <div
-            className={`absolute top-6 right-6 ${
+            className={`absolute top-5 right-5 ${
               car.type === "new" ? colors.newBadge : colors.usedBadge
             } text-white px-3 py-1 rounded-full text-sm font-semibold`}
           >
@@ -43,17 +43,17 @@ const CarCard = ({ car, tone = "orange" }) => {
         </div>
 
         {/* Card Content */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-primary mb-2">
+        <div className="px-4 pt-1 pb-3">
+          <h3 className="text-lg font-bold text-primary mb-1">
             {car.name}
           </h3>
 
-          <div className="flex items-center justify-between mb-4">
-            <span className={`text-2xl font-bold ${colors.price}`}>{car.price}</span>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-xl font-bold ${colors.price}`}>{car.price}</span>
             <span className="text-neutral text-sm">{car.year}</span>
           </div>
 
-          <div className="flex items-center justify-between text-sm text-neutral pt-4 border-t border-neutral-light">
+          <div className="flex items-center justify-between text-sm text-neutral pt-2 border-t border-neutral-light">
             <span className={`${colors.link} font-semibold flex items-center`}>
               View Details
               <ChevronRight className="w-4 h-4" />

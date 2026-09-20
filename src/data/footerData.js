@@ -5,7 +5,7 @@ export const footerData = {
   },
   quickLinks: [
     { id: 1, name: "Home", to: "/" },
-    { id: 2, name: "New Arrivals", to: "/newArrivals" },
+    { id: 2, name: "New Arrivals", to: "/#new-arrivals" },
     { id: 3, name: "Used Cars", to: "/usedCars" },
     { id: 4, name: "Services", to: "/services" },
   ],

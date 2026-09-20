@@ -98,7 +98,8 @@ const Home = () => {
 
       {/* New Arrivals Section */}
       <div
-        className={`py-14 ${
+        id="new-arrivals"
+        className={`scroll-mt-20 py-14 ${
           dealerChoiceResult.cars.length > 0 ? "bg-white" : "mt-15 bg-neutral-light"
         }`}
       >

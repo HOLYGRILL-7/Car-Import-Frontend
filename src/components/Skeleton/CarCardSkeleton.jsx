@@ -13,18 +13,18 @@ const CarCardSkeleton = ({ variant = "listing" }) => {
         data-skeleton="card"
         className="bg-white rounded-2xl overflow-hidden shadow-lg"
       >
-        <div className="h-64 p-4">
+        <div className="h-52 p-3">
           <Skeleton className="h-full w-full rounded-lg" />
         </div>
-        <div className="p-6">
-          <div className="mb-2 flex h-7 items-center">
+        <div className="px-4 pt-1 pb-3">
+          <div className="mb-1 flex h-7 items-center">
             <Skeleton className="h-5 w-3/4" />
           </div>
-          <div className="mb-4 flex h-8 items-center justify-between">
+          <div className="mb-2 flex h-7 items-center justify-between">
             <Skeleton className="h-6 w-1/3" />
             <Skeleton className="h-4 w-12" />
           </div>
-          <div className="flex h-9 items-end border-t border-neutral-light pt-4">
+          <div className="flex h-[29px] items-end border-t border-neutral-light pt-2">
             <Skeleton className="h-4 w-1/4" />
           </div>
         </div>
