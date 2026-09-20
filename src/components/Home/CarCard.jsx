@@ -7,7 +7,7 @@ import { ChevronRight } from "lucide-react";
 // slide and the dot indicator's animation).
 const CarCard = ({ car }) => {
   return (
-    <Link to={`/carDetails/${car.id}`} className="block group">
+    <Link to={`/carDetails/${car.id}`} className="block cursor-pointer">
       <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Image */}
         <div className="relative overflow-hidden h-64 p-4">
@@ -23,7 +23,7 @@ const CarCard = ({ car }) => {
 
         {/* Card Content */}
         <div className="p-6">
-          <h3 className="text-xl font-bold text-primary mb-2 group-hover:text-accent">
+          <h3 className="text-xl font-bold text-primary mb-2">
             {car.name}
           </h3>
 

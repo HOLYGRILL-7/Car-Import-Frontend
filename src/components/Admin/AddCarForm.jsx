@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { addCar } from "../../firebase/carsAdmin";
+import { addCar, toUrlList, updateCar } from "../../firebase/carsAdmin";
 
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
@@ -21,6 +21,27 @@ const EMPTY_FORM = {
   status: "available",
   isDealerChoice: false,
 };
+
+const STATUSES = ["available", "reserved", "sold"];
+
+// The form's values for an existing car (edit mode). Numbers become strings
+// because that's what the inputs hold; missing optional fields become "".
+const formFromCar = (car) => ({
+  name: String(car.name ?? ""),
+  type: car.type === "new" ? "new" : "used",
+  year: car.year != null ? String(car.year) : "",
+  price: car.price != null ? String(car.price) : "",
+  mileage: String(car.mileage ?? ""),
+  description: String(car.description ?? ""),
+  fuelType: String(car.fuelType ?? ""),
+  transmission: String(car.transmission ?? ""),
+  bodyType: String(car.bodyType ?? ""),
+  color: String(car.color ?? ""),
+  engineSize: String(car.engineSize ?? ""),
+  horsepower: String(car.horsepower ?? ""),
+  status: STATUSES.includes(car.status) ? car.status : "available",
+  isDealerChoice: car.isDealerChoice === true,
+});
 
 // Optional details; written to the document only when filled in.
 const OPTIONAL_FIELDS = [
@@ -43,7 +64,7 @@ const Field = ({ label, error, children }) => (
   </label>
 );
 
-const validate = (form, photos) => {
+const validate = (form, photoCount) => {
   const errors = {};
   if (!form.name.trim()) errors.name = "Name is required.";
   const year = Number(form.year);
@@ -53,29 +74,52 @@ const validate = (form, photos) => {
   if (!form.price || !(Number(form.price) > 0)) errors.price = "Enter a price above 0.";
   if (!form.mileage.trim()) errors.mileage = "Mileage is required.";
   if (!form.description.trim()) errors.description = "Description is required.";
-  if (photos.length === 0) errors.photos = "Add at least 1 photo.";
+  if (photoCount === 0) errors.photos = "Add at least 1 photo.";
   return errors;
 };
 
 // Form to add a car: uploads the photos to Storage, then writes the document.
-const AddCarForm = ({ onAdded }) => {
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [photos, setPhotos] = useState([]);
-  const [previews, setPreviews] = useState([]);
+// Given a `car`, it edits that car instead: pre-filled, its saved photos shown
+// (each removable) next to any new ones, and saving updates the document in
+// place (onSaved gets the result; onCancel closes without saving).
+const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
+  const isEdit = Boolean(car);
+  const [form, setForm] = useState(() => (car ? formFromCar(car) : EMPTY_FORM));
+  // Every photo on the form, in gallery order (the first is the cover): the
+  // car's saved photos ({ id, url }) and any newly picked ones
+  // ({ id, file, previewUrl }). One list, so a saved photo and a new one can
+  // be reordered against each other.
+  const [gallery, setGallery] = useState(() =>
+    car
+      ? toUrlList(car.imageUrls).map((url) => ({ id: `saved:${url}`, url }))
+      : [],
+  );
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [success, setSuccess] = useState("");
   const [progress, setProgress] = useState(null);
   const fileInput = useRef(null);
 
-  // Object URLs for the thumbnails; released whenever the selection changes.
+  // Preview URLs for new files are created when they're picked and released
+  // when they're removed, cleared, or the form closes.
+  const galleryRef = useRef(gallery);
   useEffect(() => {
-    const urls = photos.map((file) => URL.createObjectURL(file));
-    setPreviews(urls);
-    return () => urls.forEach((url) => URL.revokeObjectURL(url));
-  }, [photos]);
+    galleryRef.current = gallery;
+  }, [gallery]);
+  useEffect(
+    () => () =>
+      galleryRef.current.forEach(
+        (item) => item.previewUrl && URL.revokeObjectURL(item.previewUrl),
+      ),
+    [],
+  );
 
+  const photos = useMemo(
+    () => gallery.filter((item) => item.file).map((item) => item.file),
+    [gallery],
+  );
   const submitting = progress !== null;
+  const photoCount = gallery.length;
 
   const setField = (e) => {
     const { name, value } = e.target;
@@ -105,23 +149,52 @@ const AddCarForm = ({ onAdded }) => {
       }
     }
 
-    const room = MAX_PHOTOS - photos.length;
+    const room = MAX_PHOTOS - photoCount;
     if (accepted.length > room) {
       problems.push(`You can add up to ${MAX_PHOTOS} photos.`);
     }
-    setPhotos((prev) => [...prev, ...accepted.slice(0, room)]);
+    setGallery((prev) => [
+      ...prev,
+      ...accepted.slice(0, room).map((file) => ({
+        id: `new:${file.name}:${file.size}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+      })),
+    ]);
     setErrors((prev) => ({ ...prev, photos: problems.join(" ") || undefined }));
   };
 
-  const removePhoto = (index) =>
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
+  const removePhoto = (id) => {
+    setGallery((prev) =>
+      prev.filter((item) => {
+        if (item.id !== id) return true;
+        if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+        return false;
+      }),
+    );
+    setErrors((prev) => ({ ...prev, photos: undefined }));
+  };
+
+  // Moves a photo to the front. Purely a reordering: nothing is uploaded or
+  // deleted until Save, and then only what was added or removed.
+  const setCover = (id) =>
+    setGallery((prev) => {
+      const index = prev.findIndex((item) => item.id === id);
+      if (index <= 0) return prev;
+      return [prev[index], ...prev.slice(0, index), ...prev.slice(index + 1)];
+    });
+
+  const clearGallery = () => {
+    gallery.forEach((item) => item.previewUrl && URL.revokeObjectURL(item.previewUrl));
+    setGallery([]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess("");
     setSubmitError("");
 
-    const found = validate(form, photos);
+    const found = validate(form, photoCount);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
@@ -140,6 +213,31 @@ const AddCarForm = ({ onAdded }) => {
     }
 
     setProgress(0);
+    if (isEdit) {
+      try {
+        const result = await updateCar(car, fields, {
+          photos: gallery.map((item) =>
+            item.url ? { url: item.url } : { file: item.file },
+          ),
+          clearedFields: OPTIONAL_FIELDS.filter(
+            ({ name }) => !form[name].trim(),
+          ).map(({ name }) => name),
+          onProgress: (done) => setProgress(done),
+        });
+        onSaved?.(result);
+        setProgress(null);
+      } catch (error) {
+        console.error("Failed to update car:", error);
+        setSubmitError(
+          error?.code === "permission-denied" || error?.code === "storage/unauthorized"
+            ? "Permission denied. Check that you're signed in as the admin and that the Firebase rules are published."
+            : "Couldn't save the changes. The car wasn't modified — please try again.",
+        );
+        setProgress(null);
+      }
+      return;
+    }
+
     try {
       const id = await addCar(fields, photos, (done) => setProgress(done));
       setSuccess(
@@ -148,7 +246,7 @@ const AddCarForm = ({ onAdded }) => {
         } Cars page${fields.status === "available" ? "" : ` (hidden until it's marked available)`}.`,
       );
       setForm(EMPTY_FORM);
-      setPhotos([]);
+      clearGallery();
       setErrors({});
       onAdded?.(id);
     } catch (error) {
@@ -169,7 +267,21 @@ const AddCarForm = ({ onAdded }) => {
       noValidate
       className="bg-white rounded-2xl shadow p-6 space-y-6"
     >
-      <h2 className="text-xl font-bold text-primary">Add New Car</h2>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-xl font-bold text-primary">
+          {isEdit ? `Edit "${car.name}"` : "Add New Car"}
+        </h2>
+        {isEdit && (
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={submitting}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-neutral-dark hover:bg-gray-50 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
 
       {success && (
         <p role="status" className="rounded-lg bg-green-50 text-green-800 p-3">
@@ -263,32 +375,75 @@ const AddCarForm = ({ onAdded }) => {
           accept="image/*"
           multiple
           onChange={handleFiles}
-          disabled={photos.length >= MAX_PHOTOS}
+          disabled={photoCount >= MAX_PHOTOS}
           aria-label="Choose photos"
           className="block w-full text-sm text-neutral file:mr-4 file:rounded-lg file:border-0 file:bg-primary-light file:px-4 file:py-2 file:text-white hover:file:bg-primary"
         />
         {errors.photos && (
           <span className="block text-sm text-red-600 mt-1">{errors.photos}</span>
         )}
-        {photos.length > 0 && (
+        {isEdit && (
+          <span className="block text-xs text-neutral mt-1">
+            Photos appear in this order on the car's page. The first is the
+            cover (the listing photo and the main image) — use "Set as cover"
+            to change it. New photos are added at the end.
+          </span>
+        )}
+        {photoCount > 0 && (
           <ul className="mt-3 grid grid-cols-3 md:grid-cols-6 gap-3">
-            {photos.map((file, index) => (
-              <li key={`${file.name}-${file.size}`} className="relative">
-                <img
-                  src={previews[index]}
-                  alt={file.name}
-                  className="h-24 w-full rounded-lg object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => removePhoto(index)}
-                  aria-label={`Remove ${file.name}`}
-                  className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white shadow cursor-pointer"
+            {gallery.map((item, index) => {
+              const isSaved = Boolean(item.url);
+              const isCover = isEdit && index === 0;
+              // Saved photos are numbered among the saved ones, in current order.
+              const savedNumber = gallery
+                .slice(0, index + 1)
+                .filter((g) => g.url).length;
+              const label = isSaved
+                ? `saved photo ${savedNumber}`
+                : item.file.name;
+              return (
+                <li
+                  key={item.id}
+                  className={`relative ${
+                    isCover ? "rounded-lg ring-2 ring-primary" : ""
+                  }`}
                 >
-                  <X className="w-3 h-3" />
-                </button>
-              </li>
-            ))}
+                  <img
+                    src={item.url ?? item.previewUrl}
+                    alt={isSaved ? `Saved photo ${savedNumber}` : item.file.name}
+                    className="h-24 w-full rounded-lg object-cover"
+                  />
+                  {isCover && (
+                    <span className="absolute top-1 left-1 rounded bg-primary px-1.5 text-[10px] font-semibold text-white">
+                      Cover
+                    </span>
+                  )}
+                  {isEdit && !isSaved && (
+                    <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 text-[10px] font-semibold text-white">
+                      New
+                    </span>
+                  )}
+                  {isEdit && !isCover && (
+                    <button
+                      type="button"
+                      onClick={() => setCover(item.id)}
+                      aria-label={`Set ${label} as cover`}
+                      className="absolute bottom-1 right-1 rounded bg-white/90 px-1.5 py-0.5 text-[10px] font-semibold text-primary shadow cursor-pointer hover:bg-white"
+                    >
+                      Set as cover
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(item.id)}
+                    aria-label={`Remove ${label}`}
+                    className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white shadow cursor-pointer"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
@@ -299,8 +454,12 @@ const AddCarForm = ({ onAdded }) => {
         className="bg-primary-light hover:bg-primary text-white font-semibold h-12 px-8 rounded-xl cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {submitting
-          ? `Uploading photos (${progress}/${photos.length})...`
-          : "Add Car"}
+          ? photos.length > 0
+            ? `Uploading photos (${progress}/${photos.length})...`
+            : "Saving..."
+          : isEdit
+            ? "Save Changes"
+            : "Add Car"}
       </button>
     </form>
   );

@@ -5,6 +5,8 @@ import SectionHeader from "../../../components/Home/SectionHeader";
 import CarSlider from "../../../components/Home/CarSlider";
 import BrandList from "../../../components/Home/BrandList";
 import PopularUsedCarList from "../../../components/Home/PopularUsedCarList";
+import CarSliderSkeleton from "../../../components/Skeleton/CarSliderSkeleton";
+import PopularUsedSkeleton from "../../../components/Skeleton/PopularUsedSkeleton";
 import { useCars } from "../../../hooks/useCars";
 import { useDealerChoiceCars } from "../../../hooks/useDealerChoiceCars";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -107,12 +109,16 @@ const Home = () => {
             linkTo={viewAllPath}
             linkText="View All"
           />
-          {newArrivalsMessage ? (
+          {newArrivalsResult.loading ? (
+            <CarSliderSkeleton />
+          ) : newArrivalsMessage ? (
             <p className="my-10 text-center text-neutral">
               {newArrivalsMessage}
             </p>
           ) : (
-            <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} />
+            <div className="fade-in">
+              <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} />
+            </div>
           )}
         </div>
       </div>
@@ -139,10 +145,14 @@ const Home = () => {
           />
         </div>
         <div className="py-10">
-          {usedCarsMessage ? (
+          {usedCarsResult.loading ? (
+            <PopularUsedSkeleton />
+          ) : usedCarsMessage ? (
             <p className="text-center text-neutral">{usedCarsMessage}</p>
           ) : (
-            <PopularUsedCarList cars={usedCarsResult.cars} />
+            <div className="fade-in">
+              <PopularUsedCarList cars={usedCarsResult.cars} />
+            </div>
           )}
         </div>
       </div>

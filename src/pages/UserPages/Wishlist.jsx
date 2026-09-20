@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useWishlist } from "../../context/useWishlist";
 import CarListingCard from "../../components/Cars/CarListingCard";
+import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";
 
 // A signed-in user's saved cars (the route is behind ProtectedRoute).
 const Wishlist = () => {
@@ -54,8 +55,11 @@ const Wishlist = () => {
       <h1 className="text-4xl font-bold text-primary">Saved Cars</h1>
       <p className="text-neutral mt-2">Cars you've saved to look at later.</p>
 
-      {loading && (
-        <p className="my-10 text-center text-neutral">Loading your cars...</p>
+      {loading && cars.length === 0 && (
+        <CarGridSkeleton
+          count={3}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10"
+        />
       )}
       {fetchError && (
         <p className="my-10 text-center text-neutral">
@@ -80,7 +84,7 @@ const Wishlist = () => {
       )}
 
       {cars.length > 0 && (
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10 fade-in">
           {cars.map((car) => (
             <li key={car.id}>
               <CarListingCard car={car} />

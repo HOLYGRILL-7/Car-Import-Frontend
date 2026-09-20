@@ -20,6 +20,7 @@ import { WHATSAPP_NUMBER, openWhatsApp } from "../../../constants/contact";
 import SpecCard from "./SpecCard";
 import ImageThumbnail from "./ImageThumbnail";
 import SaveButton from "../../../components/Cars/SaveButton";
+import CarDetailsSkeleton from "../../../components/Skeleton/CarDetailsSkeleton";
 
 const hasValue = (value) =>
   value !== undefined && value !== null && String(value).trim() !== "";
@@ -31,11 +32,7 @@ const CarDetailsContent = ({ id, onShare }) => {
   const { car, loading, error } = useCar(id);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-        <p className="text-gray-600">Loading car details...</p>
-      </div>
-    );
+    return <CarDetailsSkeleton />;
   }
 
   if (error || !car) {
@@ -97,7 +94,7 @@ const CarDetailsContent = ({ id, onShare }) => {
   ].filter((spec) => hasValue(spec.value));
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 pt-20 fade-in">
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Link

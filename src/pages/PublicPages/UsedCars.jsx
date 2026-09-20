@@ -1,33 +1,36 @@
 import React from "react";
-import { useCars } from "../../hooks/useCars";
 import CarFilterSidebar from "../../components/Cars/CarFilterSidebar";
 import CarGrid from "../../components/Cars/CarGrid";
+import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";
 
 const UsedCars = () => {
-  const { cars, loading, error, hasMore, loadingMore, loadMoreError, loadMore } =
-    useCars("used");
-
   return (
     <div className="main-container pt-24 pb-16 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold text-primary mb-6">Used Cars</h1>
 
-      <CarFilterSidebar cars={cars} type="used">
-        {(visibleCars) => (
+      <CarFilterSidebar type="used">
+        {({
+          cars,
+          loading,
+          error,
+          errorMessage,
+          hasMore,
+          loadingMore,
+          loadMoreError,
+          loadMore,
+          hasActiveFilters,
+        }) => (
           <>
-            {loading && (
-              <p className="my-10 text-center text-neutral">Loading cars...</p>
-            )}
+            {loading && <CarGridSkeleton />}
             {error && (
-              <p className="my-10 text-center text-neutral">
-                Couldn't load cars right now. Please try again later.
-              </p>
+              <p className="my-10 text-center text-neutral">{errorMessage}</p>
             )}
-            {!loading && !error && cars.length === 0 && (
+            {!loading && !error && cars.length === 0 && !hasActiveFilters && (
               <p className="my-10 text-center text-neutral">
                 No used cars available at the moment.
               </p>
             )}
-            {visibleCars.length > 0 && <CarGrid cars={visibleCars} />}
+            {cars.length > 0 && <CarGrid cars={cars} />}
 
             {loadMoreError && (
               <p className="my-4 text-center text-neutral">

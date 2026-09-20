@@ -7,7 +7,7 @@ const CarGrid = ({ cars }) => {
   return (
     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 my-6">
       {cars.map((car) => (
-        <li key={car.id}>
+        <li key={car.id} className="fade-in">
           <CarListingCard car={car} />
         </li>
       ))}

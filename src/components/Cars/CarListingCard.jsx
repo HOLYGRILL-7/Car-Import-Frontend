@@ -17,8 +17,8 @@ const CarListingCard = ({ car }) => {
     .join(" • ");
 
   return (
-    <Link to={`/carDetails/${car.id}`} className="block group h-full">
-      <div className="h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+    <Link to={`/carDetails/${car.id}`} className="block h-full cursor-pointer">
+      <div className="h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg">
         <div className="relative h-48 p-4 shrink-0">
           <SaveButton carId={car.id} />
           {photo ? (
@@ -36,7 +36,7 @@ const CarListingCard = ({ car }) => {
         </div>
 
         <div className="flex flex-1 flex-col px-4 pb-4">
-          <h3 className="text-base font-bold leading-snug text-primary line-clamp-2 group-hover:text-accent transition-colors">
+          <h3 className="text-base font-bold leading-snug text-primary line-clamp-2">
             {car.name}
           </h3>
           <p className="mt-1 text-sm text-neutral">{specLine}</p>

@@ -1,19 +1,21 @@
-import React, { useId, useMemo, useState } from "react";
+import React, { useId, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import MakeFilterChip from "./MakeFilterChip";
+import { useCars } from "../../hooks/useCars";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useMakeFilter } from "../../hooks/useMakeFilter";
 import { BODY_TYPES } from "../../utils/bodyTypes";
 import {
   EMPTY_FILTERS,
-  applyCarFilters,
+  FUEL_TYPES,
+  TRANSMISSIONS,
   countActiveFilters,
-  distinctValues,
 } from "../../utils/carFilters";
 
 const BODY_OPTIONS = [{ id: "all", label: "All" }, ...BODY_TYPES];
 
 const fieldClass =
-  "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-light disabled:bg-gray-100 disabled:text-gray-400";
+  "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-light";
 
 const Section = ({ title, children }) => (
   <div>
@@ -28,10 +30,9 @@ const Dropdown = ({ label, value, options, onChange }) => (
       aria-label={label}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      disabled={options.length === 0}
       className={fieldClass}
     >
-      <option value="">{options.length === 0 ? "None listed yet" : "Any"}</option>
+      <option value="">Any</option>
       {options.map((option) => (
         <option key={option} value={option}>
           {option}
@@ -41,27 +42,35 @@ const Dropdown = ({ label, value, options, onChange }) => (
   </Section>
 );
 
+const INDEX_MISSING_MESSAGE =
+  "This filter combination isn't available yet — it needs a database index that hasn't been created.";
+const GENERIC_ERROR_MESSAGE =
+  "Couldn't load cars right now. Please try again later.";
+
 // Filter sidebar shared by the Used Cars and New Cars pages. Give it the
-// page's loaded `cars` and its `type` ("used" | "new"); it owns all filter
-// state and calls `children(visibleCars)` with the cars that match every
-// filter, so the page just renders them. Filters combine, apply in place, and
-// the manufacturer set by the homepage links (?make=toyota) is one of them.
-// Desktop: a column on the left. Mobile: behind a "Filters" toggle.
-const CarFilterSidebar = ({ cars, type, children }) => {
+// page's `type` ("used" | "new"); it owns the filter state AND runs the query:
+// every filter change starts a fresh Firestore query over the whole
+// collection (see useCars), and `children(result)` is called with what came
+// back — { cars, loading, error, errorMessage, hasMore, loadingMore,
+// loadMoreError, loadMore, hasActiveFilters } — so the page just renders it.
+// The manufacturer set by the homepage links (?make=toyota) is one of the
+// filters. Desktop: a column on the left. Mobile: behind a "Filters" toggle.
+const CarFilterSidebar = ({ type, children }) => {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [open, setOpen] = useState(false);
   const { make, makeLabel, clearMake } = useMakeFilter();
   const panelId = useId();
 
-  const visibleCars = useMemo(
-    () => applyCarFilters(cars, filters, make),
-    [cars, filters, make],
-  );
-  const fuelOptions = useMemo(() => distinctValues(cars, "fuelType"), [cars]);
-  const transmissionOptions = useMemo(
-    () => distinctValues(cars, "transmission"),
-    [cars],
-  );
+  // Typing a price shouldn't query on every keystroke; clearing one is instant.
+  const debouncedMin = useDebouncedValue(filters.minPrice);
+  const debouncedMax = useDebouncedValue(filters.maxPrice);
+  const result = useCars(type, {
+    ...filters,
+    minPrice: filters.minPrice === "" ? "" : debouncedMin,
+    maxPrice: filters.maxPrice === "" ? "" : debouncedMax,
+    make,
+  });
+  const { cars, loading, error, hasMore } = result;
 
   const activeCount = countActiveFilters(filters, make);
   const setFilter = (name, value) =>
@@ -70,6 +79,11 @@ const CarFilterSidebar = ({ cars, type, children }) => {
     setFilters(EMPTY_FILTERS);
     clearMake();
   };
+
+  const errorMessage =
+    error?.code === "failed-precondition"
+      ? INDEX_MISSING_MESSAGE
+      : GENERIC_ERROR_MESSAGE;
 
   const minPrice = Number(filters.minPrice);
   const maxPrice = Number(filters.maxPrice);
@@ -115,8 +129,13 @@ const CarFilterSidebar = ({ cars, type, children }) => {
             )}
           </div>
           <p className="-mt-4 text-sm text-neutral">
-            {visibleCars.length} of {cars.length} {type}{" "}
-            {cars.length === 1 ? "car" : "cars"}
+            {loading
+              ? "Searching..."
+              : error
+                ? "Search failed"
+                : `${cars.length}${hasMore ? "+" : ""} ${type} ${
+                    cars.length === 1 && !hasMore ? "car" : "cars"
+                  }`}
           </p>
 
           {make && <MakeFilterChip label={makeLabel} onClear={clearMake} />}
@@ -175,22 +194,26 @@ const CarFilterSidebar = ({ cars, type, children }) => {
           <Dropdown
             label="Fuel type"
             value={filters.fuelType}
-            options={fuelOptions}
+            options={FUEL_TYPES}
             onChange={(value) => setFilter("fuelType", value)}
           />
           <Dropdown
             label="Transmission"
             value={filters.transmission}
-            options={transmissionOptions}
+            options={TRANSMISSIONS}
             onChange={(value) => setFilter("transmission", value)}
           />
         </aside>
       </div>
 
       <div className="min-w-0">
-        {cars.length > 0 && visibleCars.length === 0 && (
+        {!loading && !error && cars.length === 0 && activeCount > 0 && (
           <div className="my-10 text-center text-neutral">
-            <p>No {type} cars match these filters.</p>
+            <p>
+              {hasMore
+                ? "No matches among the newest cars yet — use Load More to keep searching."
+                : `No ${type} cars match these filters.`}
+            </p>
             <button
               type="button"
               onClick={clearFilters}
@@ -200,7 +223,7 @@ const CarFilterSidebar = ({ cars, type, children }) => {
             </button>
           </div>
         )}
-        {children(visibleCars)}
+        {children({ ...result, errorMessage, hasActiveFilters: activeCount > 0 })}
       </div>
     </div>
   );

@@ -3,10 +3,12 @@
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDocs,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -106,4 +108,98 @@ export const deleteCar = async (car) => {
   }
 
   await deleteDoc(doc(db, "cars", car.id));
+};
+
+// Removes one photo from Storage. Returns false only when it should have been
+// deleted but couldn't be; photos that aren't this admin's to delete (other
+// hosts or buckets, outside cars/) or that are already gone count as done.
+const deleteStoragePhoto = async (url) => {
+  if (!isDownloadUrl(url)) return true;
+
+  let photoRef;
+  try {
+    photoRef = ref(storage, url);
+  } catch {
+    return true; // not a Firebase Storage URL
+  }
+  if (
+    photoRef.bucket !== storage.app.options.storageBucket ||
+    !photoRef.fullPath.startsWith("cars/")
+  ) {
+    return true;
+  }
+
+  try {
+    await deleteObject(photoRef);
+    return true;
+  } catch (error) {
+    return error.code === "storage/object-not-found";
+  }
+};
+
+// Updates an existing car in place. `photos` is the final gallery, in order
+// (the first is the cover): each entry is either a saved photo ({ url }) or a
+// new file to upload ({ file }), so a new photo can be placed anywhere.
+// Reordering saved photos touches nothing in Storage. Order of operations, so
+// a failure never leaves the listing pointing at photos that are gone:
+//   1. upload the new photos (removed again if anything below fails)
+//   2. update the document — createdAt and id are untouched
+//   3. only then delete the removed photos from Storage
+// `clearedFields` are optional fields the admin emptied; they're removed from
+// the document rather than left holding their old value.
+// Resolves to { car, cleanupFailures }: the updated car, and how many removed
+// photos couldn't be deleted from Storage (the save itself still succeeded).
+export const updateCar = async (
+  car,
+  fields,
+  { photos, clearedFields = [], onProgress },
+) => {
+  const newPhotos = photos.filter((photo) => photo.file).map((photo) => photo.file);
+  let uploadedCount = 0;
+
+  const uploads = await Promise.allSettled(
+    newPhotos.map(async (file, index) => {
+      const photoRef = ref(
+        storage,
+        `cars/${car.id}/${Date.now()}-${index}-${safeFileName(file.name)}`,
+      );
+      await uploadBytes(photoRef, file, { contentType: file.type });
+      const url = await getDownloadURL(photoRef);
+      onProgress?.(++uploadedCount, newPhotos.length);
+      return { photoRef, url };
+    }),
+  );
+
+  const uploaded = uploads
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value);
+  const failure = uploads.find((result) => result.status === "rejected");
+
+  let imageUrls;
+  try {
+    if (failure) throw failure.reason;
+    // Promise.allSettled keeps results in input order, so each new file maps
+    // to its own uploaded URL and lands where the admin put it.
+    const urlByFile = new Map(
+      newPhotos.map((file, i) => [file, uploads[i].value.url]),
+    );
+    imageUrls = photos.map((photo) => photo.url ?? urlByFile.get(photo.file));
+    await updateDoc(doc(db, "cars", car.id), {
+      ...fields,
+      ...Object.fromEntries(clearedFields.map((name) => [name, deleteField()])),
+      imageUrls,
+    });
+  } catch (error) {
+    await Promise.allSettled(uploaded.map(({ photoRef }) => deleteObject(photoRef)));
+    throw error;
+  }
+
+  const removedUrls = toUrlList(car.imageUrls).filter(
+    (url) => !imageUrls.includes(url),
+  );
+  const results = await Promise.all(removedUrls.map(deleteStoragePhoto));
+
+  const updated = { ...car, ...fields, imageUrls };
+  for (const name of clearedFields) delete updated[name];
+  return { car: updated, cleanupFailures: results.filter((ok) => !ok).length };
 };
