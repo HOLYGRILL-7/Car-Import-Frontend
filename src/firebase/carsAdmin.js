@@ -35,6 +35,10 @@ export const fetchAllCars = async () => {
     .sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
 };
 
+// Changes only a car's status: the quick toggle on the Manage Cars list.
+export const updateCarStatus = (carId, status) =>
+  updateDoc(doc(db, "cars", carId), { status });
+
 // Uploads the photos, then writes the car doc with the resulting imageUrls.
 // If anything fails, photos already uploaded are removed again.
 export const addCar = async (fields, photos, onProgress) => {

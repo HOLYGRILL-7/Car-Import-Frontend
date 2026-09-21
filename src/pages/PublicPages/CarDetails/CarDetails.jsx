@@ -111,7 +111,7 @@ const CarDetailsContent = ({ id, onShare }) => {
           {/* Left Column - Images */}
           <div>
             {/* Main Image */}
-            <div className="relative rounded-2xl overflow-hidden bg-white shadow-lg mb-4 h-96">
+            <div className="relative rounded-2xl overflow-hidden bg-white shadow-lg mb-4 h-64 sm:h-96">
               {imageErrors[selectedImage] || !imageUrls[selectedImage] ? (
                 <div className="w-full h-full flex items-center justify-center bg-gray-100">
                   <p className="text-gray-400">Image unavailable</p>
@@ -162,13 +162,13 @@ const CarDetailsContent = ({ id, onShare }) => {
 
           {/* Right Column - Details */}
           <div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-24">
+            <div className="bg-white rounded-2xl shadow-lg p-5 sm:p-8 lg:sticky lg:top-24">
               {/* Title & Price */}
-              <h1 className="text-4xl font-bold text-gray-900 mb-6">
+              <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 wrap-break-word">
                 {car.name}
               </h1>
 
-              <div className="text-5xl font-bold text-blue-600 mb-8">
+              <div className="text-4xl sm:text-5xl font-bold text-blue-600 mb-6 sm:mb-8">
                 {price}
               </div>
 
@@ -201,7 +201,7 @@ const CarDetailsContent = ({ id, onShare }) => {
         </div>
 
         {/* Description */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
+        <div className="bg-white rounded-2xl shadow-lg p-5 sm:p-8 mt-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
           <p className="text-gray-700 leading-relaxed">{car.description}</p>
         </div>

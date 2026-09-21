@@ -68,23 +68,24 @@ const LeaderCard = ({ leader, onViewProfile }) => {
 const Team = ({
   leaders = TEAM_CONTENT.leadership.members,
   onViewProfile,
-  onJoinTeam,
+  // onJoinTeam,   // COMMENTED OUT with the "Want to Join Our Team?" section below
 }) => {
-  const handleJoinTeam = () => {
-    console.log(`Navigate to: ${TEAM_CONTENT.joinTeam.buttonLink}`);
-    if (onJoinTeam) {
-      onJoinTeam();
-    } else {
-      // Default navigation logic
-      window.location.href = TEAM_CONTENT.joinTeam.buttonLink;
-    }
-  };
+  // COMMENTED OUT with the "Want to Join Our Team?" section below.
+  // const handleJoinTeam = () => {
+  //   console.log(`Navigate to: ${TEAM_CONTENT.joinTeam.buttonLink}`);
+  //   if (onJoinTeam) {
+  //     onJoinTeam();
+  //   } else {
+  //     // Default navigation logic
+  //     window.location.href = TEAM_CONTENT.joinTeam.buttonLink;
+  //   }
+  // };
 
   return (
     <div className="space-y-16">
       {/* Header Section */}
       <header className="text-center space-y-4">
-        <h1 className="text-5xl md:text-6xl font-bold text-primary">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
           {TEAM_CONTENT.header.title}
         </h1>
         <p className="text-xl text-neutral max-w-2xl mx-auto">
@@ -118,21 +119,26 @@ const Team = ({
         </div>
       </section>
 
-      {/* Join Team CTA */}
-      <aside className="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-12 text-center text-white mt-16">
-        <h2 className="text-3xl font-bold mb-4">
-          {TEAM_CONTENT.joinTeam.title}
-        </h2>
-        <p className="text-lg text-neutral-light mb-6 max-w-2xl mx-auto">
-          {TEAM_CONTENT.joinTeam.description}
-        </p>
-        <button
-          onClick={handleJoinTeam}
-          className="px-8 py-4 bg-accent hover:bg-accent-light text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg"
-        >
-          {TEAM_CONTENT.joinTeam.buttonText}
-        </button>
-      </aside>
+      {/* COMMENTED OUT: the "Want to Join Our Team?" section. The business isn't
+          actively hiring right now; uncomment this block, handleJoinTeam and the
+          onJoinTeam prop above, and joinTeam in data/teamData.js to reinstate it. */}
+      {
+        //       {/* Join Team CTA */}
+        //       <aside className="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-6 sm:p-12 text-center text-white mt-16">
+        //         <h2 className="text-3xl font-bold mb-4">
+        //           {TEAM_CONTENT.joinTeam.title}
+        //         </h2>
+        //         <p className="text-lg text-neutral-light mb-6 max-w-2xl mx-auto">
+        //           {TEAM_CONTENT.joinTeam.description}
+        //         </p>
+        //         <button
+        //           onClick={handleJoinTeam}
+        //           className="px-8 py-4 bg-accent hover:bg-accent-light text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg"
+        //         >
+        //           {TEAM_CONTENT.joinTeam.buttonText}
+        //         </button>
+        //       </aside>
+      }
     </div>
   );
 };

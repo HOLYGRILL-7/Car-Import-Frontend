@@ -2,6 +2,7 @@ import React from "react";
 import { services, whyChooseUs } from "../../data/carsData";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowRight } from "lucide-react"; // make sure lucide-react is installed
+import { getServiceWhatsAppLink } from "../../constants/contact";
 
 const Services = () => {
   return (
@@ -17,7 +18,7 @@ const Services = () => {
           <div className="text-center space-y-6">
             <div className="inline-block">
               <span className="bg-secondary text-white px-6 py-2 rounded-full text-sm font-semibold">
-                PREMIUM SERVICES
+                OUR SERVICES
               </span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold">
@@ -37,15 +38,15 @@ const Services = () => {
 
       {/* Services Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:auto-rows-fr md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
             <div
               key={service.id} // changed from index to unique id
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-2"
+              className="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden"
             >
               <div className={`h-2 bg-linear-to-r ${service.color}`}></div>
 
-              <div className="p-8 space-y-6">
+              <div className="flex flex-1 flex-col gap-6 p-8">
                 <div
                   className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-r ${service.color} text-white`}
                 >
@@ -73,13 +74,15 @@ const Services = () => {
                   ))}
                 </ul>
 
-                <Link
-                  to={`/services/${service.id}`} // replace with your route
-                  className={`w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} text-white font-semibold flex items-center justify-center gap-2 group-hover:gap-4 transition-all`}
+                <a
+                  href={getServiceWhatsAppLink(service.title)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-auto w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} text-white font-semibold flex items-center justify-center gap-2`}
                 >
                   Learn More
                   <ArrowRight className="w-5 h-5" />
-                </Link>
+                </a>
               </div>
             </div>
           ))}
@@ -122,12 +125,11 @@ const Services = () => {
             Ready to Get Started?
           </h2>
           <p className="text-xl text-neutral-light">
-            Experience the difference with our premium automotive services
-            today.
+            Browse our inventory or reach out — we're happy to help.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/newArrivals"
+              to="/usedCars"
               className="px-8 py-4 bg-linearto-r from-bg-accent to bg-accent-light text-white font-bold rounded-xl hover:scale-105 transition-transform shadow-lg"
             >
               Browse Inventory

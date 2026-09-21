@@ -2,15 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import BrandWordmark from "../Brand/BrandWordmark";
 
-const FooterLogo = ({ description }) => {
+const FooterLogo = () => {
   return (
-    <div>
-      <div className="logo">
-        <Link to="/" className="inline-block">
-          <BrandWordmark />
-        </Link>
-      </div>
-      <p className="text-gray-400 text-sm mt-2">{description}</p>
+    <div className="logo">
+      <Link to="/" className="inline-block">
+        <BrandWordmark />
+      </Link>
     </div>
   );
 };

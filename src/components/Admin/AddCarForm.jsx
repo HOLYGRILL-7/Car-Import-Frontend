@@ -20,6 +20,7 @@ const EMPTY_FORM = {
   horsepower: "",
   status: "available",
   isDealerChoice: false,
+  dealerReviewText: "",
 };
 
 const STATUSES = ["available", "reserved", "sold"];
@@ -41,6 +42,7 @@ const formFromCar = (car) => ({
   horsepower: String(car.horsepower ?? ""),
   status: STATUSES.includes(car.status) ? car.status : "available",
   isDealerChoice: car.isDealerChoice === true,
+  dealerReviewText: String(car.dealerReviewText ?? ""),
 });
 
 // Optional details; written to the document only when filled in.
@@ -51,6 +53,13 @@ const OPTIONAL_FIELDS = [
   { name: "color", label: "Color", placeholder: "e.g. Black" },
   { name: "engineSize", label: "Engine size", placeholder: "e.g. 3.5L V6" },
   { name: "horsepower", label: "Horsepower", placeholder: "e.g. 278 HP" },
+];
+
+// Every optional text field: written to the document only when filled in, and
+// removed from it when an edit empties it.
+const OPTIONAL_TEXT_FIELDS = [
+  ...OPTIONAL_FIELDS.map(({ name }) => name),
+  "dealerReviewText",
 ];
 
 const inputClass =
@@ -208,7 +217,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
       status: form.status,
       isDealerChoice: form.isDealerChoice,
     };
-    for (const { name } of OPTIONAL_FIELDS) {
+    for (const name of OPTIONAL_TEXT_FIELDS) {
       if (form[name].trim()) fields[name] = form[name].trim();
     }
 
@@ -219,9 +228,9 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           photos: gallery.map((item) =>
             item.url ? { url: item.url } : { file: item.file },
           ),
-          clearedFields: OPTIONAL_FIELDS.filter(
-            ({ name }) => !form[name].trim(),
-          ).map(({ name }) => name),
+          clearedFields: OPTIONAL_TEXT_FIELDS.filter(
+            (name) => !form[name].trim(),
+          ),
           onProgress: (done) => setProgress(done),
         });
         onSaved?.(result);
@@ -340,6 +349,21 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
 
       <Field label="Description *" error={errors.description}>
         <textarea name="description" rows={4} value={form.description} onChange={setField} className={inputClass} placeholder="Condition, features, history..." />
+      </Field>
+
+      <Field label="Dealer's Review (optional)">
+        <textarea
+          name="dealerReviewText"
+          rows={5}
+          value={form.dealerReviewText}
+          onChange={setField}
+          maxLength={2000}
+          className={inputClass}
+          placeholder="Your own take on this car: what you like about it, how it drives, who it suits..."
+        />
+        <span className="block text-xs text-neutral mt-1">
+          Shown on the Reviews page when this car is also marked Dealer's Choice.
+        </span>
       </Field>
 
       <div>

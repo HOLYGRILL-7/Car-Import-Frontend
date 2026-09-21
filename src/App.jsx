@@ -10,6 +10,8 @@ import UsedCars from "./pages/PublicPages/UsedCars";
 import NewCars from "./pages/PublicPages/NewCars";
 import Services from "./pages/PublicPages/Services";
 import Reviews from "./pages/PublicPages/Reviews";
+import FAQ from "./pages/PublicPages/FAQ";
+import Contact from "./pages/PublicPages/Contact";
 import AboutUs from "./pages/AboutPages/AboutUs";
 import About from "./pages/AboutPages/About";
 import Team from "./pages/AboutPages/Team";
@@ -22,8 +24,8 @@ import Wishlist from "./pages/UserPages/Wishlist";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import ManageCars from "./pages/AdminPages/ManageCars";
-import ManageOrders from "./pages/AdminPages/ManageOrders";
 import ManageUsers from "./pages/AdminPages/ManageUsers";
+import ManageTestimonials from "./pages/AdminPages/ManageTestimonials";
 import CarDetails from "./pages/PublicPages/CarDetails/CarDetails";
 
 const App = () => {
@@ -36,6 +38,8 @@ const App = () => {
         <Route path="/usedCars" element={<UsedCars />} />
         <Route path="/services" element={<Services />} />
         <Route path="/reviews" element={<Reviews />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/carDetails/:id" element={<CarDetails />} />
 
         {/* About routes */}
@@ -60,7 +64,7 @@ const App = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="cars" element={<ManageCars />} />
-          <Route path="orders" element={<ManageOrders />} />
+          <Route path="testimonials" element={<ManageTestimonials />} />
           <Route path="users" element={<ManageUsers />} />
         </Route>
       </Route>

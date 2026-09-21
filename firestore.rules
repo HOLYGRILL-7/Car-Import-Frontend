@@ -3,20 +3,53 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // The single admin account. Replace the email below with your
+    // VITE_ADMIN_EMAIL value (lowercase). The account must be email-verified
+    // (run verify-admin.js once), so a stranger can't become admin by
+    // registering the admin's email first.
+    function isAdmin() {
+      return request.auth != null
+          && request.auth.token.email == "REPLACE_WITH_ADMIN_EMAIL"
+          && request.auth.token.email_verified == true;
+    }
+
     // Anyone can browse cars; only the admin account can change them.
-    // Replace the email below with your VITE_ADMIN_EMAIL value (lowercase).
-    // The account must be email-verified (run verify-admin.js once), so a
-    // stranger can't become admin by registering the admin's email first.
     match /cars/{carId} {
       allow read: if true;
-      allow write: if request.auth != null
-                   && request.auth.token.email == "REPLACE_WITH_ADMIN_EMAIL"
-                   && request.auth.token.email_verified == true;
+      allow write: if isAdmin();
+    }
+
+    // Customer testimonials shown on the public Reviews page. Anyone can read
+    // them; only the admin account can add, change or delete them.
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Each account's profile (email + sign-up date), written once by the app
+    // the first time that account signs in. Firebase Auth's user list can't be
+    // read from a browser, so the admin's Manage Users page and user count
+    // read this collection instead (sync-users.js imports older accounts).
+    // A user can read and create only their own; only the admin can list.
+    match /users/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow read: if isAdmin();
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.keys().hasOnly(['email', 'createdAt'])
+                    && request.resource.data.email == request.auth.token.email
+                    && request.resource.data.createdAt is timestamp;
     }
 
     // A signed-in user can read and write only their own wishlist.
     match /users/{uid}/wishlist/{carId} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // The admin dashboard counts saves per car across every user's wishlist
+    // with one collection-group query, so it needs read access to all of them.
+    match /{path=**}/wishlist/{carId} {
+      allow read: if isAdmin();
     }
   }
 }

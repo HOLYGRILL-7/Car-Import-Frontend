@@ -38,10 +38,10 @@ const AboutUs = () => {
       <div className="bg-gradient-to-br from-primary via-[#1e3a5f] to-primary-dark text-white pt-32 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4">
-            <h1 className="text-5xl md:text-6xl font-bold">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">
               {aboutHeader.title}
             </h1>
-            <p className="text-xl text-neutral-cream">{aboutHeader.subtitle}</p>
+            <p className="text-lg sm:text-xl text-neutral-cream">{aboutHeader.subtitle}</p>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@ const AboutUs = () => {
       {/* Navigation Tabs */}
       <div className="bg-white shadow-md sticky top-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex gap-8 overflow-x-auto">
+          <nav className="flex gap-4 sm:gap-8 overflow-x-auto">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -71,7 +71,7 @@ const AboutUs = () => {
       {/* CTA Section */}
       <div className="bg-gradient-to-r from-primary to-primary-dark text-white py-16 mt-20">
         <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
-          <h2 className="text-4xl font-bold">{ctaSection.title}</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold">{ctaSection.title}</h2>
           <p className="text-xl text-neutral-light">{ctaSection.subtitle}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {ctaSection.buttons.map((btn) => (

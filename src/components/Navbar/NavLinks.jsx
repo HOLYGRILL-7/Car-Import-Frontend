@@ -1,18 +1,19 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NavLinks = () => {
+// `stacked` lays the links out as a vertical list (the mobile menu).
+const NavLinks = ({ stacked = false }) => {
   const navLinks = [
     { name: "Home ", to: "/" },
     { name: "New Cars ", to: "/newCars" },
     { name: "Used Cars ", to: "/usedCars" },
-    { name: "Reviews ", to: "/reviews" },
     { name: "Services ", to: "/services" },
     { name: "About ", to: "/about" },
+    { name: "Reviews ", to: "/reviews" },
   ];
 
   return (
-    <div className="flex flex-row gap-6">
+    <div className={stacked ? "flex flex-col" : "flex flex-row gap-6"}>
       {navLinks.map((link) => (
         <NavLink
           key={link.to}
@@ -21,7 +22,9 @@ const NavLinks = () => {
           className={({ isActive }) =>
             `${
               isActive ? "text-primary-light" : "text-white"
-            } hover:text-primary-light transition-colors font-semibold text-lg`
+            } hover:text-primary-light transition-colors font-semibold text-lg ${
+              stacked ? "py-3" : ""
+            }`
           }
         >
           {link.name}

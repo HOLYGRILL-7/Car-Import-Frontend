@@ -10,6 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
+import { recordUserProfile } from "../firebase/usersProfile";
 import { isAdminEmail } from "../utils/admin";
 
 const AuthContext = createContext(null);
@@ -46,6 +47,12 @@ export const AuthProvider = ({ children }) => {
       onAuthStateChanged(auth, (firebaseUser) => {
         setUser(toUser(firebaseUser));
         setLoading(false);
+        // Best effort: a failure here must never get in the way of signing in.
+        if (firebaseUser) {
+          recordUserProfile(firebaseUser).catch((error) =>
+            console.warn("Couldn't record the user profile:", error),
+          );
+        }
       }),
     [],
   );

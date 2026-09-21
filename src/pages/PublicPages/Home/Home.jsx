@@ -4,12 +4,11 @@ import Hero from "../../../components/Hero/Hero";
 import SectionHeader from "../../../components/Home/SectionHeader";
 import CarSlider from "../../../components/Home/CarSlider";
 import BrandList from "../../../components/Home/BrandList";
-import PopularUsedCarList from "../../../components/Home/PopularUsedCarList";
-import CarSliderSkeleton from "../../../components/Skeleton/CarSliderSkeleton";
-import PopularUsedSkeleton from "../../../components/Skeleton/PopularUsedSkeleton";
+import CarGrid from "../../../components/Cars/CarGrid";
+import CarGridSkeleton from "../../../components/Skeleton/CarGridSkeleton";
 import { useCars } from "../../../hooks/useCars";
 import { useDealerChoiceCars } from "../../../hooks/useDealerChoiceCars";
-import { formatPrice } from "../../../utils/formatPrice";
+import { useVisibleCards } from "../../../hooks/useVisibleCards";
 import { pickNewArrivals } from "../../../utils/newArrivals";
 import { matchesMake } from "../../../utils/makes";
 
@@ -17,16 +16,26 @@ import { matchesMake } from "../../../utils/makes";
 import { carBrands } from "../../../data/carsData";
 
 const NEW_ARRIVALS_COUNT = 8;
+const POPULAR_USED_COUNT = 8;
 
-// CarCard expects { id, name, type, image, price, year } with a display-ready price.
-const toCardCar = (car) => ({
-  id: car.id,
-  name: car.name,
-  type: car.type,
-  image: car.imageUrls?.[0],
-  price: formatPrice(car.price),
-  year: car.year,
-});
+// Placeholder for a CarSlider: as many listing-card skeletons as the slider
+// shows at this screen size (same widths and gap), plus the space of the dot
+// indicator below.
+const SLIDER_COLUMNS = {
+  1: "grid grid-cols-1 gap-6",
+  2: "grid grid-cols-2 gap-6",
+  3: "grid grid-cols-3 gap-6",
+};
+
+const SliderSkeleton = () => {
+  const visible = useVisibleCards();
+  return (
+    <div>
+      <CarGridSkeleton count={visible} className={SLIDER_COLUMNS[visible]} />
+      <div className="mt-8 h-2" />
+    </div>
+  );
+};
 
 // Message to show in place of a section's content, or null when it has cars.
 const getStatusMessage = ({ loading, error, cars }, emptyText) => {
@@ -91,7 +100,7 @@ const Home = () => {
               title="Dealer's Choice"
               description="Hand-picked by our dealers"
             />
-            <CarSlider cars={dealerChoiceResult.cars.map(toCardCar)} />
+            <CarSlider cars={dealerChoiceResult.cars} />
           </div>
         </div>
       )}
@@ -112,14 +121,14 @@ const Home = () => {
             tone="blue"
           />
           {newArrivalsResult.loading ? (
-            <CarSliderSkeleton />
+            <SliderSkeleton />
           ) : newArrivalsMessage ? (
             <p className="my-10 text-center text-neutral">
               {newArrivalsMessage}
             </p>
           ) : (
             <div className="fade-in">
-              <CarSlider cars={newArrivalsResult.cars.map(toCardCar)} tone="blue" />
+              <CarSlider cars={newArrivalsResult.cars} tone="blue" />
             </div>
           )}
         </div>
@@ -144,16 +153,20 @@ const Home = () => {
           <SectionHeader
             title="Popular Used Car Models"
             description="Find the best deals on pre-owned vehicles"
+            linkTo="/usedCars"
+            linkText="View All"
           />
         </div>
         <div className="py-10">
           {usedCarsResult.loading ? (
-            <PopularUsedSkeleton />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <CarGridSkeleton count={POPULAR_USED_COUNT} />
+            </div>
           ) : usedCarsMessage ? (
             <p className="text-center text-neutral">{usedCarsMessage}</p>
           ) : (
-            <div className="fade-in">
-              <PopularUsedCarList cars={usedCarsResult.cars} />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <CarGrid cars={usedCarsResult.cars.slice(0, POPULAR_USED_COUNT)} />
             </div>
           )}
         </div>

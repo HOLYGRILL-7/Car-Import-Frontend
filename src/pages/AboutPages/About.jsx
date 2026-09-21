@@ -1,22 +1,15 @@
 import React from "react";
-import { Award } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ABOUT_CONTENT } from "../../data/aboutData";
 
 const About = () => {
-  const [imageErrors, setImageErrors] = React.useState({});
-
-  const handleImageError = (investorId) => {
-    console.error(`Failed to load image for investor: ${investorId}`);
-    setImageErrors((prev) => ({ ...prev, [investorId]: true }));
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-light to-white">
       {/* Hero Section */}
-      <header className="bg-gradient-to-br from-primary via-[#1e3a5f] to-primary-dark text-white py-24">
+      <header className="bg-gradient-to-br from-primary via-[#1e3a5f] to-primary-dark text-white py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
               {ABOUT_CONTENT.hero.title}
               <br />
               <span className="text-accent">{ABOUT_CONTENT.hero.subtitle}</span>
@@ -31,66 +24,41 @@ const About = () => {
         {ABOUT_CONTENT.sections.map((section) => (
           <section
             key={section.id}
-            className="space-y-6 bg-white rounded-2xl p-8 shadow-lg"
+            className="space-y-6 bg-white rounded-2xl p-5 sm:p-8 shadow-lg"
             aria-labelledby={`section-${section.id}`}
           >
             <h2
               id={`section-${section.id}`}
-              className={`text-4xl font-bold text-primary border-l-4 ${section.borderColor} pl-6`}
+              className={`text-3xl sm:text-4xl font-bold text-primary border-l-4 ${section.borderColor} pl-4 sm:pl-6`}
             >
               {section.title}
             </h2>
-            <p className="text-lg text-neutral leading-relaxed pl-6">
+            <p className="text-lg text-neutral leading-relaxed pl-4 sm:pl-6">
               {section.content}
             </p>
           </section>
         ))}
 
-        {/* Our Investors */}
-        <section className="space-y-10" aria-labelledby="investors-heading">
-          <div className="text-center space-y-4">
-            <h2
-              id="investors-heading"
-              className="text-4xl font-bold text-primary"
-            >
-              {ABOUT_CONTENT.investors.heading}
-            </h2>
-            <p className="text-lg text-neutral max-w-3xl mx-auto">
-              {ABOUT_CONTENT.investors.description}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-6">
-            {ABOUT_CONTENT.investors.list.map((investor) => (
-              <article
-                key={investor.id}
-                className="bg-white rounded-xl h-72 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col items-center justify-center p-8"
-              >
-                {imageErrors[investor.id] ? (
-                  <div className="flex flex-col items-center justify-center space-y-4 text-neutral">
-                    <Award className="w-16 h-16 text-primary opacity-50" />
-                    <p className="font-semibold">{investor.name}</p>
-                    <p className="text-sm text-center">
-                      {investor.description}
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <img
-                      src={investor.logo}
-                      alt={`${investor.name} logo`}
-                      className="max-w-full max-h-48 object-contain"
-                      onError={() => handleImageError(investor.id)}
-                      loading="lazy"
-                    />
-                    <p className="mt-4 text-sm text-neutral text-center">
-                      {investor.description}
-                    </p>
-                  </>
-                )}
-              </article>
-            ))}
-          </div>
+        {/* Investing: an invitation to talk, not a list of backers */}
+        <section
+          className="space-y-6 rounded-2xl bg-white p-6 text-center shadow-lg sm:p-10"
+          aria-labelledby="invest-heading"
+        >
+          <h2
+            id="invest-heading"
+            className="text-3xl sm:text-4xl font-bold text-primary"
+          >
+            {ABOUT_CONTENT.invest.heading}
+          </h2>
+          <p className="text-lg text-neutral">
+            {ABOUT_CONTENT.invest.description}
+          </p>
+          <Link
+            to={ABOUT_CONTENT.invest.buttonPath}
+            className="inline-block rounded-xl bg-accent px-8 py-4 font-bold text-primary-dark shadow-lg hover:bg-accent-light"
+          >
+            {ABOUT_CONTENT.invest.buttonText}
+          </Link>
         </section>
       </main>
 

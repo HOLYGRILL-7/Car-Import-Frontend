@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { deleteCar, fetchAllCars, toUrlList } from "../../firebase/carsAdmin";
+import { useSearchParams } from "react-router-dom";
+import {
+  deleteCar,
+  fetchAllCars,
+  toUrlList,
+  updateCarStatus,
+} from "../../firebase/carsAdmin";
+import { STATUSES } from "../../utils/carStats";
 import { formatPrice } from "../../utils/formatPrice";
 import AddCarForm from "../../components/Admin/AddCarForm";
 import AdminCarListSkeleton from "../../components/Skeleton/AdminCarListSkeleton";
@@ -13,7 +20,12 @@ const ManageCars = () => {
   const [deleteError, setDeleteError] = useState("");
   const [editingCar, setEditingCar] = useState(null);
   const [notice, setNotice] = useState(null);
+  const [linkError, setLinkError] = useState("");
+  const [statusSaving, setStatusSaving] = useState(null); // { id, status }
+  const [statusError, setStatusError] = useState("");
   const formRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const editId = searchParams.get("edit");
 
   const loadCars = useCallback(async () => {
     try {
@@ -30,6 +42,21 @@ const ManageCars = () => {
   useEffect(() => {
     loadCars();
   }, [loadCars]);
+
+  // /admin/cars?edit=<id> (the dashboard's links) opens that car's Edit form
+  // once the list has loaded, then drops the parameter so a refresh or Cancel
+  // behaves normally.
+  useEffect(() => {
+    if (!editId || loading) return;
+    const car = cars.find((c) => c.id === editId);
+    if (car) {
+      setNotice(null);
+      setEditingCar(car);
+    } else if (!loadError) {
+      setLinkError("That car couldn't be found. It may have been deleted.");
+    }
+    setSearchParams({}, { replace: true });
+  }, [editId, loading, loadError, cars, setSearchParams]);
 
   // Bring the form into view when an Edit button is clicked.
   useEffect(() => {
@@ -58,6 +85,26 @@ const ManageCars = () => {
           : null,
     });
     loadCars();
+  };
+
+  // The status dropdown on each row: saves just the status, right away. The
+  // list only changes once Firestore has accepted it; on failure the dropdown
+  // goes back to the old value and says so.
+  const handleStatusChange = async (car, status) => {
+    if (status === car.status) return;
+    setStatusError("");
+    setStatusSaving({ id: car.id, status });
+    try {
+      await updateCarStatus(car.id, status);
+      setCars((prev) => prev.map((c) => (c.id === car.id ? { ...c, status } : c)));
+    } catch (error) {
+      console.error("Failed to update car status:", error);
+      setStatusError(
+        `Couldn't change the status of "${car.name}". It's still ${car.status}. Please try again.`,
+      );
+    } finally {
+      setStatusSaving(null);
+    }
   };
 
   const handleDelete = async (car) => {
@@ -108,6 +155,16 @@ const ManageCars = () => {
             )}
           </div>
         )}
+        {linkError && (
+          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+            {linkError}
+          </p>
+        )}
+        {statusError && (
+          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+            {statusError}
+          </p>
+        )}
         {deleteError && (
           <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
             {deleteError}
@@ -132,7 +189,7 @@ const ManageCars = () => {
               return (
                 <li
                   key={car.id}
-                  className={`flex items-center gap-4 py-3 ${
+                  className={`flex flex-wrap items-center gap-x-4 gap-y-3 py-3 ${
                     isEditing ? "-mx-3 rounded-lg bg-blue-50 px-3" : ""
                   }`}
                 >
@@ -147,31 +204,49 @@ const ManageCars = () => {
                       No photo
                     </div>
                   )}
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 basis-40">
                     <p className="font-semibold text-primary truncate">
                       {car.name}
                     </p>
                     <p className="text-sm text-neutral">
-                      {car.year} · {formatPrice(car.price)} · {car.type} ·{" "}
-                      {car.status}
+                      {car.year} · {formatPrice(car.price)} · {car.type}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(car)}
-                    disabled={deletingId === car.id || isEditing}
-                    className="shrink-0 rounded-lg bg-primary-light px-4 py-2 text-sm font-semibold text-white hover:bg-primary cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {isEditing ? "Editing" : "Edit"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(car)}
-                    disabled={deletingId === car.id}
-                    className="shrink-0 rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {deletingId === car.id ? "Deleting..." : "Delete"}
-                  </button>
+                  {/* On phones the controls take their own line under the car. */}
+                  <div className="flex w-full items-center gap-2 sm:w-auto sm:gap-4">
+                    <select
+                      value={statusSaving?.id === car.id ? statusSaving.status : car.status}
+                      onChange={(e) => handleStatusChange(car, e.target.value)}
+                      disabled={statusSaving?.id === car.id || deletingId === car.id || isEditing}
+                      aria-label={`Status of ${car.name}`}
+                      title={isEditing ? "Change the status in the form below while editing" : undefined}
+                      className="shrink-0 max-sm:flex-1 rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm font-semibold capitalize text-primary cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {(STATUSES.includes(car.status) ? STATUSES : [...STATUSES, car.status]).map(
+                        (status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => handleEdit(car)}
+                      disabled={deletingId === car.id || isEditing}
+                      className="shrink-0 rounded-lg bg-primary-light px-4 py-2 text-sm font-semibold text-white hover:bg-primary cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isEditing ? "Editing" : "Edit"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(car)}
+                      disabled={deletingId === car.id}
+                      className="shrink-0 rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {deletingId === car.id ? "Deleting..." : "Delete"}
+                    </button>
+                  </div>
                 </li>
               );
             })}

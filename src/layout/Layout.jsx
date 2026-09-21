@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
+import BackToTop from "../components/BackToTop";
 
 const Layout = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const Layout = () => {
       </main>
 
       {!hideFooter && <Footer />}
+      <BackToTop />
     </div>
   );
 };

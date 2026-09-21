@@ -18,9 +18,9 @@ const Login = () => {
   const location = useLocation();
   const { user, isAdmin, loading, login, resetPassword } = useAuth();
 
-  // Where to go once signed in: back to what they were doing, else the admin
-  // panel for the admin account, else home.
-  const destination = location.state?.from ?? (isAdmin ? "/admin" : "/");
+  // Where to go once signed in: the admin account always lands on the
+  // dashboard; everyone else goes back to what they were doing, else home.
+  const destination = isAdmin ? "/admin" : (location.state?.from ?? "/");
   const promptMessage = location.state?.message;
 
   // Already signed in (including right after a successful login).
@@ -63,10 +63,10 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-300 h-screen flex justify-center items-center">
+    <div className="bg-gray-300 min-h-screen flex justify-center items-center px-4 py-6">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full m-auto space-y-8 bg-white rounded-lg p-8"
+        className="max-w-md w-full m-auto space-y-8 bg-white rounded-lg p-6 sm:p-8"
       >
         <div className="header flex justify-center items-center">
           <h1 className="text-2xl font-bold">Login</h1>
