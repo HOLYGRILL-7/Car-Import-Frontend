@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { ABOUT_CONTENT } from "../../data/aboutData";
 
@@ -9,11 +8,11 @@ const About = () => {
       <header className="bg-gradient-to-br from-primary via-[#1e3a5f] to-primary-dark text-white py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
               {ABOUT_CONTENT.hero.title}
               <br />
               <span className="text-accent">{ABOUT_CONTENT.hero.subtitle}</span>
-            </h1>
+            </h2>
           </div>
         </div>
       </header>
@@ -61,30 +60,6 @@ const About = () => {
           </Link>
         </section>
       </main>
-
-      {/* CTA Section - Conditionally rendered */}
-      {ABOUT_CONTENT.cta.enabled && (
-        <aside className="bg-gradient-to-r from-primary to-primary-dark text-white py-16 mt-20">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
-            <h2 className="text-4xl font-bold">{ABOUT_CONTENT.cta.title}</h2>
-            <p className="text-xl text-neutral-light">
-              {ABOUT_CONTENT.cta.description}
-            </p>
-            <button
-              className="px-8 py-4 bg-accent hover:bg-accent-light text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg"
-              onClick={() => {
-                if (typeof ABOUT_CONTENT.cta.buttonAction === "function") {
-                  ABOUT_CONTENT.cta.buttonAction();
-                } else {
-                  console.log("Navigate to:", ABOUT_CONTENT.cta.buttonAction);
-                }
-              }}
-            >
-              {ABOUT_CONTENT.cta.buttonText}
-            </button>
-          </div>
-        </aside>
-      )}
     </div>
   );
 };

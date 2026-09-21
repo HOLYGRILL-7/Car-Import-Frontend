@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, MessageCircle, Phone } from "lucide-react";
 import {
@@ -82,8 +81,8 @@ const Contact = () => {
                 {SERVICE_AREA}
               </p>
               <p className="text-neutral">
-                Want to see a car in person? Tell us which one and we'll
-                arrange the details of the viewing with you.
+                Want to see a car in person? Tell us which one and we'll arrange
+                the details of the viewing with you.
               </p>
             </div>
           </div>

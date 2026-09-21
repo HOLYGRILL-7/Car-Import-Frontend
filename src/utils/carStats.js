@@ -1,14 +1,20 @@
 // Numbers for the admin dashboard, computed from the full list of car
 // documents (see fetchAllCars) so every figure comes from the same data.
 
-export const TYPES = ["used", "new"];
+const TYPES = ["used", "new"];
 export const STATUSES = ["available", "reserved", "sold"];
 
 // Cars are counted by type and status; anything outside the known values
 // (hand-edited documents) lands in "other" instead of silently vanishing.
 const bucket = (value, known) => (known.includes(value) ? value : "other");
 
-const emptyRow = () => ({ available: 0, reserved: 0, sold: 0, other: 0, total: 0 });
+const emptyRow = () => ({
+  available: 0,
+  reserved: 0,
+  sold: 0,
+  other: 0,
+  total: 0,
+});
 
 export const computeCarStats = (cars) => {
   const byTypeStatus = { used: emptyRow(), new: emptyRow(), other: emptyRow() };

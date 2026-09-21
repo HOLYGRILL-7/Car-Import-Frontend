@@ -1,5 +1,3 @@
-import React from "react";
-
 // `backdrop` (optional) is decorative art centred behind the whole text block
 // (heading + subtitle): it sits under the text, doesn't take up space and
 // ignores the mouse.

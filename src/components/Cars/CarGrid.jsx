@@ -1,4 +1,3 @@
-import React from "react";
 import CarListingCard from "./CarListingCard";
 
 // The listing grid for the Used / New Cars pages: 1 column on mobile, 2 on

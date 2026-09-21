@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { addCar, toUrlList, updateCar } from "../../firebase/carsAdmin";
 
@@ -47,8 +47,18 @@ const formFromCar = (car) => ({
 
 // Optional details; written to the document only when filled in.
 const OPTIONAL_FIELDS = [
-  { name: "fuelType", label: "Fuel type", placeholder: "e.g. Petrol", list: "fuel-types" },
-  { name: "transmission", label: "Transmission", placeholder: "e.g. Automatic", list: "transmissions" },
+  {
+    name: "fuelType",
+    label: "Fuel type",
+    placeholder: "e.g. Petrol",
+    list: "fuel-types",
+  },
+  {
+    name: "transmission",
+    label: "Transmission",
+    placeholder: "e.g. Automatic",
+    list: "transmissions",
+  },
   { name: "bodyType", label: "Body type", placeholder: "e.g. SUV" },
   { name: "color", label: "Color", placeholder: "e.g. Black" },
   { name: "engineSize", label: "Engine size", placeholder: "e.g. 3.5L V6" },
@@ -77,10 +87,16 @@ const validate = (form, photoCount) => {
   const errors = {};
   if (!form.name.trim()) errors.name = "Name is required.";
   const year = Number(form.year);
-  if (!form.year || !Number.isInteger(year) || year < 1900 || year > new Date().getFullYear() + 1) {
+  if (
+    !form.year ||
+    !Number.isInteger(year) ||
+    year < 1900 ||
+    year > new Date().getFullYear() + 1
+  ) {
     errors.year = "Enter a valid year.";
   }
-  if (!form.price || !(Number(form.price) > 0)) errors.price = "Enter a price above 0.";
+  if (!form.price || !(Number(form.price) > 0))
+    errors.price = "Enter a price above 0.";
   if (!form.mileage.trim()) errors.mileage = "Mileage is required.";
   if (!form.description.trim()) errors.description = "Description is required.";
   if (photoCount === 0) errors.photos = "Add at least 1 photo.";
@@ -194,7 +210,9 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
     });
 
   const clearGallery = () => {
-    gallery.forEach((item) => item.previewUrl && URL.revokeObjectURL(item.previewUrl));
+    gallery.forEach(
+      (item) => item.previewUrl && URL.revokeObjectURL(item.previewUrl),
+    );
     setGallery([]);
   };
 
@@ -238,7 +256,8 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
       } catch (error) {
         console.error("Failed to update car:", error);
         setSubmitError(
-          error?.code === "permission-denied" || error?.code === "storage/unauthorized"
+          error?.code === "permission-denied" ||
+            error?.code === "storage/unauthorized"
             ? "Permission denied. Check that you're signed in as the admin and that the Firebase rules are published."
             : "Couldn't save the changes. The car wasn't modified — please try again.",
         );
@@ -261,7 +280,8 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
     } catch (error) {
       console.error("Failed to add car:", error);
       setSubmitError(
-        error?.code === "permission-denied" || error?.code === "storage/unauthorized"
+        error?.code === "permission-denied" ||
+          error?.code === "storage/unauthorized"
           ? "Permission denied. Check that you're signed in as the admin and that the Firebase rules are published."
           : "Couldn't add the car. Nothing was saved — please try again.",
       );
@@ -305,25 +325,62 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Name *" error={errors.name}>
-          <input name="name" value={form.name} onChange={setField} className={inputClass} placeholder="e.g. Toyota Land Cruiser Prado" />
+          <input
+            name="name"
+            value={form.name}
+            onChange={setField}
+            className={inputClass}
+            placeholder="e.g. Toyota Land Cruiser Prado"
+          />
         </Field>
         <Field label="Type *">
-          <select name="type" value={form.type} onChange={setField} className={inputClass}>
+          <select
+            name="type"
+            value={form.type}
+            onChange={setField}
+            className={inputClass}
+          >
             <option value="used">Used</option>
             <option value="new">New</option>
           </select>
         </Field>
         <Field label="Year *" error={errors.year}>
-          <input name="year" type="number" value={form.year} onChange={setField} className={inputClass} placeholder="e.g. 2018" />
+          <input
+            name="year"
+            type="number"
+            value={form.year}
+            onChange={setField}
+            className={inputClass}
+            placeholder="e.g. 2018"
+          />
         </Field>
         <Field label="Price (USD) *" error={errors.price}>
-          <input name="price" type="number" min="0" value={form.price} onChange={setField} className={inputClass} placeholder="e.g. 25000" />
+          <input
+            name="price"
+            type="number"
+            min="0"
+            value={form.price}
+            onChange={setField}
+            className={inputClass}
+            placeholder="e.g. 25000"
+          />
         </Field>
         <Field label="Mileage *" error={errors.mileage}>
-          <input name="mileage" value={form.mileage} onChange={setField} className={inputClass} placeholder="e.g. 45,000 km" />
+          <input
+            name="mileage"
+            value={form.mileage}
+            onChange={setField}
+            className={inputClass}
+            placeholder="e.g. 45,000 km"
+          />
         </Field>
         <Field label="Status">
-          <select name="status" value={form.status} onChange={setField} className={inputClass}>
+          <select
+            name="status"
+            value={form.status}
+            onChange={setField}
+            className={inputClass}
+          >
             <option value="available">Available</option>
             <option value="reserved">Reserved</option>
             <option value="sold">Sold</option>
@@ -348,7 +405,14 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
       </label>
 
       <Field label="Description *" error={errors.description}>
-        <textarea name="description" rows={4} value={form.description} onChange={setField} className={inputClass} placeholder="Condition, features, history..." />
+        <textarea
+          name="description"
+          rows={4}
+          value={form.description}
+          onChange={setField}
+          className={inputClass}
+          placeholder="Condition, features, history..."
+        />
       </Field>
 
       <Field label="Dealer's Review (optional)">
@@ -362,7 +426,8 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           placeholder="Your own take on this car: what you like about it, how it drives, who it suits..."
         />
         <span className="block text-xs text-neutral mt-1">
-          Shown on the Reviews page when this car is also marked Dealer's Choice.
+          Shown on the Reviews page when this car is also marked Dealer's
+          Choice.
         </span>
       </Field>
 
@@ -373,7 +438,14 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {OPTIONAL_FIELDS.map(({ name, label, placeholder, list }) => (
             <Field key={name} label={label}>
-              <input name={name} value={form[name]} onChange={setField} list={list} className={inputClass} placeholder={placeholder} />
+              <input
+                name={name}
+                value={form[name]}
+                onChange={setField}
+                list={list}
+                className={inputClass}
+                placeholder={placeholder}
+              />
             </Field>
           ))}
         </div>
@@ -404,13 +476,15 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           className="block w-full text-sm text-neutral file:mr-4 file:rounded-lg file:border-0 file:bg-primary-light file:px-4 file:py-2 file:text-white hover:file:bg-primary"
         />
         {errors.photos && (
-          <span className="block text-sm text-red-600 mt-1">{errors.photos}</span>
+          <span className="block text-sm text-red-600 mt-1">
+            {errors.photos}
+          </span>
         )}
         {isEdit && (
           <span className="block text-xs text-neutral mt-1">
             Photos appear in this order on the car's page. The first is the
-            cover (the listing photo and the main image) — use "Set as cover"
-            to change it. New photos are added at the end.
+            cover (the listing photo and the main image) — use "Set as cover" to
+            change it. New photos are added at the end.
           </span>
         )}
         {photoCount > 0 && (
@@ -434,7 +508,9 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
                 >
                   <img
                     src={item.url ?? item.previewUrl}
-                    alt={isSaved ? `Saved photo ${savedNumber}` : item.file.name}
+                    alt={
+                      isSaved ? `Saved photo ${savedNumber}` : item.file.name
+                    }
                     className="h-24 w-full rounded-lg object-cover"
                   />
                   {isCover && (

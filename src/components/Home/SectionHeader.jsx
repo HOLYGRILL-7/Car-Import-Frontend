@@ -1,5 +1,3 @@
-// components/home/SectionHeader.js
-import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 

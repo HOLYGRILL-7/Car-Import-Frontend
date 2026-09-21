@@ -16,15 +16,14 @@ export const SERVICE_AREA = "Achimota, Accra";
 const whatsAppLink = (message) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-export const getWhatsAppLink = (carName) =>
+const getWhatsAppLink = (carName) =>
   whatsAppLink(`Hello, I'm interested in the ${carName}.`);
 
 export const getGeneralWhatsAppLink = () =>
   whatsAppLink("Hello, I'd like to know more about Xtra Motors.");
 
-// A chat opened from a service card, pre-filled with that service's name.
-export const getServiceWhatsAppLink = (serviceTitle) =>
-  whatsAppLink(`Hi, I'm interested in ${serviceTitle}`);
+// A chat opened from a service card, pre-filled with that card's own message.
+export const getServiceWhatsAppLink = (message) => whatsAppLink(message);
 
 export const openWhatsApp = (carName) =>
   window.open(getWhatsAppLink(carName), "_blank", "noopener,noreferrer");

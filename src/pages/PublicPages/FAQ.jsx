@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import FaqAccordion from "../../components/Faq/FaqAccordion";
 import { faqs } from "../../data/faqData";

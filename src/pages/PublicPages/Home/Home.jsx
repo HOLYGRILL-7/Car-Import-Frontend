@@ -1,5 +1,3 @@
-// pages/Home.js
-import React from "react";
 import Hero from "../../../components/Hero/Hero";
 import SectionHeader from "../../../components/Home/SectionHeader";
 import CarSlider from "../../../components/Home/CarSlider";
@@ -67,7 +65,8 @@ const Home = () => {
     (car) => car.type === "new",
   ).length;
   const usedArrivalCount = newArrivalsResult.cars.length - newArrivalCount;
-  const viewAllPath = usedArrivalCount > newArrivalCount ? "/usedCars" : "/newCars";
+  const viewAllPath =
+    usedArrivalCount > newArrivalCount ? "/usedCars" : "/newCars";
 
   // A manufacturer opens the listing page that has cars of that make: the
   // used page, unless it only has new ones.
@@ -109,7 +108,9 @@ const Home = () => {
       <div
         id="new-arrivals"
         className={`scroll-mt-20 py-14 ${
-          dealerChoiceResult.cars.length > 0 ? "bg-white" : "mt-15 bg-neutral-light"
+          dealerChoiceResult.cars.length > 0
+            ? "bg-white"
+            : "mt-15 bg-neutral-light"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -166,7 +167,9 @@ const Home = () => {
             <p className="text-center text-neutral">{usedCarsMessage}</p>
           ) : (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <CarGrid cars={usedCarsResult.cars.slice(0, POPULAR_USED_COUNT)} />
+              <CarGrid
+                cars={usedCarsResult.cars.slice(0, POPULAR_USED_COUNT)}
+              />
             </div>
           )}
         </div>

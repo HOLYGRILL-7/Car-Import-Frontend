@@ -1,4 +1,3 @@
-import React from "react";
 import { X } from "lucide-react";
 
 // Shows the manufacturer filter that's currently applied, and clears it.

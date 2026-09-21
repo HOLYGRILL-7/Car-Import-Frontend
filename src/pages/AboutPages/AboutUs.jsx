@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { navItems, aboutHeader, ctaSection } from "../../data/aboutData";
 
@@ -24,7 +23,7 @@ const AboutUs = () => {
 
   const getButtonClasses = (isPrimary) => {
     const baseClasses =
-      "px-8 py-4 font-bold rounded-xl shadow-lg transition-all";
+      "inline-block self-center px-8 py-4 font-bold rounded-xl shadow-lg transition-all";
     const primaryClasses =
       "bg-accent hover:bg-accent-light text-white transform hover:scale-105";
     const secondaryClasses = "bg-white text-primary hover:scale-105";
@@ -41,7 +40,9 @@ const AboutUs = () => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">
               {aboutHeader.title}
             </h1>
-            <p className="text-lg sm:text-xl text-neutral-cream">{aboutHeader.subtitle}</p>
+            <p className="text-lg sm:text-xl text-neutral-cream">
+              {aboutHeader.subtitle}
+            </p>
           </div>
         </div>
       </div>
@@ -75,10 +76,12 @@ const AboutUs = () => {
           <p className="text-xl text-neutral-light">{ctaSection.subtitle}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {ctaSection.buttons.map((btn) => (
-              <Link key={btn.path} to={btn.path}>
-                <button className={getButtonClasses(btn.primary)}>
-                  {btn.text}
-                </button>
+              <Link
+                key={btn.path}
+                to={btn.path}
+                className={getButtonClasses(btn.primary)}
+              >
+                {btn.text}
               </Link>
             ))}
           </div>

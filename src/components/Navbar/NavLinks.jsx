@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 // `stacked` lays the links out as a vertical list (the mobile menu).

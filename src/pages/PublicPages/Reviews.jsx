@@ -1,4 +1,3 @@
-import React from "react";
 import TestimonialCard from "../../components/Reviews/TestimonialCard";
 import DealerReviewCard from "../../components/Reviews/DealerReviewCard";
 import Skeleton from "../../components/Skeleton/Skeleton";
@@ -7,7 +6,10 @@ import { useDealerReviewCars } from "../../hooks/useDealerReviewCars";
 
 const SectionHeading = ({ id, title, description }) => (
   <div className="mb-10 space-y-3 text-center">
-    <h2 id={id} className="text-3xl font-bold text-primary sm:text-4xl md:text-5xl">
+    <h2
+      id={id}
+      className="text-3xl font-bold text-primary sm:text-4xl md:text-5xl"
+    >
       {title}
     </h2>
     <p className="mx-auto max-w-2xl text-lg text-neutral">{description}</p>

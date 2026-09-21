@@ -1,4 +1,3 @@
-import React from "react";
 import Skeleton from "./Skeleton";
 
 // Placeholder for the car details page: same page frame, gallery, info panel

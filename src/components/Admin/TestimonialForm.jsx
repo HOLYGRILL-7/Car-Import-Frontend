@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Star } from "lucide-react";
 import { addTestimonial, updateTestimonial } from "../../firebase/testimonials";
 
@@ -74,9 +74,11 @@ const RatingInput = ({ value, onChange, error }) => (
 
 const validate = (form) => {
   const errors = {};
-  if (!form.customerName.trim()) errors.customerName = "Customer name is required.";
+  if (!form.customerName.trim())
+    errors.customerName = "Customer name is required.";
   if (!form.quote.trim()) errors.quote = "The quote is required.";
-  if (!(form.rating >= 1 && form.rating <= 5)) errors.rating = "Choose a rating from 1 to 5.";
+  if (!(form.rating >= 1 && form.rating <= 5))
+    errors.rating = "Choose a rating from 1 to 5.";
   if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date)) errors.date = "Pick a date.";
   return errors;
 };
@@ -128,7 +130,9 @@ const TestimonialForm = ({ testimonial, onAdded, onSaved, onCancel }) => {
         await addTestimonial(fields);
         setSuccess(
           `${fields.customerName}'s testimonial was added${
-            fields.featured ? " and is now on the Reviews page" : " (hidden from the Reviews page)"
+            fields.featured
+              ? " and is now on the Reviews page"
+              : " (hidden from the Reviews page)"
           }.`,
         );
         setForm(formFor(null));
@@ -205,7 +209,11 @@ const TestimonialForm = ({ testimonial, onAdded, onSaved, onCancel }) => {
         </Field>
       </div>
 
-      <RatingInput value={form.rating} onChange={setRating} error={errors.rating} />
+      <RatingInput
+        value={form.rating}
+        onChange={setRating}
+        error={errors.rating}
+      />
 
       <Field label="Quote *" error={errors.quote}>
         <textarea
@@ -223,7 +231,9 @@ const TestimonialForm = ({ testimonial, onAdded, onSaved, onCancel }) => {
         <input
           type="checkbox"
           checked={form.featured}
-          onChange={(e) => setForm((prev) => ({ ...prev, featured: e.target.checked }))}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, featured: e.target.checked }))
+          }
           className="mt-1 h-4 w-4"
         />
         <span className="text-sm font-medium text-primary">

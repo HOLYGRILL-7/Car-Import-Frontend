@@ -1,4 +1,3 @@
-import React from "react";
 import { PRESS_CONTENT } from "../../data/teamData";
 // import { useState } from "react";   // COMMENTED OUT: only the news card used it
 
@@ -85,29 +84,29 @@ const Press = () => {
   //   onViewAll,
   //   onMediaKitDownload,
   // }) => {
-//   const handleViewAll = () => {
-//     console.log(`Navigate to: ${PRESS_CONTENT.viewAllButton.link}`);
-//     if (onViewAll) onViewAll();
-//   };
-//
-//   const handleMediaKitDownload = () => {
-//     console.log(
-//       `Download media kit: ${PRESS_CONTENT.mediaContact.mediaKitUrl}`,
-//     );
-//     if (onMediaKitDownload) onMediaKitDownload();
-//   };
-//
-//   const handleEmailClick = () => {
-//     window.location.href = `mailto:${PRESS_CONTENT.mediaContact.email}`;
-//   };
+  //   const handleViewAll = () => {
+  //     console.log(`Navigate to: ${PRESS_CONTENT.viewAllButton.link}`);
+  //     if (onViewAll) onViewAll();
+  //   };
+  //
+  //   const handleMediaKitDownload = () => {
+  //     console.log(
+  //       `Download media kit: ${PRESS_CONTENT.mediaContact.mediaKitUrl}`,
+  //     );
+  //     if (onMediaKitDownload) onMediaKitDownload();
+  //   };
+  //
+  //   const handleEmailClick = () => {
+  //     window.location.href = `mailto:${PRESS_CONTENT.mediaContact.email}`;
+  //   };
 
   return (
     <div className="space-y-16">
       {/* Header Section */}
       <header className="text-center space-y-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
           {PRESS_CONTENT.header.title}
-        </h1>
+        </h2>
         <p className="text-xl text-neutral max-w-2xl mx-auto">
           {PRESS_CONTENT.header.subtitle}
         </p>

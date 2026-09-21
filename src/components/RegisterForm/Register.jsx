@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 import { getAuthErrorMessage } from "../../utils/authErrors";
@@ -53,7 +53,7 @@ const Register = () => {
           <h1>Create an account with us today!</h1>
         </div>
         <div className="inputs">
-          <div className="input flex mt-5 bg-gray-200 h-15 opacity-80 rounded">
+          <div className="input flex mt-5 bg-gray-200 h-15 opacity-80 rounded focus-within:ring-2 focus-within:ring-primary-light">
             <img
               src={user_icon}
               alt=""
@@ -63,6 +63,7 @@ const Register = () => {
               type="text"
               value={name}
               placeholder="Name"
+              aria-label="Name"
               required
               autoComplete="name"
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
@@ -79,6 +80,7 @@ const Register = () => {
               type="email"
               value={email}
               placeholder="Email"
+              aria-label="Email"
               required
               autoComplete="email"
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
@@ -95,6 +97,7 @@ const Register = () => {
               type="password"
               value={password}
               placeholder="Password (at least 6 characters)"
+              aria-label="Password (at least 6 characters)"
               required
               minLength={6}
               autoComplete="new-password"

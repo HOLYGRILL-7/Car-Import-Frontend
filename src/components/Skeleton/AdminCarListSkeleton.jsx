@@ -1,4 +1,3 @@
-import React from "react";
 import Skeleton from "./Skeleton";
 
 // Placeholder for the admin car list rows (thumbnail, two text lines, and the
@@ -8,7 +7,11 @@ const AdminCarListSkeleton = ({ count = 5 }) => (
     <span className="sr-only">Loading cars...</span>
     <ul className="divide-y divide-gray-200">
       {Array.from({ length: count }, (_, i) => (
-        <li key={i} data-skeleton="row" className="flex items-center gap-4 py-3">
+        <li
+          key={i}
+          data-skeleton="row"
+          className="flex items-center gap-4 py-3"
+        >
           <Skeleton className="h-16 w-24 shrink-0 rounded-lg" />
           <div className="min-w-0 flex-1 space-y-2">
             <Skeleton className="h-4 w-1/3" />

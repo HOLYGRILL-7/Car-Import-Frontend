@@ -54,11 +54,4 @@ export const ABOUT_CONTENT = {
     buttonText: "Contact Us",
     buttonPath: "/contact",
   },
-  cta: {
-    enabled: false, // Set to true when ready to display
-    title: "Ready to Start Your Journey?",
-    description: "Let us help you source and import your dream vehicle today",
-    buttonText: "Get Started",
-    buttonAction: "/contact", // or callback function
-  },
 };

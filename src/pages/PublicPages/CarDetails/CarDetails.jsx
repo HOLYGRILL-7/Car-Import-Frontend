@@ -25,7 +25,7 @@ import CarDetailsSkeleton from "../../../components/Skeleton/CarDetailsSkeleton"
 const hasValue = (value) =>
   value !== undefined && value !== null && String(value).trim() !== "";
 
-const CarDetailsContent = ({ id, onShare }) => {
+const CarDetailsContent = ({ id }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [imageErrors, setImageErrors] = useState({});
 
@@ -59,22 +59,20 @@ const CarDetailsContent = ({ id, onShare }) => {
   const listingsPath = car.type === "used" ? "/usedCars" : "/newCars";
 
   const handleImageError = (index) => {
-    console.error(`Failed to load image at index ${index}`);
     setImageErrors((prev) => ({ ...prev, [index]: true }));
   };
 
+  // Uses the browser's share sheet where there is one (mostly phones); nothing
+  // happens elsewhere. Cancelling the sheet is a normal outcome, not an error.
   const handleShare = () => {
-    if (onShare) {
-      onShare(car);
-    } else if (navigator.share) {
-      navigator
-        .share({
-          title: car.name,
-          text: `Check out this ${car.name} for ${price}`,
-          url: window.location.href,
-        })
-        .catch(() => console.log("Share cancelled"));
-    }
+    if (!navigator.share) return;
+    navigator
+      .share({
+        title: car.name,
+        text: `Check out this ${car.name} for ${price}`,
+        url: window.location.href,
+      })
+      .catch(() => {});
   };
 
   const handleCallSeller = () => {
@@ -85,12 +83,32 @@ const CarDetailsContent = ({ id, onShare }) => {
   const specs = [
     { icon: Gauge, iconColor: "blue", label: "Mileage", value: car.mileage },
     { icon: Calendar, iconColor: "green", label: "Year", value: car.year },
-    { icon: Fuel, iconColor: "orange", label: "Fuel Type", value: car.fuelType },
-    { icon: Cog, iconColor: "purple", label: "Transmission", value: car.transmission },
+    {
+      icon: Fuel,
+      iconColor: "orange",
+      label: "Fuel Type",
+      value: car.fuelType,
+    },
+    {
+      icon: Cog,
+      iconColor: "purple",
+      label: "Transmission",
+      value: car.transmission,
+    },
     { icon: Car, iconColor: "blue", label: "Body Type", value: car.bodyType },
     { icon: Palette, iconColor: "green", label: "Color", value: car.color },
-    { icon: Wrench, iconColor: "orange", label: "Engine Size", value: car.engineSize },
-    { icon: Zap, iconColor: "purple", label: "Horsepower", value: car.horsepower },
+    {
+      icon: Wrench,
+      iconColor: "orange",
+      label: "Engine Size",
+      value: car.engineSize,
+    },
+    {
+      icon: Zap,
+      iconColor: "purple",
+      label: "Horsepower",
+      value: car.horsepower,
+    },
   ].filter((spec) => hasValue(spec.value));
 
   return (

@@ -48,17 +48,21 @@ const maxCombinations = (clauseCount) =>
   Math.min(
     MAX_COMBINATIONS,
     Math.floor(
-      (MAX_QUERY_FILTERS - SORT_ORDERS) / (FILTERS_IN_EVERY_BRANCH + clauseCount),
+      (MAX_QUERY_FILTERS - SORT_ORDERS) /
+        (FILTERS_IN_EVERY_BRANCH + clauseCount),
     ),
   );
 
 const titleCase = (text) =>
-  text.replace(/(^|[\s-])([a-z])/g, (_, before, letter) => before + letter.toUpperCase());
+  text.replace(
+    /(^|[\s-])([a-z])/g,
+    (_, before, letter) => before + letter.toUpperCase(),
+  );
 const sentenceCase = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 // "petrol" -> ["petrol", "PETROL", "Petrol"]; "mini truck" also gets
 // "Mini Truck" and "Mini truck". The spelling passed in always comes first.
-export const casingVariants = (value) => {
+const casingVariants = (value) => {
   const lower = value.toLowerCase();
   return [
     ...new Set([
@@ -86,7 +90,10 @@ export const buildServerClauses = (filters) => {
     if (values.length > 0) clauses.push({ field: "bodyType", values });
   }
   if (filters.fuelType) {
-    clauses.push({ field: "fuelType", values: casingVariants(filters.fuelType) });
+    clauses.push({
+      field: "fuelType",
+      values: casingVariants(filters.fuelType),
+    });
   }
   if (filters.transmission) {
     clauses.push({

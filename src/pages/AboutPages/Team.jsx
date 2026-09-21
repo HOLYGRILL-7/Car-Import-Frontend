@@ -1,26 +1,14 @@
-// Team.jsx - Component file
 import React from "react";
 import { TEAM_CONTENT } from "../../data/teamData";
 
 // Pure presentational component for team member card
-const LeaderCard = ({ leader, onViewProfile }) => {
+const LeaderCard = ({ leader }) => {
+  // A photo that fails to load falls back to the initial-in-a-circle below.
   const [imageError, setImageError] = React.useState(false);
-
-  const handleImageError = () => {
-    console.error(`Failed to load image for team member: ${leader.id}`);
-    setImageError(true);
-  };
-
-  const handleClick = () => {
-    console.log(`View profile for: ${leader.name}`);
-    if (onViewProfile) onViewProfile(leader);
-  };
+  const handleImageError = () => setImageError(true);
 
   return (
-    <article
-      className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
-      onClick={handleClick}
-    >
+    <article className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
       {/* Image Section */}
       <div className="relative h-80 overflow-hidden bg-neutral-light">
         {imageError ? (
@@ -67,7 +55,6 @@ const LeaderCard = ({ leader, onViewProfile }) => {
 // Main Team component
 const Team = ({
   leaders = TEAM_CONTENT.leadership.members,
-  onViewProfile,
   // onJoinTeam,   // COMMENTED OUT with the "Want to Join Our Team?" section below
 }) => {
   // COMMENTED OUT with the "Want to Join Our Team?" section below.
@@ -85,9 +72,9 @@ const Team = ({
     <div className="space-y-16">
       {/* Header Section */}
       <header className="text-center space-y-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
           {TEAM_CONTENT.header.title}
-        </h1>
+        </h2>
         <p className="text-xl text-neutral max-w-2xl mx-auto">
           {TEAM_CONTENT.header.subtitle}
         </p>
@@ -110,11 +97,7 @@ const Team = ({
           role="list"
         >
           {leaders.map((leader) => (
-            <LeaderCard
-              key={leader.id}
-              leader={leader}
-              onViewProfile={onViewProfile}
-            />
+            <LeaderCard key={leader.id} leader={leader} />
           ))}
         </div>
       </section>

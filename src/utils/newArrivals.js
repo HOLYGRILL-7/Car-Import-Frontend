@@ -1,4 +1,4 @@
-export const NEW_ARRIVAL_DAYS = 14;
+const NEW_ARRIVAL_DAYS = 14;
 
 const createdSeconds = (car) => car.createdAt?.seconds ?? 0;
 

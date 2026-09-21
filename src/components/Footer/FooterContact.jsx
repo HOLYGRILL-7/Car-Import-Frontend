@@ -1,4 +1,3 @@
-import React from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 const ICON = "mt-0.5 h-4 w-4 shrink-0 text-primary-light";

@@ -1,4 +1,3 @@
-import React from "react";
 import BrandWordmark from "../Brand/BrandWordmark";
 import { Link } from "react-router-dom";
 

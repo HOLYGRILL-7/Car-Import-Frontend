@@ -1,4 +1,3 @@
-import React from "react";
 import { Menu, X } from "lucide-react";
 
 // The hamburger that opens the mobile menu (shown below the xl breakpoint).

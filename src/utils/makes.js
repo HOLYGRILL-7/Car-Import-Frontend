@@ -2,7 +2,7 @@
 // Cars don't store a separate make, so it's read from the car's name (e.g.
 // "Toyota Land Cruiser Prado" -> Toyota). A `make` field on a car, if one is
 // ever added, takes priority over the name.
-export const MAKES = [
+const MAKES = [
   { id: "toyota", label: "Toyota", aliases: ["toyota"] },
   { id: "kia", label: "Kia", aliases: ["kia"] },
   { id: "daewoo", label: "Daewoo", aliases: ["daewoo"] },

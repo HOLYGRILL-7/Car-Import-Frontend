@@ -5,7 +5,8 @@ import process from "node:process";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
-const readJson = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url)));
+const readJson = (path) =>
+  JSON.parse(readFileSync(new URL(path, import.meta.url)));
 
 let serviceAccount;
 try {

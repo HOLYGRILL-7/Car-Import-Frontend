@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -12,6 +11,7 @@ import Services from "./pages/PublicPages/Services";
 import Reviews from "./pages/PublicPages/Reviews";
 import FAQ from "./pages/PublicPages/FAQ";
 import Contact from "./pages/PublicPages/Contact";
+import NotFound from "./pages/PublicPages/NotFound";
 import AboutUs from "./pages/AboutPages/AboutUs";
 import About from "./pages/AboutPages/About";
 import Team from "./pages/AboutPages/Team";
@@ -40,6 +40,7 @@ const App = () => {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/carDetails/:id" element={<CarDetails />} />
 
         {/* About routes */}

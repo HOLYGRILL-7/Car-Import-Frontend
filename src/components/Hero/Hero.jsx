@@ -1,4 +1,3 @@
-import React from "react";
 import HeroHeading from "./HeroHeading";
 // Same art as sale-plane.png with the "Sale" lettering painted out, so no
 // letter shapes sit behind (and muddy) the heading.

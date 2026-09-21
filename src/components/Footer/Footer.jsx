@@ -1,4 +1,3 @@
-// src/components/Footer.jsx
 import FooterLogo from "../Footer/FooterLogo";
 import FooterLinkSection from "../Footer/FooterLinkSection";
 import FooterContact from "../Footer/FooterContact";

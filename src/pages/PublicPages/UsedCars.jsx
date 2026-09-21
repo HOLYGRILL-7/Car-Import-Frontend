@@ -1,4 +1,3 @@
-import React from "react";
 import CarFilterSidebar from "../../components/Cars/CarFilterSidebar";
 import CarGrid from "../../components/Cars/CarGrid";
 import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";

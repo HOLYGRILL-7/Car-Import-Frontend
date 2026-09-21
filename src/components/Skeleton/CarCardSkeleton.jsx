@@ -1,37 +1,9 @@
-import React from "react";
 import Skeleton from "./Skeleton";
 
 // Placeholder for a car card while its data loads. Built from the same
-// padding and line heights as the real card so nothing jumps when the real
-// one replaces it.
-//   variant "listing": CarListingCard (Used / New Cars grids, Saved Cars)
-//   variant "slider":  CarCard (Home page sliders)
-const CarCardSkeleton = ({ variant = "listing" }) => {
-  if (variant === "slider") {
-    return (
-      <div
-        data-skeleton="card"
-        className="bg-white rounded-2xl overflow-hidden shadow-lg"
-      >
-        <div className="h-52 p-3">
-          <Skeleton className="h-full w-full rounded-lg" />
-        </div>
-        <div className="px-4 pt-1 pb-3">
-          <div className="mb-1 flex h-7 items-center">
-            <Skeleton className="h-5 w-3/4" />
-          </div>
-          <div className="mb-2 flex h-7 items-center justify-between">
-            <Skeleton className="h-6 w-1/3" />
-            <Skeleton className="h-4 w-12" />
-          </div>
-          <div className="flex h-[29px] items-end border-t border-neutral-light pt-2">
-            <Skeleton className="h-4 w-1/4" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+// padding and line heights as CarListingCard (Used / New Cars grids, Home
+// sliders, Saved Cars) so nothing jumps when the real card replaces it.
+const CarCardSkeleton = () => {
   return (
     <div
       data-skeleton="card"

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ImageThumbnail = ({ src, alt, index, isSelected, onClick }) => {
   return (
     <button
@@ -21,4 +19,4 @@ const ImageThumbnail = ({ src, alt, index, isSelected, onClick }) => {
   );
 };
 
-export default ImageThumbnail
+export default ImageThumbnail;

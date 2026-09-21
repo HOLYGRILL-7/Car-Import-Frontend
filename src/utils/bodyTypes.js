@@ -31,16 +31,3 @@ export const BODY_TYPES = [
     aliases: ["big truck", "big-truck", "bigtruck", "truck", "lorry"],
   },
 ];
-
-const normalize = (value) =>
-  String(value ?? "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
-
-// `typeId` is a BODY_TYPES id, or "all" for no filtering.
-export const matchesBodyType = (car, typeId) => {
-  if (typeId === "all") return true;
-  const type = BODY_TYPES.find((t) => t.id === typeId);
-  return type !== undefined && type.aliases.includes(normalize(car.bodyType));
-};

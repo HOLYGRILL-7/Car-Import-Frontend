@@ -1,6 +1,12 @@
 // A signed-in user's saved cars, stored at users/{uid}/wishlist/{carId}.
 // One shared listener feeds every save button on the page.
-import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   collection,
   deleteDoc,
@@ -23,7 +29,7 @@ export const WishlistProvider = ({ children }) => {
   const uid = user?.uid ?? null;
 
   // Keyed by uid so nothing from a previous account can leak through.
-  const [state, setState] = useState({ uid: null, ids: [] });
+  const [state, setState] = useState({ uid: null, ids: [], error: false });
 
   useEffect(() => {
     if (!uid) return;
@@ -34,10 +40,11 @@ export const WishlistProvider = ({ children }) => {
     );
     return onSnapshot(
       savedQuery,
-      (snapshot) => setState({ uid, ids: snapshot.docs.map((d) => d.id) }),
+      (snapshot) =>
+        setState({ uid, ids: snapshot.docs.map((d) => d.id), error: false }),
       (error) => {
         console.error("Failed to load saved cars:", error);
-        setState({ uid, ids: [] });
+        setState({ uid, ids: [], error: true });
       },
     );
   }, [uid]);
@@ -47,15 +54,17 @@ export const WishlistProvider = ({ children }) => {
     [state, uid],
   );
   const loading = uid !== null && state.uid !== uid;
+  const error = state.uid === uid && state.error;
 
   const value = useMemo(() => {
     const saved = new Set(savedIds);
     return {
       savedIds,
       loading,
+      error,
       isSaved: (carId) => saved.has(carId),
     };
-  }, [savedIds, loading]);
+  }, [savedIds, loading, error]);
 
   const toggleSave = useCallback(
     async (carId) => {

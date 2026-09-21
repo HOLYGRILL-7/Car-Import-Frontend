@@ -79,7 +79,7 @@ const Login = () => {
         )}
 
         <div className="inputs">
-          <div className="email flex mt-5 bg-gray-200 h-15 opacity-80">
+          <div className="email flex mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
             <img
               src={mail_icon}
               alt=""
@@ -90,12 +90,13 @@ const Login = () => {
               value={email}
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               placeholder="Email"
+              aria-label="Email"
               required
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="password flex mt-5 bg-gray-200 h-15 opacity-80">
+          <div className="password flex mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
             <img
               src={pass_icon}
               alt=""
@@ -106,6 +107,7 @@ const Login = () => {
               value={password}
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               placeholder="Password"
+              aria-label="Password"
               required
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   deleteTestimonial,
   fetchAllTestimonials,
@@ -67,7 +67,9 @@ const ManageTestimonials = () => {
     try {
       await deleteTestimonial(testimonial.id);
       setItems((prev) => prev.filter((t) => t.id !== testimonial.id));
-      setEditing((current) => (current?.id === testimonial.id ? null : current));
+      setEditing((current) =>
+        current?.id === testimonial.id ? null : current,
+      );
     } catch (error) {
       console.error("Failed to delete testimonial:", error);
       setDeleteError(
@@ -96,12 +98,18 @@ const ManageTestimonials = () => {
         </h2>
 
         {notice && (
-          <p role="status" className="rounded-lg bg-green-50 text-green-800 p-3 mb-4">
+          <p
+            role="status"
+            className="rounded-lg bg-green-50 text-green-800 p-3 mb-4"
+          >
             {notice}
           </p>
         )}
         {deleteError && (
-          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+          <p
+            role="alert"
+            className="rounded-lg bg-red-50 text-red-700 p-3 mb-4"
+          >
             {deleteError}
           </p>
         )}

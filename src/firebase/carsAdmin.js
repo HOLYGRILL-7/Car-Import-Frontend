@@ -71,7 +71,9 @@ export const addCar = async (fields, photos, onProgress) => {
       createdAt: serverTimestamp(),
     });
   } catch (error) {
-    await Promise.allSettled(uploaded.map(({ photoRef }) => deleteObject(photoRef)));
+    await Promise.allSettled(
+      uploaded.map(({ photoRef }) => deleteObject(photoRef)),
+    );
     throw error;
   }
 
@@ -158,7 +160,9 @@ export const updateCar = async (
   fields,
   { photos, clearedFields = [], onProgress },
 ) => {
-  const newPhotos = photos.filter((photo) => photo.file).map((photo) => photo.file);
+  const newPhotos = photos
+    .filter((photo) => photo.file)
+    .map((photo) => photo.file);
   let uploadedCount = 0;
 
   const uploads = await Promise.allSettled(
@@ -194,7 +198,9 @@ export const updateCar = async (
       imageUrls,
     });
   } catch (error) {
-    await Promise.allSettled(uploaded.map(({ photoRef }) => deleteObject(photoRef)));
+    await Promise.allSettled(
+      uploaded.map(({ photoRef }) => deleteObject(photoRef)),
+    );
     throw error;
   }
 

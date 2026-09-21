@@ -5,7 +5,8 @@ import { db } from "../firebase/config";
 const MAX_CARS = 50;
 
 const hasReview = (car) =>
-  typeof car.dealerReviewText === "string" && car.dealerReviewText.trim() !== "";
+  typeof car.dealerReviewText === "string" &&
+  car.dealerReviewText.trim() !== "";
 
 // Cars flagged isDealerChoice === true that also have the dealer's own written
 // review (dealerReviewText), newest first. Firestore can't filter on "text is

@@ -66,7 +66,8 @@ export const TEAM_CONTENT = {
 export const PRESS_CONTENT = {
   header: {
     title: "PRESS & MEDIA",
-    subtitle: "Latest news, press releases, and media coverage about Xtra Motors",
+    subtitle:
+      "Latest news, press releases, and media coverage about Xtra Motors",
   },
   // COMMENTED OUT: everything below is placeholder content (invented articles,
   // outlets, dates and a press@carwise.com address), not real press coverage.

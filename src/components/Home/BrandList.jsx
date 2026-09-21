@@ -1,5 +1,3 @@
-// components/home/BrandList.js
-import React from "react";
 import { Link } from "react-router-dom";
 
 // Each brand carries a `to` link (a listing page with ?make=...). The row

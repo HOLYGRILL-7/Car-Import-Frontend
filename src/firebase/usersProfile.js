@@ -33,7 +33,9 @@ export const fetchUsers = async () => {
       email: d.data().email ?? "",
       createdAt: d.data().createdAt?.toDate() ?? null,
     }))
-    .sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
+    .sort(
+      (a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0),
+    );
 };
 
 // The dashboard's "Registered users": real customer accounts only, so the

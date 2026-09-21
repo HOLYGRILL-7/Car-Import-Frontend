@@ -1,4 +1,3 @@
-import React from "react";
 import { services, whyChooseUs } from "../../data/carsData";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowRight } from "lucide-react"; // make sure lucide-react is installed
@@ -75,7 +74,7 @@ const Services = () => {
                 </ul>
 
                 <a
-                  href={getServiceWhatsAppLink(service.title)}
+                  href={getServiceWhatsAppLink(service.whatsappMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`mt-auto w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} text-white font-semibold flex items-center justify-center gap-2`}

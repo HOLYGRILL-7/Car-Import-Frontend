@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import { useId, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import MakeFilterChip from "./MakeFilterChip";
 import { useCars } from "../../hooks/useCars";
@@ -141,7 +141,11 @@ const CarFilterSidebar = ({ type, children }) => {
           {make && <MakeFilterChip label={makeLabel} onClear={clearMake} />}
 
           <Section title="Body style">
-            <div role="radiogroup" aria-label="Body style" className="space-y-1.5">
+            <div
+              role="radiogroup"
+              aria-label="Body style"
+              className="space-y-1.5"
+            >
               {BODY_OPTIONS.map(({ id, label }) => (
                 <label
                   key={id}
@@ -223,7 +227,11 @@ const CarFilterSidebar = ({ type, children }) => {
             </button>
           </div>
         )}
-        {children({ ...result, errorMessage, hasActiveFilters: activeCount > 0 })}
+        {children({
+          ...result,
+          errorMessage,
+          hasActiveFilters: activeCount > 0,
+        })}
       </div>
     </div>
   );

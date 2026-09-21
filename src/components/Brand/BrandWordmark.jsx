@@ -1,5 +1,3 @@
-import React from "react";
-
 // The site's name as a text wordmark. (The old logo images had "CarWise"
 // drawn into them; swap this for a new logo image whenever one exists.)
 const BrandWordmark = ({ className = "text-2xl" }) => {

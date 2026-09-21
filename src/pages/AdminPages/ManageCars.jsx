@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   deleteCar,
@@ -96,7 +96,9 @@ const ManageCars = () => {
     setStatusSaving({ id: car.id, status });
     try {
       await updateCarStatus(car.id, status);
-      setCars((prev) => prev.map((c) => (c.id === car.id ? { ...c, status } : c)));
+      setCars((prev) =>
+        prev.map((c) => (c.id === car.id ? { ...c, status } : c)),
+      );
     } catch (error) {
       console.error("Failed to update car status:", error);
       setStatusError(
@@ -148,7 +150,10 @@ const ManageCars = () => {
         </h2>
 
         {notice && (
-          <div role="status" className="rounded-lg bg-green-50 text-green-800 p-3 mb-4">
+          <div
+            role="status"
+            className="rounded-lg bg-green-50 text-green-800 p-3 mb-4"
+          >
             <p>{notice.message}</p>
             {notice.warning && (
               <p className="mt-1 text-amber-700">{notice.warning}</p>
@@ -156,17 +161,26 @@ const ManageCars = () => {
           </div>
         )}
         {linkError && (
-          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+          <p
+            role="alert"
+            className="rounded-lg bg-red-50 text-red-700 p-3 mb-4"
+          >
             {linkError}
           </p>
         )}
         {statusError && (
-          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+          <p
+            role="alert"
+            className="rounded-lg bg-red-50 text-red-700 p-3 mb-4"
+          >
             {statusError}
           </p>
         )}
         {deleteError && (
-          <p role="alert" className="rounded-lg bg-red-50 text-red-700 p-3 mb-4">
+          <p
+            role="alert"
+            className="rounded-lg bg-red-50 text-red-700 p-3 mb-4"
+          >
             {deleteError}
           </p>
         )}
@@ -215,20 +229,33 @@ const ManageCars = () => {
                   {/* On phones the controls take their own line under the car. */}
                   <div className="flex w-full items-center gap-2 sm:w-auto sm:gap-4">
                     <select
-                      value={statusSaving?.id === car.id ? statusSaving.status : car.status}
+                      value={
+                        statusSaving?.id === car.id
+                          ? statusSaving.status
+                          : car.status
+                      }
                       onChange={(e) => handleStatusChange(car, e.target.value)}
-                      disabled={statusSaving?.id === car.id || deletingId === car.id || isEditing}
+                      disabled={
+                        statusSaving?.id === car.id ||
+                        deletingId === car.id ||
+                        isEditing
+                      }
                       aria-label={`Status of ${car.name}`}
-                      title={isEditing ? "Change the status in the form below while editing" : undefined}
+                      title={
+                        isEditing
+                          ? "Change the status in the form below while editing"
+                          : undefined
+                      }
                       className="shrink-0 max-sm:flex-1 rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm font-semibold capitalize text-primary cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      {(STATUSES.includes(car.status) ? STATUSES : [...STATUSES, car.status]).map(
-                        (status) => (
-                          <option key={status} value={status}>
-                            {status}
-                          </option>
-                        ),
-                      )}
+                      {(STATUSES.includes(car.status)
+                        ? STATUSES
+                        : [...STATUSES, car.status]
+                      ).map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
                     </select>
                     <button
                       type="button"

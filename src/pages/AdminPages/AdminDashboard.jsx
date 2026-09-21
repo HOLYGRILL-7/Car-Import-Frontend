@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CarFront, Clock, Heart, Pencil, Star, Users } from "lucide-react";
 import { fetchAllCars, toUrlList } from "../../firebase/carsAdmin";
@@ -24,7 +24,9 @@ const STATUS_STYLES = {
 const editLink = (car) => `/admin/cars?edit=${encodeURIComponent(car.id)}`;
 
 const Card = ({ className = "", children }) => (
-  <section className={`min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6 ${className}`}>
+  <section
+    className={`min-w-0 bg-white rounded-2xl shadow p-4 sm:p-6 ${className}`}
+  >
     {children}
   </section>
 );
@@ -63,10 +65,7 @@ const InventoryCard = ({ stats }) => {
     { key: "new", label: "New" },
     ...(byTypeStatus.other.total > 0 ? [{ key: "other", label: "Other" }] : []),
   ];
-  const columns = [
-    ...STATUSES,
-    ...(byStatus.other > 0 ? ["other"] : []),
-  ];
+  const columns = [...STATUSES, ...(byStatus.other > 0 ? ["other"] : [])];
 
   return (
     <Card className="md:col-span-2">
@@ -88,7 +87,10 @@ const InventoryCard = ({ stats }) => {
                 <span className="sr-only">Type</span>
               </th>
               {columns.map((status) => (
-                <th key={status} className="px-1.5 sm:px-2 py-2 text-right font-semibold">
+                <th
+                  key={status}
+                  className="px-1.5 sm:px-2 py-2 text-right font-semibold"
+                >
                   <span className="inline-flex items-center gap-1.5">
                     <span
                       className={`hidden h-2.5 w-2.5 rounded-full sm:inline-block ${STATUS_STYLES[status].dot}`}
@@ -108,7 +110,10 @@ const InventoryCard = ({ stats }) => {
                   {label}
                 </th>
                 {columns.map((status) => (
-                  <td key={status} className="px-1.5 sm:px-2 py-2 text-right tabular-nums">
+                  <td
+                    key={status}
+                    className="px-1.5 sm:px-2 py-2 text-right tabular-nums"
+                  >
                     {byTypeStatus[key][status]}
                   </td>
                 ))}
@@ -124,7 +129,10 @@ const InventoryCard = ({ stats }) => {
                 All cars
               </th>
               {columns.map((status) => (
-                <td key={status} className="px-1.5 sm:px-2 py-2 text-right tabular-nums">
+                <td
+                  key={status}
+                  className="px-1.5 sm:px-2 py-2 text-right tabular-nums"
+                >
                   {byStatus[status]}
                 </td>
               ))}
@@ -214,8 +222,8 @@ const MostWishlistedCard = ({ ranked, error }) => (
     </h2>
     {error ? (
       <Unavailable>
-        Couldn't load wishlist counts. Check that the latest firestore.rules
-        are published, then refresh.
+        Couldn't load wishlist counts. Check that the latest firestore.rules are
+        published, then refresh.
       </Unavailable>
     ) : ranked.length === 0 ? (
       <Unavailable>No cars have been saved to a wishlist yet.</Unavailable>
@@ -234,7 +242,10 @@ const MostWishlistedCard = ({ ranked, error }) => (
               <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-3 py-1 text-sm font-semibold text-secondary-dark">
                 <Heart className="h-4 w-4 fill-current" aria-hidden="true" />
                 {saves}
-                <span className="sr-only"> {saves === 1 ? "save" : "saves"}</span>
+                <span className="sr-only">
+                  {" "}
+                  {saves === 1 ? "save" : "saves"}
+                </span>
               </span>
             }
           />
@@ -319,9 +330,7 @@ const AdminDashboard = () => {
           chipClass="bg-primary-light/20 text-primary"
           label="Registered users"
           value={data.users.status === "fulfilled" ? data.users.value : "—"}
-          note={
-            data.users.status === "fulfilled" ? null : "Couldn't be loaded"
-          }
+          note={data.users.status === "fulfilled" ? null : "Couldn't be loaded"}
         />
       </div>
 

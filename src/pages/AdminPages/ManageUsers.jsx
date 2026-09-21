@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchUsers } from "../../firebase/usersProfile";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { formatDate } from "../../utils/formatDate";

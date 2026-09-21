@@ -1,4 +1,3 @@
-import React from "react";
 import { Star } from "lucide-react";
 
 // A read-only row of five stars, `value` of them filled.

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
@@ -8,7 +8,12 @@ import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";
 
 // A signed-in user's saved cars (the route is behind ProtectedRoute).
 const Wishlist = () => {
-  const { savedIds, loading: wishlistLoading, unsave } = useWishlist();
+  const {
+    savedIds,
+    loading: wishlistLoading,
+    error: wishlistError,
+    unsave,
+  } = useWishlist();
 
   // Car docs by id; null means the car no longer exists (e.g. deleted).
   const [carsById, setCarsById] = useState({});
@@ -47,6 +52,7 @@ const Wishlist = () => {
   }, [missingKey]);
 
   const loading = wishlistLoading || (missingIds.length > 0 && !fetchError);
+  const failed = fetchError || wishlistError;
   const cars = savedIds.map((id) => carsById[id]).filter(Boolean);
   const unavailableIds = savedIds.filter((id) => carsById[id] === null);
 
@@ -61,12 +67,12 @@ const Wishlist = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10"
         />
       )}
-      {fetchError && (
+      {failed && (
         <p className="my-10 text-center text-neutral">
           Couldn't load your saved cars right now. Please try again later.
         </p>
       )}
-      {!loading && !fetchError && savedIds.length === 0 && (
+      {!loading && !failed && savedIds.length === 0 && (
         <div className="my-16 text-center text-neutral space-y-4">
           <p>You haven't saved any cars yet.</p>
           <p>

@@ -68,5 +68,4 @@ export const addTestimonial = (fields) =>
 export const updateTestimonial = (id, fields) =>
   updateDoc(doc(db, "testimonials", id), toDocument(fields));
 
-export const deleteTestimonial = (id) =>
-  deleteDoc(doc(db, "testimonials", id));
+export const deleteTestimonial = (id) => deleteDoc(doc(db, "testimonials", id));

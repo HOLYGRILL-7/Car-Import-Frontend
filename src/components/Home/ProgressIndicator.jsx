@@ -1,6 +1,3 @@
-// components/home/ProgressIndicator.js
-import React from "react";
-
 const ProgressIndicator = ({ totalSlides, currentSlide, onSlideChange }) => {
   return (
     <div className="flex justify-center gap-2 mt-8">

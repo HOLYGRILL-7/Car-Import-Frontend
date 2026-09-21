@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ADMIN_DISPLAY_NAME } from "../../utils/admin";
 
@@ -11,9 +10,7 @@ const AuthSection = ({ user, isAdmin, onLogout, stacked = false }) => {
       {user ? (
         <div
           className={
-            stacked
-              ? "flex flex-col gap-1"
-              : "flex items-center gap-4"
+            stacked ? "flex flex-col gap-1" : "flex items-center gap-4"
           }
         >
           {isAdmin && (

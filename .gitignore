@@ -21,8 +21,10 @@ dist-ssr
 .env.*
 !.env.example
 
-# Firebase Admin credentials — never commit
-serviceAccountKey.json
+# Firebase Admin credentials — never commit (wildcards so a different letter case
+# or Google's default download name can't slip through on Mac/Linux)
+serviceAccount*.json
+*-firebase-adminsdk-*.json
 
 # Editor directories and files
 .vscode/*

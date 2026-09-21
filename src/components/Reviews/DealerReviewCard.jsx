@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Star } from "lucide-react";
 import { toUrlList } from "../../firebase/carsAdmin";
@@ -7,7 +6,9 @@ import { formatPrice } from "../../utils/formatPrice";
 // One Dealer's Choice car with the dealer's own written take on it.
 const DealerReviewCard = ({ car }) => {
   const photo = toUrlList(car.imageUrls)[0];
-  const details = [car.year, formatPrice(car.price)].filter(Boolean).join(" · ");
+  const details = [car.year, formatPrice(car.price)]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <article className="grid overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-5">

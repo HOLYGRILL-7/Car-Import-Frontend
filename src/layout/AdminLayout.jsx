@@ -9,13 +9,37 @@ import {
 import { useAuth } from "../context/useAuth";
 import BrandWordmark from "../components/Brand/BrandWordmark";
 import { ADMIN_DISPLAY_NAME } from "../utils/admin";
-import { CarFront, Gauge, Menu, MessageSquareQuote, Users, X } from "lucide-react";
+import {
+  CarFront,
+  Gauge,
+  Menu,
+  MessageSquareQuote,
+  Users,
+  X,
+} from "lucide-react";
 
 const NAV_ITEMS = [
-  { to: "/admin", label: "Dashboard", icon: <Gauge width={24} height={24} />, end: true },
-  { to: "/admin/cars", label: "Manage Cars", icon: <CarFront width={24} height={24} /> },
-  { to: "/admin/testimonials", label: "Testimonials", icon: <MessageSquareQuote width={24} height={24} /> },
-  { to: "/admin/users", label: "Manage Users", icon: <Users width={24} height={24} /> },
+  {
+    to: "/admin",
+    label: "Dashboard",
+    icon: <Gauge width={24} height={24} />,
+    end: true,
+  },
+  {
+    to: "/admin/cars",
+    label: "Manage Cars",
+    icon: <CarFront width={24} height={24} />,
+  },
+  {
+    to: "/admin/testimonials",
+    label: "Testimonials",
+    icon: <MessageSquareQuote width={24} height={24} />,
+  },
+  {
+    to: "/admin/users",
+    label: "Manage Users",
+    icon: <Users width={24} height={24} />,
+  },
 ];
 
 // From lg up the sidebar sits beside the page; below that it's a drawer that
@@ -107,7 +131,9 @@ const AdminLayout = () => {
           <div className="mb-3">
             <p className="text-sm text-neutral-cream">Logged in as</p>
             <p className="font-semibold">{ADMIN_DISPLAY_NAME}</p>
-            <p className="text-xs text-neutral-cream break-all">{user?.email}</p>
+            <p className="text-xs text-neutral-cream break-all">
+              {user?.email}
+            </p>
           </div>
           <button
             onClick={handleLogout}
