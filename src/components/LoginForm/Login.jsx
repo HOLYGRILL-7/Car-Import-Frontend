@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { getAuthErrorMessage } from "../../utils/authErrors";
 import mail_icon from "../../assets/Icons/mail.png";
@@ -10,6 +11,7 @@ import pass_icon from "../../assets/Icons/pass.png";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -96,14 +98,14 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="password flex mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
+          <div className="password flex items-center mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
             <img
               src={pass_icon}
               alt=""
               className="w-6 h-6 m-5 mt-5 opacity-80 "
             />
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
               placeholder="Password"
@@ -112,6 +114,18 @@ const Login = () => {
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="mr-5 shrink-0 text-neutral-600 hover:text-neutral-900"
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
           </div>
         </div>
 

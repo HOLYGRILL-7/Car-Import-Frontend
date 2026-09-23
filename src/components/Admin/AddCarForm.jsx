@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { addCar, toUrlList, updateCar } from "../../firebase/carsAdmin";
+import { FUEL_TYPES, TRANSMISSIONS } from "../../utils/carFilters";
 
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
@@ -45,20 +46,13 @@ const formFromCar = (car) => ({
   dealerReviewText: String(car.dealerReviewText ?? ""),
 });
 
-// Optional details; written to the document only when filled in.
+// Optional details; written to the document only when filled in. Fuel type
+// and transmission are closed choices (a real <select>, not a free-text
+// input with suggestions), so re-opening the dropdown after a first pick
+// always works.
 const OPTIONAL_FIELDS = [
-  {
-    name: "fuelType",
-    label: "Fuel type",
-    placeholder: "e.g. Petrol",
-    list: "fuel-types",
-  },
-  {
-    name: "transmission",
-    label: "Transmission",
-    placeholder: "e.g. Automatic",
-    list: "transmissions",
-  },
+  { name: "fuelType", label: "Fuel type", options: FUEL_TYPES },
+  { name: "transmission", label: "Transmission", options: TRANSMISSIONS },
   { name: "bodyType", label: "Body type", placeholder: "e.g. SUV" },
   { name: "color", label: "Color", placeholder: "e.g. Black" },
   { name: "engineSize", label: "Engine size", placeholder: "e.g. 3.5L V6" },
@@ -436,29 +430,37 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           More details (optional)
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {OPTIONAL_FIELDS.map(({ name, label, placeholder, list }) => (
+          {OPTIONAL_FIELDS.map(({ name, label, placeholder, options }) => (
             <Field key={name} label={label}>
-              <input
-                name={name}
-                value={form[name]}
-                onChange={setField}
-                list={list}
-                className={inputClass}
-                placeholder={placeholder}
-              />
+              {options ? (
+                <select
+                  name={name}
+                  value={form[name]}
+                  onChange={setField}
+                  className={inputClass}
+                >
+                  <option value="">—</option>
+                  {options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                  {form[name] && !options.includes(form[name]) && (
+                    <option value={form[name]}>{form[name]}</option>
+                  )}
+                </select>
+              ) : (
+                <input
+                  name={name}
+                  value={form[name]}
+                  onChange={setField}
+                  className={inputClass}
+                  placeholder={placeholder}
+                />
+              )}
             </Field>
           ))}
         </div>
-        <datalist id="fuel-types">
-          <option value="Petrol" />
-          <option value="Diesel" />
-          <option value="Hybrid" />
-          <option value="Electric" />
-        </datalist>
-        <datalist id="transmissions">
-          <option value="Automatic" />
-          <option value="Manual" />
-        </datalist>
       </div>
 
       <div>
@@ -480,7 +482,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
             {errors.photos}
           </span>
         )}
-        {isEdit && (
+        {photoCount > 0 && (
           <span className="block text-xs text-neutral mt-1">
             Photos appear in this order on the car's page. The first is the
             cover (the listing photo and the main image) — use "Set as cover" to
@@ -491,7 +493,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           <ul className="mt-3 grid grid-cols-3 md:grid-cols-6 gap-3">
             {gallery.map((item, index) => {
               const isSaved = Boolean(item.url);
-              const isCover = isEdit && index === 0;
+              const isCover = index === 0;
               // Saved photos are numbered among the saved ones, in current order.
               const savedNumber = gallery
                 .slice(0, index + 1)
@@ -523,7 +525,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
                       New
                     </span>
                   )}
-                  {isEdit && !isCover && (
+                  {!isCover && (
                     <button
                       type="button"
                       onClick={() => setCover(item.id)}
