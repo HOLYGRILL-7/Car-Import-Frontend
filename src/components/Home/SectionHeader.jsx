@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // "View All" link colours. "orange" is the default; New Arrivals uses "blue".
 const LINK_TONES = {
-  orange: "text-accent hover:text-accent-light",
+  orange: "text-accent-text hover:text-accent",
   blue: "text-blue-600 hover:text-blue-500",
 };
 

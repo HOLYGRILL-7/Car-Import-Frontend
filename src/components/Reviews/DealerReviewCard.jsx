@@ -32,7 +32,7 @@ const DealerReviewCard = ({ car }) => {
       </Link>
 
       <div className="flex flex-col gap-3 p-6 sm:p-8 md:col-span-3">
-        <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent-dark">
+        <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent-text">
           <Star className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
           Dealer's Choice
         </span>
@@ -47,7 +47,7 @@ const DealerReviewCard = ({ car }) => {
         </p>
         <Link
           to={`/carDetails/${car.id}`}
-          className="inline-flex w-fit items-center gap-2 font-semibold text-accent-dark hover:underline"
+          className="inline-flex w-fit items-center gap-2 font-semibold text-accent-text hover:underline"
         >
           View this car
           <ArrowRight className="h-4 w-4" aria-hidden="true" />

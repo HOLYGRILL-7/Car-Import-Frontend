@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center gap-4 px-4 pt-24 pb-16 text-center">
-      <p className="text-6xl font-bold text-accent">404</p>
+      <p className="text-6xl font-bold text-accent-text">404</p>
       <h1 className="text-3xl font-bold text-primary">Page not found</h1>
       <p className="text-neutral">
         The page you're looking for doesn't exist or may have moved.

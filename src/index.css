@@ -12,6 +12,11 @@
   --color-accent: #f59e0b;
   --color-accent-dark: #d97706;
   --color-accent-light: #fbbf24;
+  /* `accent` on a light background is only ~2:1 contrast, well under the 4.5:1
+     text minimum — fine for icons, borders and backgrounds (which only need
+     3:1 or nothing), but not for words someone has to read. Use this darker
+     shade for text/links on white or near-white backgrounds instead. */
+  --color-accent-text: #9a4d0a;
 
   --color-neutral: #64748b;
   --color-neutral-dark: #1e293b;

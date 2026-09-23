@@ -10,7 +10,7 @@ const BrandList = ({ brands }) => {
           <Link to={brand.to} className="group block cursor-pointer">
             <div className="flex flex-row items-center justify-center space-x-3 sm:space-x-5 opacity-60 hover:opacity-100 transition-opacity">
               <img src={brand.logo} alt="" width={35} />
-              <h4 className="text-primary text-xl font-bold group-hover:text-accent transition-colors">
+              <h4 className="text-primary text-xl font-bold group-hover:text-accent-text transition-colors">
                 {brand.name}
               </h4>
             </div>

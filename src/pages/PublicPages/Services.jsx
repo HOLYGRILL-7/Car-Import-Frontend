@@ -129,7 +129,7 @@ const Services = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/usedCars"
-              className="px-8 py-4 bg-linearto-r from-bg-accent to bg-accent-light text-white font-bold rounded-xl hover:scale-105 transition-transform shadow-lg"
+              className="px-8 py-4 bg-accent hover:bg-accent-light text-primary-dark font-bold rounded-xl hover:scale-105 transition-transform shadow-lg"
             >
               Browse Inventory
             </Link>

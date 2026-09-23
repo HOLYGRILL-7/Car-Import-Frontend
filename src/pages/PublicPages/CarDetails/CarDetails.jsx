@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Gauge,
@@ -28,6 +28,11 @@ const hasValue = (value) =>
 const CarDetailsContent = ({ id }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [imageErrors, setImageErrors] = useState({});
+  // Feedback for the Share button's clipboard fallback (see handleShare):
+  // null | "copied" | "error", cleared automatically after a couple seconds.
+  const [shareStatus, setShareStatus] = useState(null);
+  const shareStatusTimeout = useRef(null);
+  useEffect(() => () => clearTimeout(shareStatusTimeout.current), []);
 
   const { car, loading, error } = useCar(id);
 
@@ -62,17 +67,39 @@ const CarDetailsContent = ({ id }) => {
     setImageErrors((prev) => ({ ...prev, [index]: true }));
   };
 
-  // Uses the browser's share sheet where there is one (mostly phones); nothing
-  // happens elsewhere. Cancelling the sheet is a normal outcome, not an error.
-  const handleShare = () => {
-    if (!navigator.share) return;
-    navigator
-      .share({
-        title: car.name,
-        text: `Check out this ${car.name} for ${price}`,
-        url: window.location.href,
-      })
-      .catch(() => {});
+  // Uses the browser's share sheet where there is one (mostly phones).
+  // Cancelling the sheet is a normal outcome, not an error. Most desktop
+  // browsers have no share sheet at all: there, copy the link to the
+  // clipboard instead and say so, rather than the button doing nothing.
+  const showShareStatus = (status) => {
+    clearTimeout(shareStatusTimeout.current);
+    setShareStatus(status);
+    shareStatusTimeout.current = setTimeout(() => setShareStatus(null), 2500);
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: car.name,
+      text: `Check out this ${car.name} for ${price}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // The user closed the share sheet; nothing went wrong.
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      showShareStatus("copied");
+    } catch (error) {
+      console.error("Failed to copy the link:", error);
+      showShareStatus("error");
+    }
   };
 
   const handleCallSeller = () => {
@@ -159,6 +186,16 @@ const CarDetailsContent = ({ id }) => {
                   <Share2 className="w-5 h-5" />
                 </button>
               </div>
+              {shareStatus && (
+                <span
+                  role="status"
+                  className="absolute top-16 right-4 rounded-full bg-gray-900/90 px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-white shadow-lg"
+                >
+                  {shareStatus === "copied"
+                    ? "Link copied"
+                    : "Couldn't copy the link"}
+                </span>
+              )}
             </div>
 
             {/* Thumbnail Images (a single photo needs no thumbnail strip) */}

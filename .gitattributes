@@ -1,0 +1,14 @@
+# Normalize line endings for everyone: text files are stored as LF in the repo
+# and checked out using each platform's native line ending. This stops every
+# commit from Windows showing a wall of LF/CRLF noise.
+* text=auto eol=lf
+
+# Never fix up binary files. (SVGs are XML text, not listed here, so they
+# still normalize to LF and diff normally.)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

@@ -14,7 +14,7 @@ const AboutUs = () => {
   const getTabClasses = (itemPath) => {
     const baseClasses =
       "py-4 px-2 border-b-2 transition-colors whitespace-nowrap font-medium";
-    const activeClasses = "border-accent text-accent font-semibold";
+    const activeClasses = "border-accent text-accent-text font-semibold";
     const inactiveClasses =
       "border-transparent text-neutral hover:text-primary hover:border-neutral";
 
@@ -25,7 +25,7 @@ const AboutUs = () => {
     const baseClasses =
       "inline-block self-center px-8 py-4 font-bold rounded-xl shadow-lg transition-all";
     const primaryClasses =
-      "bg-accent hover:bg-accent-light text-white transform hover:scale-105";
+      "bg-accent hover:bg-accent-light text-primary-dark transform hover:scale-105";
     const secondaryClasses = "bg-white text-primary hover:scale-105";
 
     return `${baseClasses} ${isPrimary ? primaryClasses : secondaryClasses}`;

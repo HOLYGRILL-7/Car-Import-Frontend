@@ -33,7 +33,9 @@ const Reviews = () => {
       {/* Plain page title, the same as on Used Cars / New Cars (the navbar is
           fixed, so it starts below it) */}
       <div className="pt-24 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-center text-5xl font-bold text-accent">Reviews</h1>
+        <h1 className="text-center text-5xl font-bold text-accent-text">
+          Reviews
+        </h1>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

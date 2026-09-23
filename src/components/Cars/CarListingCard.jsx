@@ -39,7 +39,7 @@ const CarListingCard = ({ car }) => {
             {car.name}
           </h3>
           <p className="mt-1 text-sm text-neutral">{specLine}</p>
-          <p className="mt-auto pt-3 text-xl font-bold text-accent">
+          <p className="mt-auto pt-3 text-xl font-bold text-accent-text">
             {formatPrice(car.price)}
           </p>
         </div>

@@ -1,4 +1,4 @@
-# Xtra Motors: car import & sales website
+# Extra Motors: car import & sales website
 
 A single-page site for a family-run used car import and sales business in
 Achimota, Accra, Ghana. Visitors browse and filter cars, save favourites,

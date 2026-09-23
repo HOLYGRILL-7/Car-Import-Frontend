@@ -5,7 +5,7 @@ const BrandWordmark = ({ className = "text-2xl" }) => {
     <span
       className={`font-extrabold tracking-tight text-white whitespace-nowrap ${className}`}
     >
-      Xtra <span className="text-secondary-light">Motors</span>
+      Extra <span className="text-secondary-light">Motors</span>
     </span>
   );
 };

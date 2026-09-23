@@ -122,7 +122,7 @@ const CarFilterSidebar = ({ type, children }) => {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-sm text-accent hover:underline cursor-pointer"
+                className="text-sm text-accent-text hover:underline cursor-pointer"
               >
                 Clear all
               </button>
@@ -221,7 +221,7 @@ const CarFilterSidebar = ({ type, children }) => {
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-2 text-accent hover:underline cursor-pointer"
+              className="mt-2 text-accent-text hover:underline cursor-pointer"
             >
               Clear all filters
             </button>

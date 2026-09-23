@@ -473,7 +473,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           onChange={handleFiles}
           disabled={photoCount >= MAX_PHOTOS}
           aria-label="Choose photos"
-          className="block w-full text-sm text-neutral file:mr-4 file:rounded-lg file:border-0 file:bg-primary-light file:px-4 file:py-2 file:text-white hover:file:bg-primary"
+          className="block w-full text-sm text-neutral file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-primary-light file:px-4 file:py-2 file:text-white file:hover:bg-primary"
         />
         {errors.photos && (
           <span className="block text-sm text-red-600 mt-1">

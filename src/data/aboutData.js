@@ -29,7 +29,7 @@ export const ABOUT_CONTENT = {
       title: "OUR STORY",
       borderColor: "border-accent",
       content:
-        "Xtra Motors is a family-run used car import and sales business based in Achimota, Accra, Ghana. With more than 10 years of experience, we focus on importing, selling and servicing quality used vehicles for customers in Ghana.",
+        "Extra Motors is a family-run used car import and sales business based in Achimota, Accra, Ghana. With more than 10 years of experience, we focus on importing, selling and servicing quality used vehicles for customers in Ghana.",
     },
     {
       id: "what-we-do",
@@ -49,7 +49,7 @@ export const ABOUT_CONTENT = {
   // Replaces the old "Our Investors" section (fake investor logos and a "backed
   // by leading venture capital firms" claim, none of it true).
   invest: {
-    heading: "Interested in investing in Xtra Motors?",
+    heading: "Interested in investing in Extra Motors?",
     description: "We'd love to talk.",
     buttonText: "Contact Us",
     buttonPath: "/contact",

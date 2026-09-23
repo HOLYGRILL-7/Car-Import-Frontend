@@ -16,5 +16,5 @@ export const footerData = {
     phone: PHONE_DISPLAY,
     address: SERVICE_AREA,
   },
-  copyright: "2026 Xtra Motors. All rights reserved.",
+  copyright: "2026 Extra Motors. All rights reserved.",
 };

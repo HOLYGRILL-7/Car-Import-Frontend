@@ -24,7 +24,7 @@ export const TEAM_CONTENT = {
         image: CEO,
         imageAlt: "Bismark Jones Oduro, CEO & Founder",
         description:
-          "Bismark founded Xtra Motors and leads the business. He brings 10+ years of experience importing and selling used vehicles in Ghana.",
+          "Bismark founded Extra Motors and leads the business. He brings 10+ years of experience importing and selling used vehicles in Ghana.",
         linkedin: "", // Add if available
         email: "", // Add if available
       },
@@ -35,7 +35,7 @@ export const TEAM_CONTENT = {
         image: COO,
         imageAlt: "Jr. Bismark Jones-Oduro, Digital Operations & Marketing",
         description:
-          "Builds and maintains the Xtra Motors website, photographs our inventory, and runs our social media presence.",
+          "Builds and maintains the Extra Motors website, photographs our inventory, and runs our social media presence.",
         linkedin: "",
         email: "",
       },
@@ -67,7 +67,7 @@ export const PRESS_CONTENT = {
   header: {
     title: "PRESS & MEDIA",
     subtitle:
-      "Latest news, press releases, and media coverage about Xtra Motors",
+      "Latest news, press releases, and media coverage about Extra Motors",
   },
   // COMMENTED OUT: everything below is placeholder content (invented articles,
   // outlets, dates and a press@carwise.com address), not real press coverage.
@@ -77,7 +77,7 @@ export const PRESS_CONTENT = {
   //     id: "expansion-2025",
   //     image: news1,
   //     imageAlt: "Global trade and international expansion",
-  //     title: "Xtra Motors Expands Operations to Three New Countries",
+  //     title: "Extra Motors Expands Operations to Three New Countries",
   //     date: "2025-11-20",
   //     displayDate: "November 20, 2025",
   //     excerpt:
@@ -100,7 +100,7 @@ export const PRESS_CONTENT = {
   //     id: "ai-launch-2025",
   //     image: AI,
   //     imageAlt: "AI technology interface",
-  //     title: "Xtra Motors Launches AI-Powered Vehicle Sourcing",
+  //     title: "Extra Motors Launches AI-Powered Vehicle Sourcing",
   //     date: "2025-11-10",
   //     displayDate: "November 10, 2025",
   //     excerpt:
@@ -138,7 +138,7 @@ export const PRESS_CONTENT = {
   //     title: "Customer Satisfaction Rate Hits 98%",
   //     date: "2025-10-05",
   //     displayDate: "October 5, 2025",
-  //     excerpt: "Independent survey ranks Xtra Motors as top automotive importer...",
+  //     excerpt: "Independent survey ranks Extra Motors as top automotive importer...",
   //     source: "Consumer Reports",
   //     link: "/press/satisfaction-rating-2025",
   //   },

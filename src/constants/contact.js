@@ -20,7 +20,7 @@ const getWhatsAppLink = (carName) =>
   whatsAppLink(`Hello, I'm interested in the ${carName}.`);
 
 export const getGeneralWhatsAppLink = () =>
-  whatsAppLink("Hello, I'd like to know more about Xtra Motors.");
+  whatsAppLink("Hello, I'd like to know more about Extra Motors.");
 
 // A chat opened from a service card, pre-filled with that card's own message.
 export const getServiceWhatsAppLink = (message) => whatsAppLink(message);

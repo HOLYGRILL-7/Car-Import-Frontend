@@ -77,11 +77,11 @@ const Wishlist = () => {
           <p>You haven't saved any cars yet.</p>
           <p>
             Browse{" "}
-            <Link to="/newCars" className="text-accent hover:underline">
+            <Link to="/newCars" className="text-accent-text hover:underline">
               new cars
             </Link>{" "}
             or{" "}
-            <Link to="/usedCars" className="text-accent hover:underline">
+            <Link to="/usedCars" className="text-accent-text hover:underline">
               used cars
             </Link>{" "}
             and tap the heart to save one.
@@ -107,7 +107,7 @@ const Wishlist = () => {
           <button
             type="button"
             onClick={() => unavailableIds.forEach((id) => unsave(id))}
-            className="text-accent hover:underline cursor-pointer"
+            className="text-accent-text hover:underline cursor-pointer"
           >
             Remove {unavailableIds.length === 1 ? "it" : "them"}
           </button>

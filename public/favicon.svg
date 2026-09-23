@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Xtra Motors monogram: navy tile, white X, red M (as in the wordmark). Letters are drawn as strokes so they look the same everywhere, with no font needed. -->
+  <!-- Extra Motors monogram: navy tile, white E, red M (as in the wordmark). Letters are drawn as strokes so they look the same everywhere, with no font needed. -->
   <rect width="64" height="64" rx="14" fill="#0a1f44"/>
   <g fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 20 L25 44 M25 20 L9 44" stroke="#ffffff"/>
+    <path d="M9 20 V44 M9 20 H25 M9 32 H22 M9 44 H25" stroke="#ffffff"/>
     <path d="M35 44 V20 L45 33 L55 20 V44" stroke="#ef4444"/>
   </g>
 </svg>

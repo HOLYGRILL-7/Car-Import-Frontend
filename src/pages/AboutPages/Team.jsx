@@ -37,7 +37,7 @@ const LeaderCard = ({ leader }) => {
             <h3 className="text-xl font-bold text-white drop-shadow-lg leading-tight">
               {leader.name}
             </h3>
-            <p className="text-sm text-accent font-bold drop-shadow-md">
+            <p className="text-sm text-accent-text font-bold drop-shadow-md">
               {leader.position}
             </p>
           </div>

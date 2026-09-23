@@ -16,10 +16,6 @@ import AboutUs from "./pages/AboutPages/AboutUs";
 import About from "./pages/AboutPages/About";
 import Team from "./pages/AboutPages/Team";
 import Press from "./pages/AboutPages/Press";
-import Dashboard from "./pages/UserPages/Dashboard";
-import TrackMyOrder from "./pages/UserPages/TrackMyOrder";
-import MyProfile from "./pages/UserPages/MyProfile";
-import MyOrder from "./pages/UserPages/MyOrder";
 import Wishlist from "./pages/UserPages/Wishlist";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
@@ -53,10 +49,6 @@ const App = () => {
         {/* Protected USER routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/users/dashboard" element={<Dashboard />} />
-          <Route path="/trackOrder" element={<TrackMyOrder />} />
-          <Route path="/myProfile" element={<MyProfile />} />
-          <Route path="/myOrders" element={<MyOrder />} />
         </Route>
       </Route>
 
