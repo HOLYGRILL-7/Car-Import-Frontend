@@ -17,13 +17,16 @@ import Nissan from "../assets/CarLogo/Nissan.png";
 import Daewoo from "../assets/CarLogo/Daewoo.png";
 import Chev from "../assets/CarLogo/chev.png";
 
-// Car Brands
+// Car Brands. logoHeight is each logo's real height at the 35px display
+// width BrandList renders them at (their aspect ratios vary a lot, from
+// Daewoo's wide wordmark to Nissan's near-square mark) — set explicitly so
+// the browser reserves the right space before the image loads.
 export const carBrands = [
-  { id: 1, logo: Toyota, name: "Toyota" },
-  { id: 2, logo: Kia, name: "Kia" },
-  { id: 3, logo: Daewoo, name: "Daewoo" },
-  { id: 4, logo: Nissan, name: "Nissan" },
-  { id: 5, logo: Chev, name: "Chevrolet" },
+  { id: 1, logo: Toyota, name: "Toyota", logoHeight: 24 },
+  { id: 2, logo: Kia, name: "Kia", logoHeight: 11 },
+  { id: 3, logo: Daewoo, name: "Daewoo", logoHeight: 5 },
+  { id: 4, logo: Nissan, name: "Nissan", logoHeight: 28 },
+  { id: 5, logo: Chev, name: "Chevrolet", logoHeight: 14 },
 ];
 
 // Services page cards

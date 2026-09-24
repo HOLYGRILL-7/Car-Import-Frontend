@@ -22,6 +22,8 @@ const DealerReviewCard = ({ car }) => {
             src={photo}
             alt={car.name}
             loading="lazy"
+            width={400}
+            height={256}
             className="h-full w-full object-cover"
           />
         ) : (

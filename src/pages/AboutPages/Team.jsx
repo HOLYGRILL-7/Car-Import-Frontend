@@ -26,6 +26,8 @@ const LeaderCard = ({ leader }) => {
           <img
             src={leader.image}
             alt={leader.imageAlt}
+            width={400}
+            height={320}
             className="w-full h-full p-3 rounded-3xl object-cover"
             onError={handleImageError}
             loading="lazy"

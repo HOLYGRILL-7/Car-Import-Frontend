@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthSection from "./AuthSection";
 import { useAuth } from "../../context/useAuth";
 import Logo from "./Logo";
@@ -20,23 +20,35 @@ const Navbar = () => {
   // Open only for the page it was opened on, so going anywhere closes it.
   const [openAt, setOpenAt] = useState(null);
   const open = openAt === location.key;
+  // Wraps the hamburger button + dropdown, so a tap outside either closes it
+  // (the button itself already toggles, so it's excluded from that check).
+  const navRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e) => e.key === "Escape" && setOpenAt(null);
+    const onPointerDown = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setOpenAt(null);
+      }
+    };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
   }, [open]);
 
   const handleLogout = async () => {
     setOpenAt(null);
     await logout();
-    navigate("/");
+    navigate("/", { state: { toast: "You've been logged out." } });
   };
 
   return (
     <nav className="bg-primary-dark shadow-lg">
-      <div className="relative w-full px-4 sm:px-6 lg:px-8">
+      <div ref={navRef} className="relative w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <Logo />
           <div className="hidden xl:contents">
@@ -47,6 +59,18 @@ const Navbar = () => {
               isAdmin={isAdmin}
             />
           </div>
+          {/* Below xl, Login/Register otherwise live only inside the
+              hamburger dropdown, which is easy to miss when prompted to log
+              in from elsewhere (e.g. saving a car) — so a logged-out visitor
+              always has this small, direct way in. */}
+          {!user && (
+            <Link
+              to="/login"
+              className="mr-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/10 xl:hidden"
+            >
+              Log in
+            </Link>
+          )}
           <MobileMenuButton
             open={open}
             controls={MOBILE_MENU_ID}

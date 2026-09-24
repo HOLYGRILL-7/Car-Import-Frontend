@@ -12,6 +12,8 @@ const ImageThumbnail = ({ src, alt, index, isSelected, onClick }) => {
       <img
         src={src}
         alt={alt}
+        width={100}
+        height={96}
         className="w-full h-full object-cover"
         loading="lazy"
       />

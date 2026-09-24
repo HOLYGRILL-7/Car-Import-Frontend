@@ -1,6 +1,6 @@
-import CEO from "../assets/Team/CEO.jpg";
-import COO from "../assets/Team/COO.jpg";
-import LOG from "../assets/Team/LOG.jpg";
+import CEO from "../assets/Team/CEO.webp";
+import COO from "../assets/Team/COO.webp";
+import LOG from "../assets/Team/LOG.webp";
 // Used only by the press items that are commented out below:
 // import news1 from "../assets/News/world-trade.jpg";
 // import fleet from "../assets/News/fleet.jpg";

@@ -25,6 +25,8 @@ const CarListingCard = ({ car }) => {
               src={photo}
               alt={car.name}
               loading="lazy"
+              width={400}
+              height={192}
               className="w-full h-full object-cover rounded-lg"
             />
           ) : (

@@ -513,6 +513,8 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
                     alt={
                       isSaved ? `Saved photo ${savedNumber}` : item.file.name
                     }
+                    width={100}
+                    height={96}
                     className="h-24 w-full rounded-lg object-cover"
                   />
                   {isCover && (

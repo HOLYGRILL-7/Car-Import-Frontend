@@ -211,6 +211,8 @@ const ManageCars = () => {
                     <img
                       src={thumbnail}
                       alt=""
+                      width={96}
+                      height={64}
                       className="h-16 w-24 shrink-0 rounded-lg object-cover"
                     />
                   ) : (

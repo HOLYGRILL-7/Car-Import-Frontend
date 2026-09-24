@@ -2,12 +2,14 @@
 // the admin — the one account whose email matches VITE_ADMIN_EMAIL.
 import { createContext, useEffect, useMemo, useState } from "react";
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  verifyPasswordResetCode,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { recordUserProfile } from "../firebase/usersProfile";
@@ -37,6 +39,13 @@ const login = async (email, password) => {
 const logout = () => signOut(auth);
 
 const resetPassword = (email) => sendPasswordResetEmail(auth, email.trim());
+
+// The two halves of our custom /auth/action page's reset flow: check the
+// emailed code is still valid (and get the email it belongs to, so the page
+// can show it), then apply the new password once the user confirms it.
+const verifyResetCode = (oobCode) => verifyPasswordResetCode(auth, oobCode);
+const confirmReset = (oobCode, newPassword) =>
+  confirmPasswordReset(auth, oobCode, newPassword);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -79,6 +88,8 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       resetPassword,
+      verifyResetCode,
+      confirmReset,
       register,
     }),
     [user, loading],

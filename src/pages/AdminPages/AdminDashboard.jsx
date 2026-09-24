@@ -153,6 +153,8 @@ const Thumbnail = ({ car }) => {
     <img
       src={photo}
       alt=""
+      width={72}
+      height={48}
       className="h-12 w-18 shrink-0 rounded-lg object-cover"
     />
   ) : (

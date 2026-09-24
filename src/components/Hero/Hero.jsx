@@ -18,6 +18,8 @@ const Hero = () => {
             <img
               src={plane}
               alt=""
+              width={474}
+              height={144}
               className="w-[min(150%,calc(100vw-2rem))] max-w-none shrink-0 select-none opacity-[0.18]"
             />
           }

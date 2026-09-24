@@ -1,19 +1,23 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Mail } from "lucide-react";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { useAuth } from "../../context/useAuth";
+import { auth } from "../../firebase/config";
 import { getAuthErrorMessage } from "../../utils/authErrors";
-import mail_icon from "../../assets/Icons/mail.png";
-import pass_icon from "../../assets/Icons/pass.png";
+import AuthTextField from "../AuthForm/AuthTextField";
+import PasswordField from "../AuthForm/PasswordField";
 
 // The one login page for everyone. Whether the account is the admin is
 // decided by its email (see AuthContext), not by anything chosen here.
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  // Set instead of `error` when the email doesn't match any account, so we
+  // can point the person at Register instead of implying a typo'd password.
+  const [noAccountEmail, setNoAccountEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -34,17 +38,42 @@ const Login = () => {
     navigate("/");
   };
 
+  // Firebase's own error codes for "no such account" (`auth/user-not-found`)
+  // only appear when the project has Email Enumeration Protection turned
+  // off. With it on (the modern default), both a wrong password and a
+  // nonexistent email come back as `auth/invalid-credential`, so we fall
+  // back to fetchSignInMethodsForEmail as a best-effort second check. If
+  // enumeration protection is on, that call also always returns an empty
+  // list, in which case we quietly fall back to the generic message rather
+  // than risk telling an existing user their account doesn't exist.
+  const looksLikeNoAccount = async (err, trimmedEmail) => {
+    if (err?.code === "auth/user-not-found") return true;
+    if (err?.code !== "auth/invalid-credential") return false;
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, trimmedEmail);
+      return methods.length === 0;
+    } catch {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setNotice("");
+    setNoAccountEmail("");
     setSubmitting(true);
 
+    const trimmedEmail = email.trim();
     try {
-      await login(email, password);
+      await login(trimmedEmail, password);
       // The redirect above takes over once auth state updates.
     } catch (err) {
-      setError(getAuthErrorMessage(err));
+      if (await looksLikeNoAccount(err, trimmedEmail)) {
+        setNoAccountEmail(trimmedEmail);
+      } else {
+        setError(getAuthErrorMessage(err));
+      }
       setSubmitting(false);
     }
   };
@@ -52,6 +81,7 @@ const Login = () => {
   const handleForgotPassword = async () => {
     setError("");
     setNotice("");
+    setNoAccountEmail("");
     if (!email.trim()) {
       setError("Enter your email above, then click Forgot Password again.");
       return;
@@ -65,68 +95,44 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-300 min-h-screen flex justify-center items-center px-4 py-6">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-light px-4 py-6">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full m-auto space-y-8 bg-white rounded-lg p-6 sm:p-8"
+        className="m-auto w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-xl sm:p-8"
       >
-        <div className="header flex justify-center items-center">
-          <h1 className="text-2xl font-bold">Login</h1>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-primary">Welcome back</h1>
+          <p className="mt-1 text-sm text-neutral">Log in to your account</p>
         </div>
 
         {promptMessage && (
-          <p className="text-center text-sm text-blue-700 bg-blue-50 rounded p-3">
+          <p className="rounded-xl bg-blue-50 p-3 text-center text-sm text-blue-700">
             {promptMessage}
           </p>
         )}
 
-        <div className="inputs">
-          <div className="email flex mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
-            <img
-              src={mail_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80 "
-            />
-            <input
-              type="email"
-              value={email}
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              placeholder="Email"
-              aria-label="Email"
-              required
-              autoComplete="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="password flex items-center mt-5 bg-gray-200 h-15 opacity-80 focus-within:ring-2 focus-within:ring-primary-light">
-            <img
-              src={pass_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80 "
-            />
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              placeholder="Password"
-              aria-label="Password"
-              required
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              className="mr-5 shrink-0 text-neutral-600 hover:text-neutral-900"
-            >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+        <div className="space-y-4">
+          <AuthTextField
+            icon={Mail}
+            label="Email"
+            type="email"
+            value={email}
+            placeholder="you@example.com"
+            required
+            autoComplete="email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setNoAccountEmail("");
+            }}
+          />
+          <PasswordField
+            label="Password"
+            value={password}
+            placeholder="Your password"
+            required
+            autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
 
         {error && (
@@ -135,35 +141,50 @@ const Login = () => {
           </p>
         )}
         {notice && <p className="text-sm text-green-700">{notice}</p>}
+        {noAccountEmail && (
+          <p
+            role="alert"
+            className="rounded-xl border border-accent/40 bg-accent/10 p-3 text-sm text-accent-text"
+          >
+            We couldn't find an account with that email — would you like to{" "}
+            <Link
+              to="/register"
+              state={location.state}
+              className="font-semibold underline"
+            >
+              create one?
+            </Link>
+          </p>
+        )}
 
-        <div className="buttons space-y-3">
+        <div className="space-y-3">
           <button
             type="button"
             onClick={handleForgotPassword}
-            className="forgot-password text-blue-400 cursor-pointer"
+            className="cursor-pointer text-sm font-medium text-primary-light hover:underline"
           >
             Forgot Password?
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-14 w-full cursor-pointer rounded-xl bg-primary text-center font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? "Logging in..." : "Login"}
           </button>
           <button
             type="button"
-            className="w-full p-3 bg-gray-500 hover:bg-gray-600 h-14 font-semibold text-white rounded-lg border-none cursor-pointer"
+            className="h-14 w-full cursor-pointer rounded-xl border border-gray-300 font-semibold text-neutral-dark transition-colors hover:bg-gray-50"
             onClick={handleKeepBrowsing}
           >
             Keep Browsing
           </button>
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-neutral">
             Don't have an account?{" "}
             <Link
               to="/register"
               state={location.state}
-              className="text-blue-600 hover:underline"
+              className="font-semibold text-primary-light hover:underline"
             >
               Register
             </Link>

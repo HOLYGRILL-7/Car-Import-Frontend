@@ -165,6 +165,8 @@ const CarDetailsContent = ({ id }) => {
                 <img
                   src={imageUrls[selectedImage]}
                   alt={`${car.name} - Main view`}
+                  width={800}
+                  height={384}
                   className="w-full h-full object-cover"
                   onError={() => handleImageError(selectedImage)}
                 />

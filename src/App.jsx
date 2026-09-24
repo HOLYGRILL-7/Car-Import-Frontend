@@ -23,6 +23,7 @@ import ManageCars from "./pages/AdminPages/ManageCars";
 import ManageUsers from "./pages/AdminPages/ManageUsers";
 import ManageTestimonials from "./pages/AdminPages/ManageTestimonials";
 import CarDetails from "./pages/PublicPages/CarDetails/CarDetails";
+import ResetPasswordAction from "./pages/PublicPages/ResetPasswordAction";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/auth/action" element={<ResetPasswordAction />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/carDetails/:id" element={<CarDetails />} />
 

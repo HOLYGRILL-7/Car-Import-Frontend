@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CarListingCard from "../Cars/CarListingCard";
 import ProgressIndicator from "./ProgressIndicator";
@@ -19,6 +19,7 @@ const ARROW_TONES = {
 const CarSlider = ({ cars, tone = "orange" }) => {
   const visible = useVisibleCards();
   const [page, setPage] = useState(0);
+  const touchStartX = useRef(null);
 
   const pages = Math.max(1, Math.ceil(cars.length / visible));
   const currentPage = Math.min(page, pages - 1);
@@ -29,20 +30,38 @@ const CarSlider = ({ cars, tone = "orange" }) => {
 
   const goToPage = (index) => setPage(Math.min(Math.max(index, 0), pages - 1));
 
+  // Swipe support for touch devices: a plain threshold check on release,
+  // no live drag-follow (arrows already handle the precise, discrete case).
+  const SWIPE_THRESHOLD = 40;
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (deltaX > SWIPE_THRESHOLD) goToPage(currentPage - 1);
+    else if (deltaX < -SWIPE_THRESHOLD) goToPage(currentPage + 1);
+  };
+
   return (
     <div className="relative">
-      {/* Previous Button */}
+      {/* Previous Button: hidden on mobile, which relies on swipe instead */}
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 0}
-        className={`absolute left-0 shadow-xl top-1/2 -translate-y-1/2 -translate-x-4 z-10 ${ARROW_TONES[tone]} rounded-full p-2.5 sm:p-3 disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`hidden sm:block absolute left-0 shadow-xl top-1/2 -translate-y-1/2 -translate-x-4 z-10 ${ARROW_TONES[tone]} rounded-full p-2.5 sm:p-3 disabled:opacity-50 disabled:cursor-not-allowed`}
         aria-label="Previous"
       >
         <ChevronLeft className="w-6 h-6 text-white" />
       </button>
 
       {/* Slider Wrapper */}
-      <div className="overflow-hidden">
+      <div
+        className="overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <ul
           className="flex gap-6 transition-transform duration-500 ease-in-out"
           style={{
@@ -63,11 +82,11 @@ const CarSlider = ({ cars, tone = "orange" }) => {
         </ul>
       </div>
 
-      {/* Next Button */}
+      {/* Next Button: hidden on mobile, which relies on swipe instead */}
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage >= pages - 1}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 shadow-xl translate-x-4 z-10 ${ARROW_TONES[tone]} rounded-full p-2.5 sm:p-3 disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 shadow-xl translate-x-4 z-10 ${ARROW_TONES[tone]} rounded-full p-2.5 sm:p-3 disabled:opacity-50 disabled:cursor-not-allowed`}
         aria-label="Next"
       >
         <ChevronRight className="w-6 h-6 text-white" />

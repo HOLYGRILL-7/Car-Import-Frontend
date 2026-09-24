@@ -22,7 +22,7 @@ const SectionHeader = ({
       <div className="flex items-center gap-3">
         {icon && (
           <span className="text-3xl">
-            <img src={icon} alt="" />
+            <img src={icon} alt="" width={32} height={32} />
           </span>
         )}
         <div className="space-y-1">

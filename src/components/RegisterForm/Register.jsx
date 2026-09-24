@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { User, Mail } from "lucide-react";
 import { useAuth } from "../../context/useAuth";
 import { getAuthErrorMessage } from "../../utils/authErrors";
-import user_icon from "../../assets/Icons/user.png";
-import mail_icon from "../../assets/Icons/mail.png";
-import pass_icon from "../../assets/Icons/pass.png";
+import { isStrongPassword } from "../../utils/passwordStrength";
+import AuthTextField from "../AuthForm/AuthTextField";
+import PasswordField from "../AuthForm/PasswordField";
+import PasswordStrengthList from "../AuthForm/PasswordStrengthList";
 
 // Sign-up for regular users (e.g. to save cars). The admin account is created
 // manually in the Firebase console, not here.
@@ -24,11 +26,18 @@ const Register = () => {
     return <Navigate to={location.state?.from ?? "/"} replace />;
   }
 
+  const passwordOk = isStrongPassword(password);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSubmitting(true);
 
+    if (!passwordOk) {
+      setError("Please meet all the password requirements below.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
       await register(name, email, password);
       // The redirect above takes over once auth state updates.
@@ -43,68 +52,48 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-gray-300 min-h-screen flex justify-center items-center px-4 py-6">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-light px-4 py-6">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full m-auto space-y-8 bg-white rounded-lg p-6 sm:p-8"
+        className="m-auto w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-xl sm:p-8"
       >
-        <div className="header text-center space-y-2">
-          <div className="text-2xl font-bold">Sign Up</div>
-          <h1>Create an account with us today!</h1>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-primary">Create an account</h1>
+          <p className="mt-1 text-sm text-neutral">
+            Sign up to save cars and get in touch faster.
+          </p>
         </div>
-        <div className="inputs">
-          <div className="input flex mt-5 bg-gray-200 h-15 opacity-80 rounded focus-within:ring-2 focus-within:ring-primary-light">
-            <img
-              src={user_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80"
-            />
-            <input
-              type="text"
-              value={name}
-              placeholder="Name"
-              aria-label="Name"
-              required
-              autoComplete="name"
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="email flex mt-5 bg-gray-200 h-15 opacity-80 rounded">
-            <img
-              src={mail_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80"
-            />
-            <input
-              type="email"
-              value={email}
-              placeholder="Email"
-              aria-label="Email"
-              required
-              autoComplete="email"
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="password flex mt-5 bg-gray-200 h-15 opacity-80 rounded">
-            <img
-              src={pass_icon}
-              alt=""
-              className="w-6 h-6 m-5 mt-5 opacity-80"
-            />
-            <input
-              type="password"
-              value={password}
-              placeholder="Password (at least 6 characters)"
-              aria-label="Password (at least 6 characters)"
-              required
-              minLength={6}
-              autoComplete="new-password"
-              className="border-none outline-none w-full flex bg-gray-200 h-15 opacity-80"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+
+        <div className="space-y-4">
+          <AuthTextField
+            icon={User}
+            label="Name"
+            type="text"
+            value={name}
+            placeholder="Your full name"
+            required
+            autoComplete="name"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <AuthTextField
+            icon={Mail}
+            label="Email"
+            type="email"
+            value={email}
+            placeholder="you@example.com"
+            required
+            autoComplete="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <PasswordField
+            label="Password"
+            value={password}
+            placeholder="Create a password"
+            required
+            autoComplete="new-password"
+            onChange={(e) => setPassword(e.target.value)}
+            hint={<PasswordStrengthList password={password} />}
+          />
         </div>
 
         {error && (
@@ -113,27 +102,27 @@ const Register = () => {
           </p>
         )}
 
-        <div className="buttons space-y-3">
+        <div className="space-y-3">
           <button
             type="submit"
-            disabled={submitting}
-            className="bg-blue-600 h-14 font-semibold text-white text-center rounded-lg cursor-pointer hover:bg-blue-600 w-full disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={submitting || !passwordOk}
+            className="h-14 w-full cursor-pointer rounded-xl bg-primary text-center font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? "Creating account..." : "Sign Up"}
           </button>
           <button
             type="button"
-            className="w-full p-3 bg-gray-500 hover:bg-gray-600 h-14 font-semibold text-white rounded-lg border-none cursor-pointer"
+            className="h-14 w-full cursor-pointer rounded-xl border border-gray-300 font-semibold text-neutral-dark transition-colors hover:bg-gray-50"
             onClick={handleKeepBrowsing}
           >
             Keep Browsing
           </button>
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-neutral">
             Already have an account?{" "}
             <Link
               to="/login"
               state={location.state}
-              className="text-blue-600 hover:underline"
+              className="font-semibold text-primary-light hover:underline"
             >
               Log in
             </Link>
