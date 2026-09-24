@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthSection from "./AuthSection";
 import { useAuth } from "../../context/useAuth";
 import Logo from "./Logo";
@@ -59,18 +59,6 @@ const Navbar = () => {
               isAdmin={isAdmin}
             />
           </div>
-          {/* Below xl, Login/Register otherwise live only inside the
-              hamburger dropdown, which is easy to miss when prompted to log
-              in from elsewhere (e.g. saving a car) — so a logged-out visitor
-              always has this small, direct way in. */}
-          {!user && (
-            <Link
-              to="/login"
-              className="mr-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/10 xl:hidden"
-            >
-              Log in
-            </Link>
-          )}
           <MobileMenuButton
             open={open}
             controls={MOBILE_MENU_ID}
