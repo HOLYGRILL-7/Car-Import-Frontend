@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://extra-motors.vercel.app/sitemap.xml
