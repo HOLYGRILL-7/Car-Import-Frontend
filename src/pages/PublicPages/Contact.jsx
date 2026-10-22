@@ -6,12 +6,17 @@ import {
   SERVICE_AREA,
   getGeneralWhatsAppLink,
 } from "../../constants/contact";
+import PageMeta from "../../components/PageMeta";
 
 // Sales happen by phone and WhatsApp, so this page is direct Call / WhatsApp
 // buttons rather than a form that would need somewhere to send its messages.
 const Contact = () => {
   return (
     <div className="min-h-screen bg-neutral-light">
+      <PageMeta
+        title="Contact Us | Extra Motors"
+        description="Call or WhatsApp Extra Motors on +233 24 317 0816. We're in Achimota, Accra. Book a viewing or ask about any car."
+      />
       {/* Header (the navbar is fixed, so it starts below it) */}
       <div className="bg-linear-to-br from-primary via-[#1e3a5f] to-primary-dark text-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-14 text-center space-y-4">

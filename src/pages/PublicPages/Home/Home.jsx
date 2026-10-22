@@ -12,6 +12,7 @@ import { matchesMake } from "../../../utils/makes";
 
 // Import data
 import { carBrands } from "../../../data/carsData";
+import PageMeta from "../../../components/PageMeta";
 
 const NEW_ARRIVALS_COUNT = 8;
 const POPULAR_USED_COUNT = 8;
@@ -90,6 +91,10 @@ const Home = () => {
   return (
     <div>
       <Hero />
+      <PageMeta
+        title="Extra Motors | Used & Imported Cars in Achimota, Accra"
+        description="Extra Motors: inspected used and imported cars in Achimota, Accra. SUVs, sedans and more. Call +233 24 317 0816."
+      />
 
       {/* Dealer's Choice: only cars the admin has flagged; hidden when none */}
       {dealerChoiceResult.cars.length > 0 && (

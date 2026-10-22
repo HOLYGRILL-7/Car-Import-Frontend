@@ -6,6 +6,7 @@ import { getAuthErrorMessage } from "../../utils/authErrors";
 import { isStrongPassword } from "../../utils/passwordStrength";
 import PasswordField from "../../components/AuthForm/PasswordField";
 import PasswordStrengthList from "../../components/AuthForm/PasswordStrengthList";
+import PageMeta from "../../components/PageMeta";
 
 // Handles Firebase's password-reset email link. Firebase's action URL is
 // shared across every email type (reset, verify, recover), so `mode` is
@@ -66,9 +67,12 @@ const ResetPasswordAction = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-6rem)] items-center justify-center px-4 py-6 pt-24">
+      <PageMeta title="Reset Password | Extra Motors" noindex />
       <div className="m-auto w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-xl sm:p-8">
         {status === "verifying" && (
-          <p className="text-center text-neutral">Checking your reset link...</p>
+          <p className="text-center text-neutral">
+            Checking your reset link...
+          </p>
         )}
 
         {status === "invalid" && (
@@ -139,9 +143,7 @@ const ResetPasswordAction = () => {
         {status === "done" && (
           <div className="space-y-4 text-center">
             <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
-            <h1 className="text-2xl font-bold text-primary">
-              Password reset
-            </h1>
+            <h1 className="text-2xl font-bold text-primary">Password reset</h1>
             <p className="text-neutral">
               Your password has been changed. You can now log in with it.
             </p>

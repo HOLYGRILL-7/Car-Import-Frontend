@@ -21,9 +21,26 @@ import SpecCard from "./SpecCard";
 import ImageThumbnail from "./ImageThumbnail";
 import SaveButton from "../../../components/Cars/SaveButton";
 import CarDetailsSkeleton from "../../../components/Skeleton/CarDetailsSkeleton";
+import PageMeta from "../../../components/PageMeta";
 
 const hasValue = (value) =>
   value !== undefined && value !== null && String(value).trim() !== "";
+
+// Search result title and snippet for a car, e.g. "2016 Lexus RX 350 for
+// sale in Accra | Extra Motors" / "... GH₵ 185,000. 62,000 km. Petrol. ...".
+const carMeta = (car) => {
+  const heading = [car.year, car.name].filter(hasValue).join(" ");
+  const details = [
+    `${heading} for sale in Accra at ${formatPrice(car.price)}.`,
+    hasValue(car.mileage) && `${car.mileage}.`,
+    hasValue(car.fuelType) && `${car.fuelType}.`,
+    "Call or WhatsApp Extra Motors to view it.",
+  ];
+  return {
+    title: `${heading} for sale in Accra | Extra Motors`,
+    description: details.filter(Boolean).join(" "),
+  };
+};
 
 const CarDetailsContent = ({ id }) => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -39,7 +56,12 @@ const CarDetailsContent = ({ id }) => {
   const location = useLocation();
 
   if (loading) {
-    return <CarDetailsSkeleton />;
+    return (
+      <>
+        <PageMeta title="Car Details | Extra Motors" />
+        <CarDetailsSkeleton />
+      </>
+    );
   }
 
   if (error || !car) {
@@ -53,6 +75,16 @@ const CarDetailsContent = ({ id }) => {
 
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex flex-col items-center justify-center gap-4">
+        {/* Only a car that's really gone is kept out of search results; a
+            failed load may be temporary. */}
+        <PageMeta
+          title={
+            error
+              ? "Car Details | Extra Motors"
+              : "Car Not Found | Extra Motors"
+          }
+          noindex={!error}
+        />
         <p className="text-gray-600">
           {error
             ? "Couldn't load this car right now. Please try again later."
@@ -151,6 +183,7 @@ const CarDetailsContent = ({ id }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 fade-in">
+      <PageMeta {...carMeta(car)} />
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Link

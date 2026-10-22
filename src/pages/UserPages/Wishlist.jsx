@@ -5,6 +5,7 @@ import { db } from "../../firebase/config";
 import { useWishlist } from "../../context/useWishlist";
 import CarListingCard from "../../components/Cars/CarListingCard";
 import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";
+import PageMeta from "../../components/PageMeta";
 
 // A signed-in user's saved cars (the route is behind ProtectedRoute).
 const Wishlist = () => {
@@ -59,6 +60,7 @@ const Wishlist = () => {
   return (
     <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold text-primary">Saved Cars</h1>
+      <PageMeta title="Saved Cars | Extra Motors" noindex />
       <p className="text-neutral mt-2">Cars you've saved to look at later.</p>
 
       {loading && cars.length === 0 && (

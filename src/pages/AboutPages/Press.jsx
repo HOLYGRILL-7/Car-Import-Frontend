@@ -1,4 +1,5 @@
 import { PRESS_CONTENT } from "../../data/teamData";
+import PageMeta from "../../components/PageMeta";
 // import { useState } from "react";   // COMMENTED OUT: only the news card used it
 
 // COMMENTED OUT: the news card for the placeholder press articles (invented
@@ -102,6 +103,10 @@ const Press = () => {
 
   return (
     <div className="space-y-16">
+      <PageMeta
+        title="Press & Media | Extra Motors"
+        description="News and media enquiries for Extra Motors, the used and imported car dealer in Achimota, Accra."
+      />
       {/* Header Section */}
       <header className="text-center space-y-4">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">

@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 import FaqAccordion from "../../components/Faq/FaqAccordion";
 import { faqs } from "../../data/faqData";
+import PageMeta from "../../components/PageMeta";
 
 const FAQ = () => {
   return (
     <div className="min-h-screen bg-neutral-light">
+      <PageMeta
+        title="FAQ | Extra Motors"
+        description="Answers about viewings, payment, port clearance, importing, servicing and delivery when you buy a car from Extra Motors in Accra."
+      />
       {/* Header (the navbar is fixed, so it starts below it) */}
       <div className="bg-linear-to-br from-primary via-[#1e3a5f] to-primary-dark text-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-14 text-center space-y-4">

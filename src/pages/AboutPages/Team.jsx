@@ -1,5 +1,6 @@
 import React from "react";
 import { TEAM_CONTENT } from "../../data/teamData";
+import PageMeta from "../../components/PageMeta";
 
 // Pure presentational component for team member card
 const LeaderCard = ({ leader }) => {
@@ -73,6 +74,10 @@ const Team = ({
   return (
     <div className="space-y-16">
       {/* Header Section */}
+      <PageMeta
+        title="Our Team | Extra Motors"
+        description="Meet the people behind Extra Motors, the used and imported car dealer in Achimota, Accra."
+      />
       <header className="text-center space-y-4">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
           {TEAM_CONTENT.header.title}

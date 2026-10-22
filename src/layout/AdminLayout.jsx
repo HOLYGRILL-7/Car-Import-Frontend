@@ -18,6 +18,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import PageMeta from "../components/PageMeta";
 
 const NAV_ITEMS = [
   {
@@ -68,6 +69,7 @@ const AdminLayout = () => {
 
   return (
     <div className="flex h-screen bg-neutral-light">
+      <PageMeta title="Admin | Extra Motors" noindex />
       {/* Dimmed backdrop behind the drawer (small screens only) */}
       {drawerOpen && (
         <button

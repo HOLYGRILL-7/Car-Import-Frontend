@@ -2,10 +2,15 @@ import { services, whyChooseUs } from "../../data/carsData";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowRight } from "lucide-react"; // make sure lucide-react is installed
 import { getServiceWhatsAppLink } from "../../constants/contact";
+import PageMeta from "../../components/PageMeta";
 
 const Services = () => {
   return (
     <div className="min-h-screen bg-(--color-neutral-light)">
+      <PageMeta
+        title="Car Sales, Import & Servicing | Extra Motors"
+        description="Buy a car, sell through us, import a specific vehicle or have your car serviced by our trusted mechanics. Extra Motors, Achimota, Accra."
+      />
       {/* Hero Section */}
       <div className="relative bg-linear-to-br from-primary via-[#1e3a5f] to bg-primary-dark text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">

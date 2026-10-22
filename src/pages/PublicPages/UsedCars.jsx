@@ -1,11 +1,16 @@
 import CarFilterSidebar from "../../components/Cars/CarFilterSidebar";
 import CarGrid from "../../components/Cars/CarGrid";
 import CarGridSkeleton from "../../components/Skeleton/CarGridSkeleton";
+import PageMeta from "../../components/PageMeta";
 
 const UsedCars = () => {
   return (
     <div className="main-container pt-24 pb-16 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold text-primary mb-6">Used Cars</h1>
+      <PageMeta
+        title="Used Cars for Sale in Accra | Extra Motors"
+        description="Browse inspected used cars for sale at Extra Motors in Achimota, Accra. Photos, prices in GH₵ and full details. Call or WhatsApp to buy."
+      />
 
       <CarFilterSidebar type="used">
         {({

@@ -7,6 +7,7 @@ import { isStrongPassword } from "../../utils/passwordStrength";
 import AuthTextField from "../AuthForm/AuthTextField";
 import PasswordField from "../AuthForm/PasswordField";
 import PasswordStrengthList from "../AuthForm/PasswordStrengthList";
+import PageMeta from "../PageMeta";
 
 // Sign-up for regular users (e.g. to save cars). The admin account is created
 // manually in the Firebase console, not here.
@@ -53,6 +54,7 @@ const Register = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-light px-4 py-6">
+      <PageMeta title="Create an Account | Extra Motors" noindex />
       <form
         onSubmit={handleSubmit}
         className="m-auto w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-xl sm:p-8"

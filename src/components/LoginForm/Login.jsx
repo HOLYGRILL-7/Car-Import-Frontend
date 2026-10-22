@@ -5,6 +5,7 @@ import { useAuth } from "../../context/useAuth";
 import { getAuthErrorMessage } from "../../utils/authErrors";
 import AuthTextField from "../AuthForm/AuthTextField";
 import PasswordField from "../AuthForm/PasswordField";
+import PageMeta from "../PageMeta";
 
 // The one login page for everyone. Whether the account is the admin is
 // decided by its email (see AuthContext), not by anything chosen here.
@@ -68,6 +69,7 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-light px-4 py-6">
+      <PageMeta title="Log In | Extra Motors" noindex />
       <form
         onSubmit={handleSubmit}
         className="m-auto w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-xl sm:p-8"

@@ -3,6 +3,7 @@ import DealerReviewCard from "../../components/Reviews/DealerReviewCard";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { useFeaturedTestimonials } from "../../hooks/useFeaturedTestimonials";
 import { useDealerReviewCars } from "../../hooks/useDealerReviewCars";
+import PageMeta from "../../components/PageMeta";
 
 const SectionHeading = ({ id, title, description }) => (
   <div className="mb-10 space-y-3 text-center">
@@ -30,6 +31,10 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen">
+      <PageMeta
+        title="Customer Reviews | Extra Motors"
+        description="Read what customers say about buying a car from Extra Motors in Achimota, Accra, plus our own reviews of the cars we recommend."
+      />
       {/* Plain page title, the same as on Used Cars / New Cars (the navbar is
           fixed, so it starts below it) */}
       <div className="pt-24 max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">

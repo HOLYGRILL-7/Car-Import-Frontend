@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import { ABOUT_CONTENT } from "../../data/aboutData";
+import PageMeta from "../../components/PageMeta";
 
 const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-light to-white">
+      <PageMeta
+        title="About Us | Extra Motors"
+        description="Extra Motors imports and sells used cars in Achimota, Accra, sources specific cars on request and services them through our trusted mechanics."
+      />
       {/* Hero Section */}
       <header className="bg-gradient-to-br from-primary via-[#1e3a5f] to-primary-dark text-white py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
