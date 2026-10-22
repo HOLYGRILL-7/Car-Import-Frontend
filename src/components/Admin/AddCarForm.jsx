@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import { addCar, toUrlList, updateCar } from "../../firebase/carsAdmin";
 import { FUEL_TYPES, TRANSMISSIONS } from "../../utils/carFilters";
 
-const MAX_PHOTOS = 6;
+const MAX_PHOTOS = 10;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
 const EMPTY_FORM = {
@@ -348,7 +348,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
             placeholder="e.g. 2018"
           />
         </Field>
-        <Field label="Price (USD) *" error={errors.price}>
+        <Field label="Price (GH₵) *" error={errors.price}>
           <input
             name="price"
             type="number"

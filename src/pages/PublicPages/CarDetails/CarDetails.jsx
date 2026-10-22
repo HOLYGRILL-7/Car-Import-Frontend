@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Gauge,
   Calendar,
@@ -35,12 +35,22 @@ const CarDetailsContent = ({ id }) => {
   useEffect(() => () => clearTimeout(shareStatusTimeout.current), []);
 
   const { car, loading, error } = useCar(id);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   if (loading) {
     return <CarDetailsSkeleton />;
   }
 
   if (error || !car) {
+    // Back to wherever the visitor came from on this site; a link opened
+    // directly (location.key "default" = first page of the visit) has no
+    // such page, so it goes to the used cars instead.
+    const handleBack = () => {
+      if (location.key !== "default") navigate(-1);
+      else navigate("/usedCars");
+    };
+
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex flex-col items-center justify-center gap-4">
         <p className="text-gray-600">
@@ -48,13 +58,14 @@ const CarDetailsContent = ({ id }) => {
             ? "Couldn't load this car right now. Please try again later."
             : "This car could not be found."}
         </p>
-        <Link
-          to="/newCars"
-          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+        <button
+          type="button"
+          onClick={handleBack}
+          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-5 h-5" />
           Back to Listings
-        </Link>
+        </button>
       </div>
     );
   }

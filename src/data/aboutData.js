@@ -36,7 +36,7 @@ export const ABOUT_CONTENT = {
       title: "WHAT WE DO",
       borderColor: "border-secondary",
       content:
-        "We import and sell used vehicles, and we can source a specific car for you on request. We also look after the vehicles we sell: our in-house garage and mechanics handle servicing and maintenance. And when we ship a vehicle, its container sometimes has room to spare, which we offer for household goods such as furniture and mattresses. It's a small, hands-on business, and we keep our services focused on what we know.",
+        "We import and sell used vehicles, and we can source a specific car for you on request. We also look after the vehicles we sell: our trusted mechanics handle servicing and maintenance. And when we ship a vehicle, its container sometimes has room to spare, which we offer for household goods such as furniture and mattresses. It's a small, hands-on business, and we keep our services focused on what we know.",
     },
     {
       id: "passion",

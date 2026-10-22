@@ -10,15 +10,21 @@ const Layout = () => {
   // via navigate(path, { state: { toast: "..." } })). Cleared from history
   // state right away so it doesn't reappear on refresh or back/forward.
   const [toast, setToast] = useState(null);
+  // The navigation (location.key) whose toast was last picked up, so each
+  // one is shown once.
+  const [toastKey, setToastKey] = useState(null);
+
+  if (location.state?.toast && location.key !== toastKey) {
+    setToastKey(location.key);
+    setToast(location.state.toast);
+  }
 
   useEffect(() => {
-    if (!location.state?.toast) return;
-    setToast(location.state.toast);
+    if (!toastKey) return;
     window.history.replaceState({}, "");
     const timer = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state?.toast]);
+  }, [toastKey]);
 
   // Optional: Hide footer on services page
   const hideFooter =

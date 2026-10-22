@@ -1,7 +1,6 @@
 import { PHONE_DISPLAY, SERVICE_AREA } from "../constants/contact";
 
-// The phone number and area come from constants/contact.js. TODO: the email is
-// temporary (a personal address); swap in a dedicated business email later.
+// The phone number and area come from constants/contact.js.
 export const footerData = {
   quickLinks: [
     { id: 1, name: "Home", to: "/" },
@@ -12,7 +11,7 @@ export const footerData = {
     { id: 6, name: "Contact", to: "/contact" },
   ],
   contact: {
-    email: "bismarkjonesoduro@gmail.com",
+    email: "extramotors.gh@gmail.com",
     phone: PHONE_DISPLAY,
     address: SERVICE_AREA,
   },

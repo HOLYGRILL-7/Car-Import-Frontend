@@ -164,7 +164,7 @@ const CarFilterSidebar = ({ type, children }) => {
             </div>
           </Section>
 
-          <Section title="Price range (USD)">
+          <Section title="Price range (GH₵)">
             <div className="flex items-center gap-2">
               <input
                 type="number"

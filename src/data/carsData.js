@@ -85,11 +85,11 @@ export const services = [
     whatsappMessage:
       "Hi, I'd like to know more about your service and maintenance.",
     description:
-      "We have our own mechanics and a garage, so servicing and repairs can be handled in one place. Get in touch to book your vehicle in.",
+      "Our trusted mechanics can handle servicing and repairs for your car. Get in touch to book your vehicle in.",
     features: [
-      "Our own in-house mechanics",
-      "Our own garage",
+      "Work done by our trusted mechanics",
       "Routine servicing and repairs",
+      "Ask us about anything your car needs",
       "Book by phone or WhatsApp",
     ],
     color: "from-bg-neutral to bg-neutral-dark",
@@ -116,12 +116,12 @@ export const services = [
     title: "Home Delivery",
     whatsappMessage: "Hi, I'd like to know more about home delivery.",
     description:
-      "We plan to deliver purchased cars straight to your door. It's a planned service that isn't fully available yet, so ask us what we can arrange for your purchase.",
+      "Delivery on request, at an extra cost, or pick it up yourself.",
     features: [
-      "Delivered to your address instead of you collecting",
-      "A planned service, not yet standard",
-      "Ask us what can be arranged today",
-      "Talk to us before you buy",
+      "Delivery isn't included in the car's price",
+      "We can arrange delivery for an extra cost",
+      "Or pick it up from our lot in Achimota",
+      "Ask us about delivery when you buy",
     ],
     color: "from-bg-secondary to bg-secondary-light",
   },
