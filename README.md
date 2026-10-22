@@ -1,5 +1,9 @@
 # Extra Motors: car import & sales website
 
+**🔗 Live site:** [extra-motors.vercel.app](https://extra-motors.vercel.app)
+
+<img width="100%" alt="Extra Motors homepage" src="https://github.com/user-attachments/assets/f707880f-d433-459a-939d-b3883a7e87b0" />
+
 A single-page site for a family-run used car import and sales business in
 Achimota, Accra, Ghana. Visitors browse and filter cars, save favourites,
 read reviews and reach the dealer by phone or WhatsApp. The admin manages the
