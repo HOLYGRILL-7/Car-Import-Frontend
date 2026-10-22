@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   Link,
   NavLink,
@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import PageLoader from "../components/PageLoader";
 import { useAuth } from "../context/useAuth";
 import BrandWordmark from "../components/Brand/BrandWordmark";
 import { ADMIN_DISPLAY_NAME } from "../utils/admin";
@@ -173,7 +174,10 @@ const AdminLayout = () => {
 
         {/* Page Content */}
         <div className="p-4 sm:p-6">
-          <Outlet />
+          {/* Keeps the sidebar up while an admin page's code downloads. */}
+          <Suspense fallback={<PageLoader className="min-h-64" />}>
+            <Outlet />
+          </Suspense>
         </div>
       </main>
     </div>

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import PageLoader from "../components/PageLoader";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import BackToTop from "../components/BackToTop";
@@ -38,7 +39,10 @@ const Layout = () => {
       </header>
 
       <main className="flex-1">
-        <Outlet />
+        {/* Keeps the navbar and footer up while a page's code downloads. */}
+        <Suspense fallback={<PageLoader className="min-h-screen pt-20" />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       {!hideFooter && <Footer />}

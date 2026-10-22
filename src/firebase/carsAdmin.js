@@ -16,7 +16,8 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { db, storage } from "./config";
+import { db } from "./config";
+import { storage } from "./storage";
 
 // imageUrls should be an array, but tolerate a lone string from hand-made docs.
 export const toUrlList = (imageUrls) => {

@@ -60,6 +60,12 @@
   animation: fade-in 0.3s ease-out;
 }
 
+/* The page-loading spinner waits a moment before showing, so a page that
+   loads quickly doesn't flash it. */
+.page-loader {
+  animation: fade-in 0.3s ease-out 0.25s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton,
   .fade-in {

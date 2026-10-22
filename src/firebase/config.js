@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
-import { connectStorageEmulator, getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,16 +11,17 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
+// Storage is only used by the admin pages, so it's set up in ./storage.js
+// and downloaded with them rather than on every visit.
 
 // Local development against the Firebase emulators (see firebase.json).
 // Set VITE_USE_EMULATORS=true to enable; it's off in normal builds.
-if (import.meta.env.VITE_USE_EMULATORS === "true") {
+export const emulatorsEnabled = import.meta.env.VITE_USE_EMULATORS === "true";
+if (emulatorsEnabled) {
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
-  connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
