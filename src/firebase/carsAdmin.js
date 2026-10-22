@@ -26,6 +26,17 @@ export const toUrlList = (imageUrls) => {
 
 const safeFileName = (name) => name.toLowerCase().replace(/[^a-z0-9.]+/g, "-");
 
+// Every photo gets its own unique path and is never changed in place, so
+// browsers may keep it for a year (set-photo-cache.js applies the same to
+// photos uploaded before this).
+const PHOTO_CACHE_CONTROL = "public, max-age=31536000";
+
+const uploadPhoto = (photoRef, file) =>
+  uploadBytes(photoRef, file, {
+    contentType: file.type,
+    cacheControl: PHOTO_CACHE_CONTROL,
+  });
+
 // Every car regardless of status, newest first. Sorted here (not with
 // orderBy) so docs missing createdAt still show up and can be deleted.
 export const fetchAllCars = async () => {
@@ -51,7 +62,7 @@ export const addCar = async (fields, photos, onProgress) => {
         storage,
         `cars/${carRef.id}/${Date.now()}-${index}-${safeFileName(file.name)}`,
       );
-      await uploadBytes(photoRef, file, { contentType: file.type });
+      await uploadPhoto(photoRef, file);
       const url = await getDownloadURL(photoRef);
       onProgress?.(++uploadedCount, photos.length);
       return { photoRef, url };
@@ -171,7 +182,7 @@ export const updateCar = async (
         storage,
         `cars/${car.id}/${Date.now()}-${index}-${safeFileName(file.name)}`,
       );
-      await uploadBytes(photoRef, file, { contentType: file.type });
+      await uploadPhoto(photoRef, file);
       const url = await getDownloadURL(photoRef);
       onProgress?.(++uploadedCount, newPhotos.length);
       return { photoRef, url };

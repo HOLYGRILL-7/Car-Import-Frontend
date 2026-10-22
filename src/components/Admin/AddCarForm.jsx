@@ -2,9 +2,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { addCar, toUrlList, updateCar } from "../../firebase/carsAdmin";
 import { FUEL_TYPES, TRANSMISSIONS } from "../../utils/carFilters";
+import { compressImage } from "../../utils/compressImage";
 
 const MAX_PHOTOS = 10;
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+// Limit on the picked original; what's uploaded is the compressed copy.
+const MAX_SOURCE_BYTES = 25 * 1024 * 1024;
+
+// A new photo's gallery id comes from the original file, so picking the same
+// file again is spotted even though its compressed copy is what's kept.
+const sourceId = (file) => `new:${file.name}:${file.size}`;
 
 const EMPTY_FORM = {
   name: "",
@@ -117,6 +123,8 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
   const [submitError, setSubmitError] = useState("");
   const [success, setSuccess] = useState("");
   const [progress, setProgress] = useState(null);
+  // { done, total } while newly picked photos are being compressed.
+  const [preparing, setPreparing] = useState(null);
   const fileInput = useRef(null);
 
   // Preview URLs for new files are created when they're picked and released
@@ -150,7 +158,9 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
   const setChecked = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.checked }));
 
-  const handleFiles = (e) => {
+  // Each picked photo is compressed (see compressImage) before it joins the
+  // gallery, one at a time to keep memory down on phones.
+  const handleFiles = async (e) => {
     const picked = Array.from(e.target.files);
     e.target.value = ""; // allow re-picking the same file after removing it
 
@@ -159,11 +169,9 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
     for (const file of picked) {
       if (!file.type.startsWith("image/")) {
         problems.push(`${file.name} isn't an image.`);
-      } else if (file.size > MAX_PHOTO_BYTES) {
-        problems.push(`${file.name} is over 5 MB.`);
-      } else if (
-        !photos.some((p) => p.name === file.name && p.size === file.size)
-      ) {
+      } else if (file.size > MAX_SOURCE_BYTES) {
+        problems.push(`${file.name} is over 25 MB.`);
+      } else if (!gallery.some((item) => item.id === sourceId(file))) {
         accepted.push(file);
       }
     }
@@ -172,14 +180,26 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
     if (accepted.length > room) {
       problems.push(`You can add up to ${MAX_PHOTOS} photos.`);
     }
-    setGallery((prev) => [
-      ...prev,
-      ...accepted.slice(0, room).map((file) => ({
-        id: `new:${file.name}:${file.size}`,
-        file,
-        previewUrl: URL.createObjectURL(file),
-      })),
-    ]);
+    const toAdd = accepted.slice(0, room);
+
+    const added = [];
+    for (const [index, file] of toAdd.entries()) {
+      setPreparing({ done: index, total: toAdd.length });
+      try {
+        const compressed = await compressImage(file);
+        added.push({
+          id: sourceId(file),
+          file: compressed,
+          previewUrl: URL.createObjectURL(compressed),
+        });
+      } catch (error) {
+        console.error(`Failed to compress ${file.name}:`, error);
+        problems.push(`${file.name} couldn't be read. Try a JPEG or PNG.`);
+      }
+    }
+    setPreparing(null);
+
+    setGallery((prev) => [...prev, ...added]);
     setErrors((prev) => ({ ...prev, photos: problems.join(" ") || undefined }));
   };
 
@@ -465,7 +485,10 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
 
       <div>
         <span className="block text-sm font-medium text-primary mb-1">
-          Photos * (1–{MAX_PHOTOS}, up to 5 MB each)
+          Photos * (1–{MAX_PHOTOS})
+        </span>
+        <span className="block text-xs text-neutral mb-2">
+          Photos are resized and compressed automatically before upload.
         </span>
         <input
           ref={fileInput}
@@ -473,10 +496,15 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
           accept="image/*"
           multiple
           onChange={handleFiles}
-          disabled={photoCount >= MAX_PHOTOS}
+          disabled={photoCount >= MAX_PHOTOS || preparing !== null}
           aria-label="Choose photos"
           className="block w-full text-sm text-neutral file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-primary-light file:px-4 file:py-2 file:text-white file:hover:bg-primary"
         />
+        {preparing && (
+          <span role="status" className="block text-sm text-neutral mt-1">
+            Preparing photos ({preparing.done + 1}/{preparing.total})...
+          </span>
+        )}
         {errors.photos && (
           <span className="block text-sm text-red-600 mt-1">
             {errors.photos}
@@ -554,7 +582,7 @@ const AddCarForm = ({ car, onAdded, onSaved, onCancel }) => {
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || preparing !== null}
         className="bg-primary-light hover:bg-primary text-white font-semibold h-12 px-8 rounded-xl cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {submitting
