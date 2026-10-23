@@ -22,6 +22,7 @@ import ImageThumbnail from "./ImageThumbnail";
 import SaveButton from "../../../components/Cars/SaveButton";
 import CarDetailsSkeleton from "../../../components/Skeleton/CarDetailsSkeleton";
 import PageMeta from "../../../components/PageMeta";
+import { trackContactClick } from "../../../utils/analytics";
 
 const hasValue = (value) =>
   value !== undefined && value !== null && String(value).trim() !== "";
@@ -146,6 +147,7 @@ const CarDetailsContent = ({ id }) => {
   };
 
   const handleCallSeller = () => {
+    trackContactClick("call", car.name);
     window.location.href = `tel:+${WHATSAPP_NUMBER}`;
   };
 
@@ -290,7 +292,10 @@ const CarDetailsContent = ({ id }) => {
                   Call Seller
                 </button>
                 <button
-                  onClick={() => openWhatsApp(car.name)}
+                  onClick={() => {
+                    trackContactClick("whatsapp", car.name);
+                    openWhatsApp(car.name);
+                  }}
                   className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
                 >
                   <MessageSquare className="w-5 h-5" />

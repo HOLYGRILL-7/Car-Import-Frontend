@@ -1,4 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
+import { trackContactClick } from "../../utils/analytics";
 
 const ICON = "mt-0.5 h-4 w-4 shrink-0 text-primary-light";
 const LINK = "hover:text-white transition-colors";
@@ -16,7 +17,11 @@ const FooterContact = ({ email, phone, address }) => {
         </li>
         <li className="flex items-start gap-3">
           <Phone className={ICON} aria-hidden="true" />
-          <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={LINK}>
+          <a
+            href={`tel:${phone.replace(/[^\d+]/g, "")}`}
+            onClick={() => trackContactClick("call")}
+            className={LINK}
+          >
             {phone}
           </a>
         </li>

@@ -6,6 +6,7 @@ import {
   SERVICE_AREA,
   getGeneralWhatsAppLink,
 } from "../../constants/contact";
+import { trackContactClick } from "../../utils/analytics";
 import PageMeta from "../../components/PageMeta";
 
 // Sales happen by phone and WhatsApp, so this page is direct Call / WhatsApp
@@ -44,6 +45,7 @@ const Contact = () => {
             </p>
             <a
               href={`tel:${PHONE_TEL}`}
+              onClick={() => trackContactClick("call")}
               className="mt-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white hover:bg-primary-light"
             >
               <Phone className="h-5 w-5" aria-hidden="true" />
@@ -65,6 +67,7 @@ const Contact = () => {
             </p>
             <a
               href={getGeneralWhatsAppLink()}
+              onClick={() => trackContactClick("whatsapp")}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#128C7E] px-6 py-3 font-semibold text-white hover:bg-[#0f766b]"

@@ -2,6 +2,7 @@ import { services, whyChooseUs } from "../../data/carsData";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowRight } from "lucide-react"; // make sure lucide-react is installed
 import { getServiceWhatsAppLink } from "../../constants/contact";
+import { trackContactClick } from "../../utils/analytics";
 import PageMeta from "../../components/PageMeta";
 
 const Services = () => {
@@ -80,6 +81,7 @@ const Services = () => {
 
                 <a
                   href={getServiceWhatsAppLink(service.whatsappMessage)}
+                  onClick={() => trackContactClick("whatsapp")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`mt-auto w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} text-white font-semibold flex items-center justify-center gap-2`}
