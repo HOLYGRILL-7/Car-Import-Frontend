@@ -7,13 +7,13 @@ import PageMeta from "../../components/PageMeta";
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-(--color-neutral-light)">
+    <div className="min-h-screen bg-neutral-light">
       <PageMeta
         title="Car Sales, Import & Servicing | Extra Motors"
         description="Buy a car, sell through us, import a specific vehicle or have your car serviced by our trusted mechanics. Extra Motors, Achimota, Accra."
       />
       {/* Hero Section */}
-      <div className="relative bg-linear-to-br from-primary via-[#1e3a5f] to bg-primary-dark text-white overflow-hidden">
+      <div className="relative bg-linear-to-br from-primary via-[#1e3a5f] to-primary-dark text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-20 w-96 h-96 bg-accent rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 left-20 w-72 h-72 bg-secondary rounded-full blur-3xl animate-pulse"></div>
@@ -59,7 +59,7 @@ const Services = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-bold text-[#0a1f44] mb-3">
+                  <h3 className="text-2xl font-bold text-primary mb-3">
                     {service.title}
                   </h3>
                   <p className="text-neutral leading-relaxed">
@@ -71,7 +71,7 @@ const Services = () => {
                   {service.features.map((feature, idx) => (
                     <li
                       key={idx}
-                      className="flex items-center gap-3 text-[#0a1f44]"
+                      className="flex items-center gap-3 text-primary"
                     >
                       <CheckCircle className="w-5 h-5 text-accent shrink-0" />
                       <span className="text-sm font-medium">{feature}</span>
@@ -84,7 +84,7 @@ const Services = () => {
                   onClick={() => trackContactClick("whatsapp")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`mt-auto w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} text-white font-semibold flex items-center justify-center gap-2`}
+                  className={`mt-auto w-full py-3 px-6 rounded-xl bg-linear-to-r ${service.color} ${service.buttonText ?? "text-white"} font-semibold flex items-center justify-center gap-2`}
                 >
                   Learn More
                   <ArrowRight className="w-5 h-5" />
@@ -99,7 +99,7 @@ const Services = () => {
       <div className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-[#0a1f44] mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Why Choose Us?
             </h2>
             <p className="text-xl text-neutral">
@@ -113,7 +113,7 @@ const Services = () => {
                 key={item.id} // use a unique id if available
                 className="text-center space-y-4 p-6 rounded-2xl hover:bg-neutral-cream transition-all"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-linear-to-r from-[#f59e0b] to-[#fbbf24] text-white">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-linear-to-r from-accent to-accent-light text-white">
                   <item.icon className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-primary">{item.title}</h3>
@@ -125,7 +125,7 @@ const Services = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-linear-to-br from-[#0a1f44] to-[#1e3a5f] text-white py-20">
+      <div className="bg-linear-to-br from-primary to-[#1e3a5f] text-white py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold">
             Ready to Get Started?

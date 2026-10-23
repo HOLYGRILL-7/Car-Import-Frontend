@@ -45,7 +45,9 @@ export const services = [
       "Save your favourites to a wishlist",
       "Buy by phone or WhatsApp, no online checkout",
     ],
-    color: "from-bg-accent to bg-accent-light",
+    color: "from-accent to-accent-light",
+    // White is unreadable on amber (~2:1), so this button uses dark text.
+    buttonText: "text-primary-dark",
   },
   {
     id: 2,
@@ -61,7 +63,7 @@ export const services = [
       "Especially suited to Korean-make cars",
       "A brokering service, not an instant cash offer",
     ],
-    color: "from-bg-secondary to bg-secondary-light",
+    color: "from-secondary to-secondary-light",
   },
   {
     id: 3,
@@ -76,7 +78,7 @@ export const services = [
       "Guidance through import paperwork and customs",
       "Room for household goods in the same container, when available",
     ],
-    color: "from-bg-primary-dark to bg-primary",
+    color: "from-primary-dark to-primary",
   },
   {
     id: 4,
@@ -92,7 +94,7 @@ export const services = [
       "Ask us about anything your car needs",
       "Book by phone or WhatsApp",
     ],
-    color: "from-bg-neutral to bg-neutral-dark",
+    color: "from-neutral to-neutral-dark",
   },
   {
     id: 5,
@@ -108,7 +110,9 @@ export const services = [
       "Availability varies with each shipment",
       "Ask us about space when a vehicle is shipping",
     ],
-    color: "from-bg-accent to bg-accent-dark",
+    color: "from-accent to-accent-dark",
+    // White is unreadable on amber (~2:1), so this button uses dark text.
+    buttonText: "text-primary-dark",
   },
   {
     id: 6,
@@ -123,7 +127,7 @@ export const services = [
       "Or pick it up from our lot in Achimota",
       "Ask us about delivery when you buy",
     ],
-    color: "from-bg-secondary to bg-secondary-light",
+    color: "from-secondary to-secondary-light",
   },
 ];
 
