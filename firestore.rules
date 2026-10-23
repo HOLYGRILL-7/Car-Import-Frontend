@@ -9,7 +9,7 @@ service cloud.firestore {
     // registering the admin's email first.
     function isAdmin() {
       return request.auth != null
-          && request.auth.token.email == "REPLACE_WITH_ADMIN_EMAIL"
+          && request.auth.token.email == "bismarkjonesoduro@gmail.com"
           && request.auth.token.email_verified == true;
     }
 
