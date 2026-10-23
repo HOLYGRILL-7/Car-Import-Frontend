@@ -38,7 +38,13 @@ const login = async (email, password) => {
 
 const logout = () => signOut(auth);
 
-const resetPassword = (email) => sendPasswordResetEmail(auth, email.trim());
+// The reset itself happens on Firebase's own page; once it's done, its
+// "Continue" button brings the user back to our login page. The domain must
+// be listed under Authentication > Settings > Authorized domains.
+const RESET_CONTINUE_URL = "https://extra-motors.vercel.app/login";
+
+const resetPassword = (email) =>
+  sendPasswordResetEmail(auth, email.trim(), { url: RESET_CONTINUE_URL });
 
 // The two halves of our custom /auth/action page's reset flow: check the
 // emailed code is still valid (and get the email it belongs to, so the page

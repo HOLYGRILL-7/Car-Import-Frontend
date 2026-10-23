@@ -15,6 +15,8 @@ const MESSAGES = {
     "Network error. Check your connection and try again.",
   "auth/operation-not-allowed":
     "Email/password sign-in isn't enabled for this site yet.",
+  "auth/unauthorized-continue-uri":
+    "Password reset isn't set up for this site yet. Please contact us.",
   "auth/configuration-not-found":
     "Sign-in isn't set up for this site yet. Please try again later.",
 };
